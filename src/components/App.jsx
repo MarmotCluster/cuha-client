@@ -5,6 +5,7 @@ import history from '../history';
 import Header from './Header';
 import Board from './pages/Board';
 import CTF from './pages/CTF';
+import Join from './pages/Join';
 import Login from './pages/Login';
 import Main from './pages/Main';
 import Settings from './pages/Settings';
@@ -20,6 +21,8 @@ const App = () => {
                     <Route path="/board/:type" exact element={<Board />} />
                     <Route path="/ctf" exact element={<CTF />} />
                     <Route path="/settings" exact element={<Settings />} />
+
+                    <Route path="/join" exact element={<Join />} />
                 </Routes>
             </BrowserRouter>
         </React.Fragment>
