@@ -18,7 +18,10 @@ const Settings = (props) => {
                         <p className="menu-container__section-item__title">
                             <span>기본 테마</span>
                         </p>
-                        <div className="menu-container__section-item__active" style={{ backgroundColor: 'white' }}></div>
+                        <div
+                            className="menu-container__section-item__active"
+                            style={{ backgroundColor: 'white' }}
+                        ></div>
                     </div>
                     <div className="menu-container__section-item">
                         <p className="menu-container__section-item__title">
@@ -54,7 +57,10 @@ const Settings = (props) => {
                         <p className="menu-container__section-item__title">
                             <span>한국어</span>
                         </p>
-                        <div className="menu-container__section-item__active" style={{ backgroundColor: 'white' }}></div>
+                        <div
+                            className="menu-container__section-item__active"
+                            style={{ backgroundColor: 'white' }}
+                        ></div>
                     </div>
                     <div className="menu-container__section-item">
                         <p className="en menu-container__section-item__title">

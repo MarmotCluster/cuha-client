@@ -9,7 +9,10 @@ const Header = () => {
                     <Link to="/" className="header-menu__icon home"></Link>
                     <Link to="/board/free" className="header-menu__icon boards"></Link>
                     <Link to="/login" className="header-menu__profile">
-                        <div className="header-menu__profile-target"></div>
+                        <div
+                            className="header-menu__profile-target"
+                            style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/no-profile.svg)` }}
+                        ></div>
                     </Link>
                     <Link to="/ctf" className="header-menu__icon ctf"></Link>
                     <Link to="/settings" className="header-menu__icon settings"></Link>

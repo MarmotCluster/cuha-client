@@ -1,17 +1,43 @@
 
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="100px" height="100px" viewBox="0 0 100 100">
 <defs>
+<image id="____1" x="0" y="0" width="240" height="240" xlink:href="./이미지/____1.png"/>
+
+<pattern id="Pattern_1" patternUnits="userSpaceOnUse" patternTransform="matrix( 0.4166717529296875, 0, 0, 0.4166717529296875, 0,0) " width="240" height="240">
+<use xlink:href="#____1"/>
+</pattern>
+
+<g id="Layer1_0_FILL">
+<path fill="url(#Pattern_1)" stroke="none" d="
+M 100 0
+L 0 0 0 100 100 100 100 0 Z"/>
+</g>
+
 <g id="Layer0_0_FILL">
-<path fill="#001466" stroke="none" d="
-M 40.35 56.15
-Q 33.4 56.15 28.55 61 23.65 65.8 23.65 72.75 23.65 76.05 26.05 78.15 36.35 86.9 50 86.9 63.65 86.9 73.85 78.15 76.35 76.15 76.35 72.75 76.35 65.8 71.45 61 66.6 56.15 59.55 56.15
-L 40.35 56.15
-M 61.65 19.8
-Q 56.8 14.95 50 14.95 43.2 14.95 38.25 19.8 33.4 24.6 33.4 31.55 33.4 38.35 38.25 43.2 43.2 48 50 48 56.8 48 61.65 43.2 66.5 38.35 66.5 31.55 66.5 24.6 61.65 19.8 Z"/>
+<path fill="#F4F4F4" stroke="none" d="
+M 0 100
+L 100 100 100 0 0 0 0 100 Z"/>
+</g>
+
+<g id="Layer0_1_FILL">
+<path fill="#CCCCCC" stroke="none" d="
+M 68.5 38.5
+Q 68.5 30.8 63.1 25.4 57.65 20 50 20 42.3 20 36.9 25.4 31.5 30.8 31.5 38.5 31.5 39.5984375 31.6 40.65 32.2703125 46.9703125 36.9 51.6 42.3 57 50 57 57.65 57 63.1 51.6 67.7296875 46.9703125 68.4 40.65 68.5 39.5984375 68.5 38.5
+M 81.5 78.7
+Q 81.5 78.5 81.5 78.3 81.5 72.05 72.3 67.6 63.05 63.3 50 63.3 36.95 63.3 27.7 67.6 18.5 72.05 18.5 78.3 18.5 78.4994140625 18.5 78.7
+L 18.45 100 81.55 100 81.5 78.7 Z"/>
 </g>
 </defs>
 
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Layer1_0_FILL"/>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <use xlink:href="#Layer0_0_FILL"/>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Layer0_1_FILL"/>
 </g>
 </svg>
