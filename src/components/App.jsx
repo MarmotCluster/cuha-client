@@ -24,6 +24,8 @@ const App = () => {
 
                     <Route path="/join" exact element={<Join />} />
                 </Routes>
+
+                {/* <div style={{ height: '5.8rem' }}></div> */}
             </BrowserRouter>
         </React.Fragment>
     );

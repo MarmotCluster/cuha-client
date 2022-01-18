@@ -1,12 +1,60 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { setCookie, getCookie } from '../cookies';
 
 const Settings = (props) => {
-    return (
-        <main className="main">
-            <div className="menu-container">
-                <p className="title">환경설정</p>
-                <section className="menu-container__section base-bg">
+    const [isCookieLoaded, setIsCookieLoaded] = useState(false);
+
+    const [settings, setSettings] = useState(getCookie('settings'));
+
+    const init = () => {
+        // let savedData = getCookie('settings');
+        // console.log(savedData);
+
+        // if (savedData !== undefined) {
+        //     setSettings((state) => {
+        //         return state;
+        //     });
+        // }
+
+        console.log(settings);
+
+        if (settings === undefined) {
+            setSettings((state) => ({
+                ...state,
+                theme: 0,
+                language: 1,
+            }));
+        }
+
+        setIsCookieLoaded((o) => true);
+    };
+
+    const saveData = (target, to) => {
+        setSettings((state) => ({
+            ...state,
+            [target]: to,
+        }));
+
+        // setCookie('settings', settings, {});
+
+        // console.log(settings);
+        // console.log(getCookie('settings'));
+    };
+
+    useEffect(() => {
+        init();
+        return null;
+    }, []);
+
+    useEffect(() => {
+        setCookie('settings', settings, {});
+        console.log('cookie updated with useEffect');
+    }, [settings]);
+
+    const renderSectionTheme = () => {
+        if (isCookieLoaded) {
+            return (
+                <React.Fragment>
                     <div className="menu-container__section-item">
                         <p className="menu-container__section-item__title menu-container__section-item__title-static">
                             <span>테마</span>
@@ -20,22 +68,49 @@ const Settings = (props) => {
                         </p>
                         <div
                             className="menu-container__section-item__active"
-                            style={{ backgroundColor: 'white' }}
+                            style={{ backgroundColor: settings.theme === 0 ? 'skyblue' : 'transparent' }}
                         ></div>
+                        <button
+                            onClick={() => saveData('theme', 0)}
+                            className="menu-container__section-item__title-btn"
+                        ></button>
                     </div>
                     <div className="menu-container__section-item">
                         <p className="menu-container__section-item__title">
                             <span>다크 테마</span>
                         </p>
-                        <div className="menu-container__section-item__active"></div>
+                        <div
+                            className="menu-container__section-item__active"
+                            style={{ backgroundColor: settings.theme === 1 ? 'skyblue' : 'transparent' }}
+                        ></div>
+                        <button
+                            onClick={() => saveData('theme', 1)}
+                            className="menu-container__section-item__title-btn"
+                        ></button>
                     </div>
                     <div className="menu-container__section-item">
                         <p className="menu-container__section-item__title">
                             <span>핑크 테마</span>
                         </p>
-                        <div className="menu-container__section-item__active"></div>
+                        <div
+                            className="menu-container__section-item__active"
+                            style={{ backgroundColor: settings.theme === 2 ? 'skyblue' : 'transparent' }}
+                        ></div>
+                        <button
+                            onClick={() => saveData('theme', 2)}
+                            className="menu-container__section-item__title-btn"
+                        ></button>
                     </div>
-                </section>
+                </React.Fragment>
+            );
+        }
+    };
+
+    return (
+        <main className="main">
+            <div className="menu-container">
+                <p className="title">환경설정</p>
+                <section className="menu-container__section base-bg">{renderSectionTheme()}</section>
 
                 <div style={{ height: '2rem' }}></div>
 
