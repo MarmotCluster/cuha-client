@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-export const Card = ({ name, division }) => {
+export const Card = ({ name, division, imageUrl }) => {
     return (
         <div className="card noselect">
-            <div className="card-profile"></div>
+            <div className="card-profile" style={{ backgroundImage: `url(${imageUrl})` }}></div>
             <div className="card-text">
                 <div className="card-text__name">{name}</div>
                 <div className="card-text__division">{division}</div>
@@ -18,6 +18,8 @@ Card.defaultProps = {
 };
 
 const Main = () => {
+    const faker = require('@faker-js/faker');
+
     const ref = useRef([]);
     const [logo, setLogo] = useState('icon icon-white');
 
@@ -123,12 +125,16 @@ const Main = () => {
                         <p className="title">우리 구성원을 소개합니다.</p>
                         <div className="cards">
                             <div className="cards-slide">
-                                <Card name="김태원" division="동아리 회장" />
-                                <Card name="김태형" division="동아리 회장" />
-                                <Card name="서종찬" division="동아리 회장" />
+                                <Card
+                                    name="김태원"
+                                    division="동아리 회장"
+                                    imageUrl={`${process.env.PUBLIC_URL}/images/cuha_ico.svg`}
+                                />
+                                <Card name="김태형" division="동아리 회장" imageUrl={faker.image.avatar()} />
+                                <Card name="서종찬" division="동아리 회장" imageUrl={faker.image.avatar()} />
 
-                                <Card name="권순범" division="동아리 구성원" />
-                                <Card name="김재윤" division="동아리 구성원" />
+                                <Card name="권순범" division="동아리 구성원" imageUrl={faker.image.avatar()} />
+                                <Card name="김재윤" division="동아리 구성원" imageUrl={faker.image.avatar()} />
                             </div>
                         </div>
                     </div>
