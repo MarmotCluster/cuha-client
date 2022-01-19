@@ -1,13 +1,43 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+export const Card = ({ name, division }) => {
+    return (
+        <div className="card noselect">
+            <div className="card-profile"></div>
+            <div className="card-text">
+                <div className="card-text__name">{name}</div>
+                <div className="card-text__division">{division}</div>
+            </div>
+        </div>
+    );
+};
+
+Card.defaultProps = {
+    name: '이름',
+    division: '역할군',
+};
+
 const Main = () => {
     const ref = useRef([]);
     const [logo, setLogo] = useState('icon icon-white');
 
     useEffect(() => {
+        function shouldOriginal() {
+            return (
+                document.documentElement.scrollTop > ref.current[0].offsetHeight - 20 &&
+                document.documentElement.scrollTop < ref.current[1].offsetTop + ref.current[1].offsetHeight - 20
+            );
+        }
+
         const funcScrollEvent = (e) => {
-            // console.log('scrolled', document.documentElement.scrollTop, ref.current[0].offsetHeight);
-            if (document.documentElement.scrollTop > ref.current[0].offsetHeight - 20) {
+            // console.log(
+            //     'scrolled',
+            //     document.documentElement.scrollTop,
+            //     // ref.current[1].offsetHeight,
+            //     // ref.current[1].offsetTop
+            //     ref.current[1].offsetTop + ref.current[1].offsetHeight - 20
+            // );
+            if (shouldOriginal()) {
                 setLogo((state) => 'icon');
             } else {
                 setLogo((state) => 'icon icon-white');
@@ -21,7 +51,7 @@ const Main = () => {
 
     return (
         <main className="main">
-            <div style={{ position: 'fixed', padding: '2rem' }}>
+            <div style={{ position: 'fixed', padding: '2rem', zIndex: '100' }}>
                 <div className={logo} onClick={() => ref.current[0].scrollIntoView()}></div>
             </div>
 
@@ -35,7 +65,7 @@ const Main = () => {
                 </div>
             </section>
 
-            <section className="section-about">
+            <section ref={(e) => (ref.current[1] = e)} className="section-about">
                 <div className="section-about__back">
                     <p className="inner-text">
                         <span className="inner-text-title">
@@ -60,9 +90,53 @@ const Main = () => {
                     </p>
                 </div>
             </section>
+
+            <section className="section-idea">
+                <div className="section-idea__back">
+                    <div className="section-idea__back-container">
+                        <p className="title">우리는 다음 해커가 되기 위해 노력하고 있습니다:</p>
+                        <div className="ideas">
+                            <div className="ideas-idea">
+                                <div className="ideas-idea__icon icon_c"></div>
+                                <p className="ideas-idea__text noselect">창의적인</p>
+                            </div>
+                            <div className="ideas-idea">
+                                <div className="ideas-idea__icon icon_u"></div>
+                                <p className="ideas-idea__text noselect">특별한</p>
+                            </div>
+                            <div className="ideas-idea">
+                                <div className="ideas-idea__icon icon_h"></div>
+                                <p className="ideas-idea__text noselect">조화로운</p>
+                            </div>
+                            <div className="ideas-idea">
+                                <div className="ideas-idea__icon icon_a"></div>
+                                <p className="ideas-idea__text noselect">열심인</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="section-members">
+                <div className="section-members__back">
+                    <div className="section-members__back-container">
+                        <p className="title">우리 구성원을 소개합니다.</p>
+                        <div className="cards">
+                            <div className="cards-slide">
+                                <Card name="김태원" division="동아리 회장" />
+                                <Card name="김태형" division="동아리 회장" />
+                                <Card name="서종찬" division="동아리 회장" />
+
+                                <Card name="권순범" division="동아리 구성원" />
+                                <Card name="김재윤" division="동아리 구성원" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
             {/* <span>
                 우리 동아리는 또한 창의적이고(Creative), 특별하며(Unique), 편향된 지식과 실력이 아닌 모든 것을 조화롭게
-                갖춘(Harmonious), 어떤 일을 하더라도 열심인(Avid) 해커가 되기 위해 노력하고 있습니다.
+                갖춘(Harmonious), 어떤 일을 하더라도 열심인(Avid)
             </span> */}
         </main>
     );
