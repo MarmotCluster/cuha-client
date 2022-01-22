@@ -48,7 +48,9 @@ const Main = () => {
 
         window.addEventListener('scroll', funcScrollEvent);
 
-        return () => window.removeEventListener('scroll', funcScrollEvent);
+        return () => {
+            window.removeEventListener('scroll', funcScrollEvent);
+        };
     }, []);
 
     return (
@@ -67,7 +69,7 @@ const Main = () => {
                 </div>
             </section>
 
-            <section ref={(e) => (ref.current[1] = e)} className="section-about">
+            {/* <section ref={(e) => (ref.current[1] = e)} className="section-about">
                 <div className="section-about__back">
                     <p className="inner-text">
                         <span className="inner-text-title">
@@ -139,11 +141,7 @@ const Main = () => {
                         </div>
                     </div>
                 </div>
-            </section>
-            {/* <span>
-                우리 동아리는 또한 창의적이고(Creative), 특별하며(Unique), 편향된 지식과 실력이 아닌 모든 것을 조화롭게
-                갖춘(Harmonious), 어떤 일을 하더라도 열심인(Avid)
-            </span> */}
+            </section> */}
         </main>
     );
 };
