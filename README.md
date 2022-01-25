@@ -9,4 +9,5 @@ npm start
 ````
 
 # relese note
+22.01.26 : half advanced Home design
 22.01.22 : rollback to before the build main complete
