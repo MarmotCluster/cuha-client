@@ -75,20 +75,18 @@ const Main = () => {
                 <div className="section-notice__area area" style={{ padding: '2rem' }}>
                     <div className="container-big">
                         <h3 className="title">공지사항</h3>
-                        <a className="title-recent-most" href="#">
-                            동아리 인원을 모집합니다
-                        </a>
+                        <a className="title-recent-most">동아리 인원을 모집합니다</a>
                         <p className="title-date">2022년 2월 2일</p>
                     </div>
                     <div className="container-small">
-                        <a href="#" className="container-small__notice">
+                        <a className="container-small__notice">
                             <p className="container-small__notice-title">
                                 이제 막 시작된 서비스입니다. 이제 막 시작된 서비스입니다.
                             </p>
                             <p className="container-small__notice-date">2022년 2월 1일</p>
                         </a>
 
-                        <a href="#" className="container-small__notice">
+                        <a className="container-small__notice">
                             <p className="container-small__notice-title">이제 막 시작된 서비스입니다.</p>
                             <p className="container-small__notice-date">2022년 1월 31일</p>
                         </a>
