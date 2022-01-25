@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import MainItemCard from './feeds/MainItemCard';
 
 export const Card = ({ name, division, imageUrl }) => {
     return (
@@ -26,8 +27,9 @@ const Main = () => {
     useEffect(() => {
         function shouldOriginal() {
             return (
-                document.documentElement.scrollTop > ref.current[0].offsetHeight - 20 &&
-                document.documentElement.scrollTop < ref.current[1].offsetTop + ref.current[1].offsetHeight - 20
+                document.documentElement.scrollTop > ref.current[0].offsetHeight - 20
+                // &&
+                // document.documentElement.scrollTop < ref.current[1].offsetTop + ref.current[1].offsetHeight - 20
             );
         }
 
@@ -65,83 +67,133 @@ const Main = () => {
                     <div className="title-wrap">
                         <h3 className="title">청주대학교 정보보안 동아리</h3>
                     </div>
-                    <p className="subtitle">공식 웹사이트에 오신것을 환영합니다.</p>
+                    <p className="subtitle">프로젝트에 즐거움을, 모두에게 기회를.</p>
                 </div>
             </section>
 
-            {/* <section ref={(e) => (ref.current[1] = e)} className="section-about">
-                <div className="section-about__back">
-                    <p className="inner-text">
-                        <span className="inner-text-title">
-                            CUHA 는 청주대학교
-                            <br />
-                            학생들이 만든
-                            <br />
-                            <span>정보 보안 동아리</span>
-                            입니다.
-                        </span>
-                    </p>
-                    <p className="inner-desc">
-                        <span>
-                            우리 동아리는 정보 보안에 관련한 내용을 공부하고, 공유하며 서로 발전해 나가기 위해
-                            창립되었습니다.
-                        </span>
-                        <br />
-                        <span>주로 다루는 공부 내용은 프로그래밍과 전반적인 보안에 관한 것입니다.</span>
-                        <span>
-                            공부를 통해서 <b>CTF및 보안 관련 대회 참가</b>를 목표하고 있습니다.
-                        </span>
-                    </p>
-                </div>
-            </section>
+            <section ref={(e) => (ref.current[1] = e)} className="section-notice">
+                <div className="section-notice__area area" style={{ padding: '2rem' }}>
+                    <div className="container-big">
+                        <h3 className="title">공지사항</h3>
+                        <a className="title-recent-most" href="#">
+                            동아리 인원을 모집합니다
+                        </a>
+                        <p className="title-date">2022년 2월 2일</p>
+                    </div>
+                    <div className="container-small">
+                        <a href="#" className="container-small__notice">
+                            <p className="container-small__notice-title">
+                                이제 막 시작된 서비스입니다. 이제 막 시작된 서비스입니다.
+                            </p>
+                            <p className="container-small__notice-date">2022년 2월 1일</p>
+                        </a>
 
-            <section className="section-idea">
-                <div className="section-idea__back">
-                    <div className="section-idea__back-container">
-                        <p className="title">우리는 다음 해커가 되기 위해 노력하고 있습니다:</p>
-                        <div className="ideas">
-                            <div className="ideas-idea">
-                                <div className="ideas-idea__icon icon_c"></div>
-                                <p className="ideas-idea__text noselect">창의적인</p>
-                            </div>
-                            <div className="ideas-idea">
-                                <div className="ideas-idea__icon icon_u"></div>
-                                <p className="ideas-idea__text noselect">특별한</p>
-                            </div>
-                            <div className="ideas-idea">
-                                <div className="ideas-idea__icon icon_h"></div>
-                                <p className="ideas-idea__text noselect">조화로운</p>
-                            </div>
-                            <div className="ideas-idea">
-                                <div className="ideas-idea__icon icon_a"></div>
-                                <p className="ideas-idea__text noselect">열심인</p>
-                            </div>
-                        </div>
+                        <a href="#" className="container-small__notice">
+                            <p className="container-small__notice-title">이제 막 시작된 서비스입니다.</p>
+                            <p className="container-small__notice-date">2022년 1월 31일</p>
+                        </a>
                     </div>
                 </div>
             </section>
 
-            <section className="section-members">
-                <div className="section-members__back">
-                    <div className="section-members__back-container">
-                        <p className="title">우리 구성원을 소개합니다.</p>
-                        <div className="cards">
-                            <div className="cards-slide">
-                                <Card
-                                    name="김태원"
-                                    division="동아리 회장"
-                                    imageUrl={`${process.env.PUBLIC_URL}/images/cuha_ico.svg`}
-                                />
-                                <Card name="김태형" division="동아리 회장" imageUrl={faker.image.avatar()} />
-                                <Card name="서종찬" division="동아리 회장" imageUrl={faker.image.avatar()} />
+            <section ref={(e) => (ref.current[2] = e)} className="section-feed">
+                <div className="area" style={{ padding: '2rem' }}>
+                    <h3 className="title">최신글 모음</h3>
 
-                                <Card name="권순범" division="동아리 구성원" imageUrl={faker.image.avatar()} />
-                                <Card name="김재윤" division="동아리 구성원" imageUrl={faker.image.avatar()} />
-                            </div>
-                        </div>
+                    <div className="feed-items">
+                        <MainItemCard
+                            image=""
+                            category="자유게시판"
+                            title="Enter Title Here"
+                            subtitle="서브 타이틀을 여기에 넣으세요"
+                            profileImage=""
+                            uploaderName="Jasmin Pay"
+                            uploadedDate="2022-02-22"
+                        />
+                        <MainItemCard
+                            image=""
+                            category="자유게시판"
+                            title="Enter Title Here"
+                            subtitle="서브 타이틀을 여기에 넣으세요"
+                            profileImage=""
+                            uploaderName="Jasmin Pay"
+                            uploadedDate="2022-02-22"
+                        />
+                        <MainItemCard
+                            image=""
+                            category="자유게시판"
+                            title="Enter Title Here"
+                            subtitle="서브 타이틀을 여기에 넣으세요"
+                            profileImage=""
+                            uploaderName="Jasmin Pay"
+                            uploadedDate="2022-02-22"
+                        />
+                        <MainItemCard
+                            image=""
+                            category="자유게시판"
+                            title="Enter Title Here"
+                            subtitle="서브 타이틀을 여기에 넣으세요"
+                            profileImage=""
+                            uploaderName="Jasmin Pay"
+                            uploadedDate="2022-02-22"
+                        />
+                        <MainItemCard
+                            image=""
+                            category="자유게시판"
+                            title="Enter Title Here"
+                            subtitle="서브 타이틀을 여기에 넣으세요"
+                            profileImage=""
+                            uploaderName="Jasmin Pay"
+                            uploadedDate="2022-02-22"
+                        />
+                        <MainItemCard
+                            image=""
+                            category="자유게시판"
+                            title="Enter Title Here"
+                            subtitle="서브 타이틀을 여기에 넣으세요"
+                            profileImage=""
+                            uploaderName="Jasmin Pay"
+                            uploadedDate="2022-02-22"
+                        />
+                        <MainItemCard
+                            image=""
+                            category="자유게시판"
+                            title="Enter Title Here"
+                            subtitle="서브 타이틀을 여기에 넣으세요"
+                            profileImage=""
+                            uploaderName="Jasmin Pay"
+                            uploadedDate="2022-02-22"
+                        />
+                        <MainItemCard
+                            image=""
+                            category="자유게시판"
+                            title="Enter Title Here"
+                            subtitle="서브 타이틀을 여기에 넣으세요"
+                            profileImage=""
+                            uploaderName="Jasmin Pay"
+                            uploadedDate="2022-02-22"
+                        />
+                        <MainItemCard
+                            image=""
+                            category="자유게시판"
+                            title="Enter Title Here"
+                            subtitle="서브 타이틀을 여기에 넣으세요"
+                            profileImage=""
+                            uploaderName="Jasmin Pay"
+                            uploadedDate="2022-02-22"
+                        />
+                        <MainItemCard
+                            image=""
+                            category="자유게시판"
+                            title="Enter Title Here"
+                            subtitle="서브 타이틀을 여기에 넣으세요"
+                            profileImage=""
+                            uploaderName="Jasmin Pay"
+                            uploadedDate="2022-02-22"
+                        />
                     </div>
                 </div>
-            </section> */}
+            </section>
         </main>
     );
 };
