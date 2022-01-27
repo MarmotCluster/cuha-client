@@ -103,7 +103,7 @@ const Main = () => {
                             image=""
                             category="자유게시판"
                             title="Enter Title Here"
-                            subtitle="서브 타이틀을 여기에 넣으세요"
+                            subtitle="서브 타이틀을 여기에 넣으세요. 세부 내용이 길어지면 점점점 처리하는 방향으로"
                             profileImage=""
                             uploaderName="Jasmin Pay"
                             uploadedDate="2022-02-22"
