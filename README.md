@@ -9,7 +9,7 @@ npm start
 ````
 
 # relese note
-22.01.29 : Updated Dark Mode
+22.01.29 : Updated Dark Mode</br>
 22.01.28 : Redux Ready</br>
 22.01.26 : half advanced Home design</br>
 22.01.22 : rollback to before the build main complete
