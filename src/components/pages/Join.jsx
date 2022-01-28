@@ -1,90 +1,19 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import history from '../../history';
+import { colorMainClassname, colorThemeBackgroundText } from './utils';
 
 const Join = () => {
-    // const funcOnSubmit = (e) => {
-    //     e.preventDefault();
-    // };
-
-    // const [form, setForm] = useState({
-    //     id: '',
-    //     pw: '',
-    // });
-
-    // const [err, setErr] = useState({
-    //     id: 0,
-    //     pw: 0,
-    // });
-
-    // const funcOnChange = (e) => {
-    //     setForm({
-    //         ...form,
-    //         [e.target.name]: e.target.value,
-    //     });
-    //     // console.log(ref);
-    // };
-
-    // return (
-    //     <main className="main" style={{ backgroundColor: '#f4f4f4' }}>
-    //         <div className="menu-container">
-    //             <p className="title">로그인</p>
-    //             <section
-    //                 className="menu-container__section"
-    //                 style={{ width: 'calc(100% - 10rem)', maxWidth: '48rem', padding: '2rem' }}
-    //             >
-    //                 <form name="login" onSubmit={(e) => funcOnSubmit(e)}>
-    //                     <div className="menu-container__section-form">
-    //                         <input
-    //                             className="menu-container__section-form-input"
-    //                             type="text"
-    //                             name="id"
-    //                             value={form.id}
-    //                             placeholder=" "
-    //                             autoComplete="off"
-    //                             // onFocus={(e) => funcScrollToMe(e)}
-    //                             onChange={(e) => funcOnChange(e)}
-    //                         />
-    //                         <p className="menu-container__section-form-title">아이디</p>
-    //                     </div>
-
-    //                     <div className="menu-container__section-form__error" style={{ height: `${err['id'] * 2}rem` }}>
-    //                         <p>입력란이 비었습니다.</p>
-    //                     </div>
-
-    //                     <div className="menu-container__section-form">
-    //                         <input
-    //                             className="menu-container__section-form-input"
-    //                             type="password"
-    //                             name="pw"
-    //                             value={form.pw}
-    //                             placeholder=" "
-    //                             onChange={(e) => funcOnChange(e)}
-    //                         />
-    //                         <p className="menu-container__section-form-title">비밀번호</p>
-    //                     </div>
-
-    //                     <div className="menu-container__section-form__error" style={{ height: `${err['pw'] * 2}rem` }}>
-    //                         <p>입력란이 비었습니다.</p>
-    //                     </div>
-
-    //                     <div style={{ height: '2rem' }}></div>
-
-    //                     <button className="menu-container__section-form-submit" type="submit"></button>
-    //                 </form>
-    //                 {/* <Link className="menu-container__section-form-join" to="/join">
-    //                     계정이 없으신가요?
-    //                 </Link> */}
-    //             </section>
-
-    //             <div style={{ height: '10rem' }}></div>
-    //         </div>
-    //     </main>
-    // );
+    const { seto } = useSelector((state) => ({
+        seto: state.seto,
+    }));
 
     return (
-        <main className="main" style={{ backgroundColor: '#f4f4f4' }}>
+        <main className={colorMainClassname[seto.theme]}>
             <div className="menu-container">
-                <p className="title">회원가입</p>
+                <p className="title" style={{ color: colorThemeBackgroundText[seto.theme] }}>
+                    회원가입
+                </p>
                 <section
                     className="menu-container__section"
                     style={{
@@ -95,7 +24,7 @@ const Join = () => {
                         textAlign: 'center',
                     }}
                 >
-                    <p>
+                    <p style={{ color: colorThemeBackgroundText[seto.theme] }}>
                         우리 웹사이트는 회원가입을 지원하지 않습니다.
                         <br />
                         계정 생성을 원하시면 CUHA 관리자에게 문의바랍니다.

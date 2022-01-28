@@ -2,6 +2,8 @@ import { getCookie, setCookie } from '../components/cookies';
 
 export const finalSet = (payload) => ({ type: 'settings/THEME', payload });
 
+console.log(getCookie('settings'));
+
 const initialState =
     getCookie('settings') === undefined
         ? {

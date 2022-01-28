@@ -5,9 +5,11 @@ import { Link } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 
 import { fetchAccount } from '../../actions';
+import { colorMainClassname, colorThemeBackgroundText } from './utils';
 
 const Login = () => {
-    const { accounts } = useSelector((state) => ({
+    const { seto, accounts } = useSelector((state) => ({
+        seto: state.seto,
         accounts: state.accounts,
     }));
 
@@ -98,9 +100,11 @@ const Login = () => {
         );
     } else {
         return (
-            <main className="main" style={{ backgroundColor: '#f4f4f4' }}>
+            <main className={colorMainClassname[seto.theme]}>
                 <div className="menu-container">
-                    <p className="title">로그인</p>
+                    <p className="title" style={{ color: colorThemeBackgroundText[seto.theme] }}>
+                        로그인
+                    </p>
                     <section
                         className="menu-container__section"
                         style={{ width: 'calc(100% - 10rem)', maxWidth: '48rem', padding: '2rem' }}

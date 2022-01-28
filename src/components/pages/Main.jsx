@@ -1,25 +1,38 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import MainItemCard from './feeds/MainItemCard';
+import {
+    colorMainClassname,
+    colorMainFeedBackground,
+    colorMainRecentNotice,
+    colorMainRecentNoticeSmall,
+    colorThemeContainerText,
+    colorMainSection,
+} from './utils';
 
-export const Card = ({ name, division, imageUrl }) => {
-    return (
-        <div className="card noselect">
-            <div className="card-profile" style={{ backgroundImage: `url(${imageUrl})` }}></div>
-            <div className="card-text">
-                <div className="card-text__name">{name}</div>
-                <div className="card-text__division">{division}</div>
-            </div>
-        </div>
-    );
-};
+// export const Card = ({ name, division, imageUrl }) => {
+//     return (
+//         <div className="card noselect">
+//             <div className="card-profile" style={{ backgroundImage: `url(${imageUrl})` }}></div>
+//             <div className="card-text">
+//                 <div className="card-text__name">{name}</div>
+//                 <div className="card-text__division">{division}</div>
+//             </div>
+//         </div>
+//     );
+// };
 
-Card.defaultProps = {
-    name: '이름',
-    division: '역할군',
-};
+// Card.defaultProps = {
+//     name: '이름',
+//     division: '역할군',
+// };
 
 const Main = () => {
-    const faker = require('@faker-js/faker');
+    const { seto } = useSelector((state) => ({
+        seto: state.seto,
+    }));
+
+    // const faker = require('@faker-js/faker');
 
     const ref = useRef([]);
     const [logo, setLogo] = useState('icon icon-white');
@@ -41,10 +54,12 @@ const Main = () => {
             //     // ref.current[1].offsetTop
             //     ref.current[1].offsetTop + ref.current[1].offsetHeight - 20
             // );
-            if (shouldOriginal()) {
-                setLogo((state) => 'icon');
-            } else {
-                setLogo((state) => 'icon icon-white');
+            if (seto.theme === 0) {
+                if (shouldOriginal()) {
+                    setLogo((state) => 'icon');
+                } else {
+                    setLogo((state) => 'icon icon-white');
+                }
             }
         };
 
@@ -56,7 +71,7 @@ const Main = () => {
     }, []);
 
     return (
-        <main className="main">
+        <main className={colorMainClassname[seto.theme]}>
             <div style={{ position: 'fixed', padding: '2rem', zIndex: '100' }}>
                 <div className={logo} onClick={() => ref.current[0].scrollIntoView()}></div>
             </div>
@@ -71,32 +86,40 @@ const Main = () => {
                 </div>
             </section>
 
-            <section ref={(e) => (ref.current[1] = e)} className="section-notice">
+            <section
+                ref={(e) => (ref.current[1] = e)}
+                className="section-notice"
+                style={{ backgroundColor: colorMainSection[seto.theme] }}
+            >
                 <div className="section-notice__area area" style={{ padding: '2rem' }}>
                     <div className="container-big">
-                        <h3 className="title">공지사항</h3>
-                        <a className="title-recent-most">동아리 인원을 모집합니다</a>
+                        <h3 className="title" style={{ color: colorThemeContainerText[seto.theme] }}>
+                            공지사항
+                        </h3>
+                        <a className={colorMainRecentNotice[seto.theme]}>동아리 인원을 모집합니다</a>
                         <p className="title-date">2022년 2월 2일</p>
                     </div>
                     <div className="container-small">
                         <a className="container-small__notice">
-                            <p className="container-small__notice-title">
+                            <p className={colorMainRecentNoticeSmall[seto.theme]}>
                                 이제 막 시작된 서비스입니다. 이제 막 시작된 서비스입니다.
                             </p>
                             <p className="container-small__notice-date">2022년 2월 1일</p>
                         </a>
 
                         <a className="container-small__notice">
-                            <p className="container-small__notice-title">이제 막 시작된 서비스입니다.</p>
+                            <p className={colorMainRecentNoticeSmall[seto.theme]}>이제 막 시작된 서비스입니다.</p>
                             <p className="container-small__notice-date">2022년 1월 31일</p>
                         </a>
                     </div>
                 </div>
             </section>
 
-            <section ref={(e) => (ref.current[2] = e)} className="section-feed">
+            <section ref={(e) => (ref.current[2] = e)} className={colorMainFeedBackground[seto.theme]}>
                 <div className="area" style={{ padding: '2rem' }}>
-                    <h3 className="title">최신글 모음</h3>
+                    <h3 className="title" style={{ color: colorThemeContainerText[seto.theme] }}>
+                        최신글 모음
+                    </h3>
 
                     <div className="feed-items">
                         <MainItemCard
