@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import jwtDecode from 'jwt-decode';
+import LoadingBar from 'react-top-loading-bar';
 
 import { fetchAccount } from '../../actions';
-import { colorMainClassname, colorThemeBackgroundText } from './utils';
+import { colorMainClassname, colorThemeBackgroundText, colorMainRecentPostItemText } from './utils';
 
 const Login = () => {
     const { seto, accounts } = useSelector((state) => ({
@@ -19,6 +20,7 @@ const Login = () => {
     // REDUX AREA
 
     let ref = useRef([]);
+    let loadingRef = useRef();
 
     const [focus, setFocus] = useState(false);
     const [form, setForm] = useState({
@@ -67,7 +69,9 @@ const Login = () => {
         }
 
         if (id.value.length !== 0 && pw.value.length !== 0) {
+            loadingRef.current.continuousStart();
             reduxCheckAccount(id.value, pw.value);
+            loadingRef.current.complete();
         }
     };
 
@@ -101,6 +105,8 @@ const Login = () => {
     } else {
         return (
             <main className={colorMainClassname[seto.theme]}>
+                <LoadingBar color="#0a33cc" ref={loadingRef} />
+
                 <div className="menu-container">
                     <p className="title" style={{ color: colorThemeBackgroundText[seto.theme] }}>
                         로그인
@@ -156,7 +162,11 @@ const Login = () => {
 
                             <button className="menu-container__section-form-submit" type="submit"></button>
                         </form>
-                        <Link className="menu-container__section-form-join" to="/join">
+                        <Link
+                            className="menu-container__section-form-join"
+                            to="/join"
+                            style={{ color: colorMainRecentPostItemText[seto.theme] }}
+                        >
                             계정이 없으신가요?
                         </Link>
                     </section>
