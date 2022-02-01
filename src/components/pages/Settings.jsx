@@ -10,6 +10,28 @@ import {
     colorThemeContainerText,
 } from './utils';
 
+export const translated = {
+    title: ['Settings', '환경설정', '喜好'],
+    section: {
+        theme: {
+            name: ['Theme', '테마', '主题'],
+            list: [
+                ['Default', 'Dark', 'Pink'],
+                ['기본', '다크', '핑크'],
+                ['默认', '黑暗的', '粉色的'],
+            ],
+        },
+    },
+
+    global: {
+        section: {
+            lang: {
+                list: ['English', '한국어', '中文 (简体)'],
+            },
+        },
+    },
+};
+
 const Settings = (props) => {
     const { seto } = useSelector((state) => ({
         seto: state.seto,
@@ -57,52 +79,44 @@ const Settings = (props) => {
                 <React.Fragment>
                     <div className="menu-container__section-item">
                         <p className="menu-container__section-item__title menu-container__section-item__title-static">
-                            <span style={{ color: colorThemeBackgroundText[seto.theme] }}>테마</span>
+                            <span
+                                style={{ color: colorThemeBackgroundText[seto.theme] }}
+                                className={seto.language === 1 ? '' : 'en'}
+                            >
+                                {translated.section.theme.name[seto.language]}
+                            </span>
                             <br />
-                            <span style={{ fontSize: '1.2rem', color: colorThemeContainerActiveText[seto.theme] }}>
-                                기본 테마
+                            <span
+                                style={{ fontSize: '1.2rem', color: colorThemeContainerActiveText[seto.theme] }}
+                                className={seto.language === 1 ? '' : 'en'}
+                            >
+                                {translated.section.theme.list[seto.language][seto.theme]}
                             </span>
                         </p>
                     </div>
-                    <div className="menu-container__section-item">
-                        <p className="menu-container__section-item__title">
-                            <span style={{ color: colorThemeContainerText[seto.theme] }}>기본 테마</span>
-                        </p>
-                        <div
-                            className="menu-container__section-item__active"
-                            style={{ backgroundColor: settings.theme === 0 ? 'skyblue' : 'transparent' }}
-                        ></div>
-                        <button
-                            onClick={() => saveData('theme', 0)}
-                            className="menu-container__section-item__title-btn"
-                        ></button>
-                    </div>
-                    <div className="menu-container__section-item">
-                        <p className="menu-container__section-item__title">
-                            <span style={{ color: colorThemeContainerText[seto.theme] }}>다크 테마</span>
-                        </p>
-                        <div
-                            className="menu-container__section-item__active"
-                            style={{ backgroundColor: settings.theme === 1 ? 'skyblue' : 'transparent' }}
-                        ></div>
-                        <button
-                            onClick={() => saveData('theme', 1)}
-                            className="menu-container__section-item__title-btn"
-                        ></button>
-                    </div>
-                    <div className="menu-container__section-item">
-                        <p className="menu-container__section-item__title">
-                            <span style={{ color: colorThemeContainerText[seto.theme] }}>핑크 테마</span>
-                        </p>
-                        <div
-                            className="menu-container__section-item__active"
-                            style={{ backgroundColor: settings.theme === 2 ? 'skyblue' : 'transparent' }}
-                        ></div>
-                        <button
-                            onClick={() => saveData('theme', 2)}
-                            className="menu-container__section-item__title-btn"
-                        ></button>
-                    </div>
+
+                    {translated.section.theme.list[0].map((i, index) => {
+                        return (
+                            <div className="menu-container__section-item">
+                                <p className="menu-container__section-item__title">
+                                    <span
+                                        style={{ color: colorThemeContainerText[seto.theme] }}
+                                        className={seto.language === 1 ? '' : 'en'}
+                                    >
+                                        {translated.section.theme.list[seto.language][index]}
+                                    </span>
+                                </p>
+                                <div
+                                    className="menu-container__section-item__active"
+                                    style={{ backgroundColor: settings.theme === index ? 'skyblue' : 'transparent' }}
+                                ></div>
+                                <button
+                                    onClick={() => saveData('theme', index)}
+                                    className="menu-container__section-item__title-btn"
+                                ></button>
+                            </div>
+                        );
+                    })}
                 </React.Fragment>
             );
         }
@@ -113,59 +127,45 @@ const Settings = (props) => {
             return (
                 <React.Fragment>
                     <div className="menu-container__section-item">
-                        <p
-                            className={
-                                settings.language !== 1
-                                    ? 'en menu-container__section-item__title menu-container__section-item__title-static'
-                                    : 'menu-container__section-item__title menu-container__section-item__title-static'
-                            }
-                        >
-                            <span style={{ color: colorThemeBackgroundText[seto.theme] }}>언어</span>
+                        <p className="menu-container__section-item__title menu-container__section-item__title-static">
+                            <span
+                                style={{ color: colorThemeBackgroundText[seto.theme] }}
+                                className={seto.language === 1 ? '' : 'en'}
+                            >
+                                {translated.title[seto.language]}
+                            </span>
                             <br />
-                            <span style={{ fontSize: '1.2rem', color: colorThemeContainerActiveText[seto.theme] }}>
+                            <span
+                                style={{ fontSize: '1.2rem', color: colorThemeContainerActiveText[seto.theme] }}
+                                className={seto.language === 1 ? '' : 'en'}
+                            >
                                 {getCurrentSettingsValue('language')}
                             </span>
                         </p>
                     </div>
-                    <div className="menu-container__section-item">
-                        <p className="menu-container__section-item__title">
-                            <span style={{ color: colorThemeContainerText[seto.theme] }}>English</span>
-                        </p>
-                        <div
-                            className="menu-container__section-item__active"
-                            style={{ backgroundColor: settings.language === 0 ? 'skyblue' : 'transparent' }}
-                        ></div>
-                        <button
-                            onClick={() => saveData('language', 0)}
-                            className="menu-container__section-item__title-btn"
-                        ></button>
-                    </div>
-                    <div className="menu-container__section-item">
-                        <p className="menu-container__section-item__title">
-                            <span style={{ color: colorThemeContainerText[seto.theme] }}>한국어</span>
-                        </p>
-                        <div
-                            className="menu-container__section-item__active"
-                            style={{ backgroundColor: settings.language === 1 ? 'skyblue' : 'transparent' }}
-                        ></div>
-                        <button
-                            onClick={() => saveData('language', 1)}
-                            className="menu-container__section-item__title-btn"
-                        ></button>
-                    </div>
-                    <div className="menu-container__section-item">
-                        <p className="en menu-container__section-item__title">
-                            <span style={{ color: colorThemeContainerText[seto.theme] }}>中文 (简体)</span>
-                        </p>
-                        <div
-                            className="menu-container__section-item__active"
-                            style={{ backgroundColor: settings.language === 2 ? 'skyblue' : 'transparent' }}
-                        ></div>
-                        <button
-                            onClick={() => saveData('language', 2)}
-                            className="menu-container__section-item__title-btn"
-                        ></button>
-                    </div>
+
+                    {translated.section.theme.list[0].map((i, index) => {
+                        return (
+                            <div className="menu-container__section-item">
+                                <p className="menu-container__section-item__title">
+                                    <span
+                                        style={{ color: colorThemeContainerText[seto.theme] }}
+                                        className={index === 1 ? '' : 'en'}
+                                    >
+                                        {translated.global.section.lang.list[index]}
+                                    </span>
+                                </p>
+                                <div
+                                    className="menu-container__section-item__active"
+                                    style={{ backgroundColor: settings.language === index ? 'skyblue' : 'transparent' }}
+                                ></div>
+                                <button
+                                    onClick={() => saveData('language', index)}
+                                    className="menu-container__section-item__title-btn"
+                                ></button>
+                            </div>
+                        );
+                    })}
                 </React.Fragment>
             );
         }
@@ -173,14 +173,15 @@ const Settings = (props) => {
 
     const getCurrentSettingsValue = (kind) => {
         if (kind === 'language') {
-            switch (settings.language) {
-                case 0:
-                    return 'English';
-                case 1:
-                    return '한국어';
-                case 2:
-                    return '中文 (简体)';
-            }
+            // switch (settings.language) {
+            //     case 0:
+            //         return 'English';
+            //     case 1:
+            //         return '한국어';
+            //     case 2:
+            //         return '中文 (简体)';
+            // }
+            return translated.global.section.lang.list[settings.language];
         }
     };
 
@@ -188,7 +189,7 @@ const Settings = (props) => {
         <main className={colorMainClassname[seto.theme]}>
             <div className="menu-container">
                 <p className="title" style={{ color: colorThemeBackgroundText[seto.theme] }}>
-                    환경설정
+                    <span className={seto.language === 1 ? '' : 'en'}>{translated.title[seto.language]}</span>
                 </p>
                 <section
                     className="menu-container__section"
