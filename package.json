@@ -1,50 +1,54 @@
 {
-  "name": "cuha-react",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
-    "axios": "^0.24.0",
-    "node-sass": "^7.0.1",
-    "react": "^17.0.2",
-    "react-cookie": "^4.1.1",
-    "react-dom": "^17.0.2",
-    "react-redux": "^7.2.6",
-    "react-router-dom": "^6.2.1",
-    "react-scripts": "5.0.0",
-    "redux": "^4.1.2",
-    "redux-form": "^8.3.8",
-    "redux-thunk": "^2.4.1",
-    "web-vitals": "^2.1.2"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "compile:sass": "node-sass sass/main.scss public/stylesheets/style.css -w --output-style compressed"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "@faker-js/faker": "^6.0.0-alpha.3"
-  }
+    "name": "cuha-react",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "@testing-library/jest-dom": "^5.16.1",
+        "@testing-library/react": "^12.1.2",
+        "@testing-library/user-event": "^13.5.0",
+        "axios": "^0.24.0",
+        "history": "^5.2.0",
+        "http-proxy-middleware": "^2.0.2",
+        "jwt-decode": "^3.1.2",
+        "node-sass": "^7.0.1",
+        "react": "^17.0.2",
+        "react-cookie": "^4.1.1",
+        "react-dom": "^17.0.2",
+        "react-redux": "^7.2.6",
+        "react-router-dom": "^6.2.1",
+        "react-scripts": "5.0.0",
+        "react-top-loading-bar": "^2.1.0",
+        "redux": "^4.1.2",
+        "redux-form": "^8.3.8",
+        "redux-thunk": "^2.4.1",
+        "web-vitals": "^2.1.2"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject",
+        "compile:sass": "node-sass sass/main.scss public/stylesheets/style.css -w --output-style compressed"
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@faker-js/faker": "^6.0.0-alpha.3"
+    }
 }
