@@ -6,6 +6,15 @@ import {
     colorMainRecentPostItemText,
 } from '../utils';
 
+export const translated = {
+    boards: {
+        types: [
+            ['Free', '자유게시판', 'Free'],
+            ['Discussion', '질문게시판', 'Discussion'],
+        ],
+    },
+};
+
 const MainItemCard = (props) => {
     const { seto } = useSelector((state) => ({
         seto: state.seto,
@@ -31,6 +40,10 @@ const MainItemCard = (props) => {
         }
     };
 
+    const getBoardType = () => {
+        return translated.boards.types[Number(props.category)][seto.language];
+    };
+
     return (
         <a
             href="#"
@@ -42,9 +55,15 @@ const MainItemCard = (props) => {
         >
             <div className="feed-items__item-image" style={makeImageURL()}></div>
             <div className="feed-items__item-container">
-                <p className="feed-items__item-container__category">{props.category}</p>
-                <p className="feed-items__item-container__title">{props.title}</p>
-                <p className="feed-items__item-container__subtitle">{props.subtitle}</p>
+                <p className="feed-items__item-container__category">
+                    <span className={seto.language === 1 ? '' : 'en'}>{getBoardType()}</span>
+                </p>
+                <p className="feed-items__item-container__title">
+                    <span className={seto.language === 1 ? '' : 'en'}>{props.title}</span>
+                </p>
+                <p className="feed-items__item-container__subtitle">
+                    <span className={seto.language === 1 ? '' : 'en'}>{props.subtitle}</span>
+                </p>
             </div>
             <div
                 className="feed-items__item-profile"
@@ -53,8 +72,12 @@ const MainItemCard = (props) => {
                 <div className="feed-items__item-profile__left">
                     <div className="feed-items__item-profile-image" style={makeProfileImageURL()}></div>
                     <div className="feed-items__item-profile__text">
-                        <p className="feed-items__item-profile-name">{props.uploaderName}</p>
-                        <p className="feed-items__item-profile-date">2022-02-22</p>
+                        <p className="feed-items__item-profile-name">
+                            <span className={seto.language === 1 ? '' : 'en'}>{props.uploaderName}</span>
+                        </p>
+                        <p className="feed-items__item-profile-date">
+                            <span className={seto.language === 1 ? '' : 'en'}>2022-02-22</span>
+                        </p>
                     </div>
                 </div>
             </div>

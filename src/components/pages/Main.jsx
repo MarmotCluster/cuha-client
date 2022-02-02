@@ -10,22 +10,26 @@ import {
     colorMainSection,
 } from './utils';
 
-// export const Card = ({ name, division, imageUrl }) => {
-//     return (
-//         <div className="card noselect">
-//             <div className="card-profile" style={{ backgroundImage: `url(${imageUrl})` }}></div>
-//             <div className="card-text">
-//                 <div className="card-text__name">{name}</div>
-//                 <div className="card-text__division">{division}</div>
-//             </div>
-//         </div>
-//     );
-// };
+export const translated = {
+    section: {
+        welcome: {
+            title: ['CJU Security Circles', '청주대학교 정보보안 동아리', '清州大学安全团体'],
+            subtitle: [
+                '프로젝트에 즐거움을, 모두에게 기회를.',
+                '프로젝트에 즐거움을, 모두에게 기회를.',
+                '프로젝트에 즐거움을, 모두에게 기회를.',
+            ],
+        },
 
-// Card.defaultProps = {
-//     name: '이름',
-//     division: '역할군',
-// };
+        notices: {
+            title: ['Notices', '공지사항', '通知'],
+        },
+
+        recents: {
+            title: ['Recent Posts', '최신글 모음', '最近的帖子'],
+        },
+    },
+};
 
 const Main = () => {
     const { seto } = useSelector((state) => ({
@@ -80,7 +84,11 @@ const Main = () => {
                 <div className="section-welcome__back noselect">
                     <div className="symbol"></div>
                     <div className="title-wrap">
-                        <h3 className="title">청주대학교 정보보안 동아리</h3>
+                        <h3 className="title">
+                            <span className={seto.language === 1 ? '' : 'en'}>
+                                {translated.section.welcome.title[seto.language]}
+                            </span>
+                        </h3>
                     </div>
                     <p className="subtitle">프로젝트에 즐거움을, 모두에게 기회를.</p>
                 </div>
@@ -94,7 +102,9 @@ const Main = () => {
                 <div className="section-notice__area area" style={{ padding: '2rem' }}>
                     <div className="container-big">
                         <h3 className="title" style={{ color: colorThemeContainerText[seto.theme] }}>
-                            공지사항
+                            <span className={seto.language === 1 ? '' : 'en'}>
+                                {translated.section.notices.title[seto.language]}
+                            </span>
                         </h3>
                         <a className={colorMainRecentNotice[seto.theme]}>동아리 인원을 모집합니다</a>
                         <p className="title-date">2022년 2월 2일</p>
@@ -118,13 +128,15 @@ const Main = () => {
             <section ref={(e) => (ref.current[2] = e)} className={colorMainFeedBackground[seto.theme]}>
                 <div className="area" style={{ padding: '2rem' }}>
                     <h3 className="title" style={{ color: colorThemeContainerText[seto.theme] }}>
-                        최신글 모음
+                        <span className={seto.language === 1 ? '' : 'en'}>
+                            {translated.section.recents.title[seto.language]}
+                        </span>
                     </h3>
 
                     <div className="feed-items">
                         <MainItemCard
                             image=""
-                            category="자유게시판"
+                            category="0"
                             title="Enter Title Here"
                             subtitle="서브 타이틀을 여기에 넣으세요. 세부 내용이 길어지면 점점점 처리하는 방향으로"
                             profileImage=""
@@ -133,7 +145,7 @@ const Main = () => {
                         />
                         <MainItemCard
                             image=""
-                            category="자유게시판"
+                            category="0"
                             title="Enter Title Here"
                             subtitle="서브 타이틀을 여기에 넣으세요"
                             profileImage=""
@@ -142,7 +154,7 @@ const Main = () => {
                         />
                         <MainItemCard
                             image=""
-                            category="자유게시판"
+                            category="0"
                             title="Enter Title Here"
                             subtitle="서브 타이틀을 여기에 넣으세요"
                             profileImage=""
@@ -151,7 +163,7 @@ const Main = () => {
                         />
                         <MainItemCard
                             image=""
-                            category="자유게시판"
+                            category="0"
                             title="Enter Title Here"
                             subtitle="서브 타이틀을 여기에 넣으세요"
                             profileImage=""
@@ -160,7 +172,7 @@ const Main = () => {
                         />
                         <MainItemCard
                             image=""
-                            category="자유게시판"
+                            category="0"
                             title="Enter Title Here"
                             subtitle="서브 타이틀을 여기에 넣으세요"
                             profileImage=""
@@ -169,7 +181,7 @@ const Main = () => {
                         />
                         <MainItemCard
                             image=""
-                            category="자유게시판"
+                            category="0"
                             title="Enter Title Here"
                             subtitle="서브 타이틀을 여기에 넣으세요"
                             profileImage=""
@@ -178,7 +190,7 @@ const Main = () => {
                         />
                         <MainItemCard
                             image=""
-                            category="자유게시판"
+                            category="0"
                             title="Enter Title Here"
                             subtitle="서브 타이틀을 여기에 넣으세요"
                             profileImage=""
@@ -187,7 +199,7 @@ const Main = () => {
                         />
                         <MainItemCard
                             image=""
-                            category="자유게시판"
+                            category="0"
                             title="Enter Title Here"
                             subtitle="서브 타이틀을 여기에 넣으세요"
                             profileImage=""
@@ -196,7 +208,7 @@ const Main = () => {
                         />
                         <MainItemCard
                             image=""
-                            category="자유게시판"
+                            category="0"
                             title="Enter Title Here"
                             subtitle="서브 타이틀을 여기에 넣으세요"
                             profileImage=""
@@ -205,7 +217,7 @@ const Main = () => {
                         />
                         <MainItemCard
                             image=""
-                            category="자유게시판"
+                            category="0"
                             title="Enter Title Here"
                             subtitle="서브 타이틀을 여기에 넣으세요"
                             profileImage=""

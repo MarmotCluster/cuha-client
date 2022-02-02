@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import AddUser from './AddUser';
 // import history from '../history';
 
 import Header from './Header';
@@ -20,10 +21,12 @@ const App = () => {
                     <Route path="/" exact element={<Main />} />
                     <Route path="login" exact element={<Login />} />
                     <Route path="board/:type" exact element={<Board />} />
+                    <Route path="board" exact element={<Board />} />
                     <Route path="ctf" exact element={<CTF />} />
                     <Route path="settings" exact element={<Settings />} />
 
                     <Route path="join" exact element={<Join />} />
+                    <Route path="addmember" exact element={<AddUser />} />
                     <Route path="*" element={<ErrorPage />} />
                 </Routes>
             </BrowserRouter>

@@ -29,4 +29,4 @@ export const colorMainRecentPostItemText = ['', '#f4f4f4', ''];
 
 export const colorMainRecentPostItemProfileBorderTop = ['', '1px solid #333', ''];
 
-export const colorMainSection = ['white', '', 'white'];
+export const colorMainSection = ['white', '#202020', 'white'];

@@ -3,22 +3,30 @@ import forums from '../apis/forums';
 const INITIAL_STATE = {
     isSignedIn: null,
     userAccessToken: null,
+    isAdmin: null,
+    profileImageUrl: null,
 };
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case 'FETCH_ACCOUNT':
-            // console.log(action.payload.headers.authorization.replace('Bearer ', ''));
-
-            if (action.payload.data.code !== 401) {
-                // console.log('체크체크');
-                forums.defaults.headers.common['Authorization'] = action.payload.headers.authorization;
+            if (action.payload.data.code === 200) {
+                forums.defaults.headers.common['Authorization'] = action.payload.data.token.accessToken;
             }
 
             return {
                 ...state,
                 isSignedIn: true,
-                userAccessToken: action.payload.headers.authorization,
+                userAccessToken: action.payload.data.token.accessToken,
+            };
+
+        case 'LOGOUT':
+            forums.defaults.headers.common['Authorization'] = '';
+
+            return {
+                ...state,
+                isSignedIn: false,
+                userAccessToken: null,
             };
 
         default:

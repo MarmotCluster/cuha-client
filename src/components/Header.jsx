@@ -23,7 +23,7 @@ const Header = () => {
                         // activeClassName="header-menu__icon icon-home-active icon-dark"
                     ></NavLink>
                     <NavLink
-                        to="/board/free"
+                        to="/board"
                         className={({ isActive }) =>
                             isActive
                                 ? 'header-menu__icon icon-boards-active icon-dark'

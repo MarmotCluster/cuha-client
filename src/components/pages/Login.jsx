@@ -5,8 +5,24 @@ import { Link } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import LoadingBar from 'react-top-loading-bar';
 
-import { fetchAccount } from '../../actions';
+import { fetchAccount, logoutAccount } from '../../actions';
 import { colorMainClassname, colorThemeBackgroundText, colorMainRecentPostItemText } from './utils';
+
+export const translated = {
+    title: ['Login', '로그인', '登录'],
+    section: {
+        id: {
+            placeholder: ['USERNAME', '아이디', '用户名'],
+            errorDescription: ['The Field above is empty.', '입력란이 비었습니다.', '上面的字段是空的。'],
+        },
+        password: {
+            placeholder: ['PASSWORD', '비밀번호', '密码'],
+            errorDescription: ['The Field above is empty.', '입력란이 비었습니다.', '上面的字段是空的。'],
+        },
+
+        register: ['Have no account?', '계정이 없으신가요?', '对我们来说是新的？'],
+    },
+};
 
 const Login = () => {
     const { seto, accounts } = useSelector((state) => ({
@@ -16,6 +32,7 @@ const Login = () => {
 
     const dispatch = useDispatch();
     const reduxCheckAccount = (id, pw) => dispatch(fetchAccount(id, pw));
+    const reduxLogoutAccount = () => dispatch(logoutAccount());
 
     // REDUX AREA
 
@@ -87,6 +104,10 @@ const Login = () => {
         }
     };
 
+    const tempLogOut = () => {
+        reduxLogoutAccount();
+    };
+
     useEffect(() => {
         console.log(accounts);
     }, [accounts]);
@@ -99,6 +120,7 @@ const Login = () => {
                     <p style={{ fontSize: '1.4rem' }}>{jwtDecode(accounts.userAccessToken).name}</p>
 
                     <div style={{ height: '10rem' }}></div>
+                    <button onClick={() => tempLogOut()}>로그아웃</button>
                 </div>
             </main>
         );
@@ -109,7 +131,7 @@ const Login = () => {
 
                 <div className="menu-container">
                     <p className="title" style={{ color: colorThemeBackgroundText[seto.theme] }}>
-                        로그인
+                        <span className={seto.language === 1 ? '' : 'en'}>{translated.title[seto.language]}</span>
                     </p>
                     <section
                         className="menu-container__section"
@@ -128,14 +150,20 @@ const Login = () => {
                                     onFocus={(e) => funcScrollToMe(e)}
                                     onChange={(e) => funcOnChange(e)}
                                 />
-                                <p className="menu-container__section-form-title">아이디</p>
+                                <p className="menu-container__section-form-title">
+                                    <span className={seto.language === 1 ? '' : 'en'}>
+                                        {translated.section.id.placeholder[seto.language]}
+                                    </span>
+                                </p>
                             </div>
 
                             <div
                                 className="menu-container__section-form__error"
                                 style={{ height: `${err['id'] * 2}rem` }}
                             >
-                                <p>입력란이 비었습니다.</p>
+                                <p className={seto.language === 1 ? '' : 'en'}>
+                                    {translated.section.id.errorDescription[seto.language]}
+                                </p>
                             </div>
 
                             <div className="menu-container__section-form">
@@ -148,14 +176,20 @@ const Login = () => {
                                     placeholder=" "
                                     onChange={(e) => funcOnChange(e)}
                                 />
-                                <p className="menu-container__section-form-title">비밀번호</p>
+                                <p className="menu-container__section-form-title">
+                                    <span className={seto.language === 1 ? '' : 'en'}>
+                                        {translated.section.password.placeholder[seto.language]}
+                                    </span>
+                                </p>
                             </div>
 
                             <div
                                 className="menu-container__section-form__error"
                                 style={{ height: `${err['pw'] * 2}rem` }}
                             >
-                                <p>입력란이 비었습니다.</p>
+                                <p className={seto.language === 1 ? '' : 'en'}>
+                                    {translated.section.password.errorDescription[seto.language]}
+                                </p>
                             </div>
 
                             <div style={{ height: '2rem' }}></div>
@@ -167,7 +201,9 @@ const Login = () => {
                             to="/join"
                             style={{ color: colorMainRecentPostItemText[seto.theme] }}
                         >
-                            계정이 없으신가요?
+                            <span className={seto.language === 1 ? '' : 'en'}>
+                                {translated.section.register[seto.language]}
+                            </span>
                         </Link>
                     </section>
 
