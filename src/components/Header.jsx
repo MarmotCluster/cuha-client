@@ -3,9 +3,12 @@ import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { colorHeaderClassname } from './pages/utils';
 
+import jwtDecode from 'jwt-decode';
+
 const Header = () => {
-    const { seto } = useSelector((state) => ({
+    const { seto, accounts } = useSelector((state) => ({
         seto: state.seto,
+        accounts: state.accounts,
     }));
 
     return (
@@ -32,10 +35,19 @@ const Header = () => {
                         // className="header-menu__icon icon-boards icon-dark"
                         // activeClassName="header-menu__icon icon-boards-active icon-dark"
                     ></NavLink>
-                    <NavLink to="/login" className="header-menu__profile">
+                    <NavLink
+                        to={accounts.isSignedIn ? `/user/${jwtDecode(accounts.userAccessToken).username}` : '/login'}
+                        className="header-menu__profile"
+                    >
                         <div
                             className="header-menu__profile-target"
-                            style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/no-profile.svg)` }}
+                            style={{
+                                backgroundImage:
+                                    // accounts.isSignedIn && accounts.profileImageUrl.length > 0
+                                    //     ? accounts.profileImageUrl
+                                    //     : `url(${process.env.PUBLIC_URL}/images/no-profile.svg)`,
+                                    `url(${process.env.PUBLIC_URL}/images/no-profile.svg)`,
+                            }}
                         ></div>
                     </NavLink>
                     <NavLink
