@@ -43,10 +43,10 @@ const Header = () => {
                             className="header-menu__profile-target"
                             style={{
                                 backgroundImage:
-                                    // accounts.isSignedIn && accounts.profileImageUrl.length > 0
-                                    //     ? accounts.profileImageUrl
-                                    //     : `url(${process.env.PUBLIC_URL}/images/no-profile.svg)`,
-                                    `url(${process.env.PUBLIC_URL}/images/no-profile.svg)`,
+                                    accounts.isSignedIn && accounts.profileImageUrl.length > 0
+                                        ? accounts.profileImageUrl
+                                        : `url(${process.env.PUBLIC_URL}/images/no-profile.svg)`,
+                                // `url(${process.env.PUBLIC_URL}/images/no-profile.svg)`,
                             }}
                         ></div>
                     </NavLink>

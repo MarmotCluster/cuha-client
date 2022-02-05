@@ -97,7 +97,7 @@ const Settings = (props) => {
 
                     {translated.section.theme.list[0].map((i, index) => {
                         return (
-                            <div className="menu-container__section-item">
+                            <div className="menu-container__section-item" key={index}>
                                 <p className="menu-container__section-item__title">
                                     <span
                                         style={{ color: colorThemeContainerText[seto.theme] }}
@@ -146,7 +146,7 @@ const Settings = (props) => {
 
                     {translated.section.theme.list[0].map((i, index) => {
                         return (
-                            <div className="menu-container__section-item">
+                            <div className="menu-container__section-item" key={index}>
                                 <p className="menu-container__section-item__title">
                                     <span
                                         style={{ color: colorThemeContainerText[seto.theme] }}

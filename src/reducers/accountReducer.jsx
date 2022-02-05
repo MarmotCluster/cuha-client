@@ -9,7 +9,7 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case 'FETCH_ACCOUNT':
+        case 'LOGIN':
             if (action.payload.data.code === 200) {
                 forums.defaults.headers.common['Authorization'] = action.payload.data.token.accessToken;
             }

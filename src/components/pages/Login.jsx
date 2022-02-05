@@ -108,9 +108,9 @@ const Login = () => {
         reduxLogoutAccount();
     };
 
-    useEffect(() => {
-        console.log(accounts);
-    }, [accounts]);
+    // useEffect(() => {
+    //     console.log(accounts);
+    // }, [accounts]);
 
     if (accounts.isSignedIn) {
         return (

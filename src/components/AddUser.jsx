@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import LoadingBar from 'react-top-loading-bar';
 import { useNavigate } from 'react-router-dom';
 import { colorMainClassname, colorThemeBackgroundText, colorMainRecentPostItemText } from './pages/utils';
+import { createAccount, testAxios } from '../actions';
 
 const AddUser = (props) => {
     const navigate = useNavigate();
@@ -13,8 +14,7 @@ const AddUser = (props) => {
     }));
 
     const dispatch = useDispatch();
-    const reduxCheckAccount = (id, name, email, pw) => dispatch(/*fetchAccount(id, pw)*/);
-    const reduxLogoutAccount = () => dispatch(/*logoutAccount()*/);
+    const reduxAddAccount = (id, name, email, pw) => dispatch(testAxios() /*createAccount(id, name, email, pw)*/);
 
     // REDUX AREA
 
@@ -91,11 +91,14 @@ const AddUser = (props) => {
         // }
     };
 
-    useEffect(() => {
+    useEffect(async () => {
         // console.log(`allFine changed : ${allFine}`);
         if (allFine >= 5) {
             console.log('lets go');
-            // reduxCheckAccount
+            loadingRef.current.continuousStart();
+            const res = await reduxAddAccount();
+            console.log(res);
+            loadingRef.current.complete();
         }
     }, [allFine]);
 

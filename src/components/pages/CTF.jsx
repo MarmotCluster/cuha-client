@@ -10,10 +10,6 @@ const CTF = () => {
     }));
     // Redux
 
-    useEffect(() => {
-        forums.get('/user').then((res) => console.log(res));
-    }, []);
-
     return (
         <main className={colorMainClassname[seto.theme]}>
             <p className="en" style={{ fontSize: '2rem' }}>
