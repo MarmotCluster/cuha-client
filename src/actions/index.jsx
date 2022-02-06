@@ -46,7 +46,7 @@ export const lookupUser = (username) => async (dispatch) => {
     dispatch({ type: 'FETCH_USER', payload: res });
 };
 
-export const createAccount = (id, username, email, password) => async (dispatch) => {
+export const createAccount = (id, username, department, studentId, email, password) => async (dispatch) => {
     let _data = {
         id,
         username,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Cookies } from 'react-cookie';
+import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 

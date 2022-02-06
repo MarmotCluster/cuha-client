@@ -4,6 +4,7 @@ import LoadingBar from 'react-top-loading-bar';
 import { useNavigate } from 'react-router-dom';
 import { colorMainClassname, colorThemeBackgroundText, colorMainRecentPostItemText } from './pages/utils';
 import { createAccount, testAxios } from '../actions';
+import InputCustom from './pages/forms/InputCustom';
 
 const AddUser = (props) => {
     const navigate = useNavigate();
@@ -14,7 +15,8 @@ const AddUser = (props) => {
     }));
 
     const dispatch = useDispatch();
-    const reduxAddAccount = (id, name, email, pw) => dispatch(testAxios() /*createAccount(id, name, email, pw)*/);
+    const reduxAddAccount = (id, name, department, studentId, gender, email, pw) =>
+        dispatch(testAxios() /*createAccount(id, name, email, pw)*/);
 
     // REDUX AREA
 
@@ -25,6 +27,9 @@ const AddUser = (props) => {
     const [form, setForm] = useState({
         id: '',
         realname: '',
+        studentId: '',
+        department: '',
+        gender: '',
         email: '',
         pw: '',
         confirmPw: '',
@@ -33,6 +38,8 @@ const AddUser = (props) => {
     const [err, setErr] = useState({
         id: 0,
         realname: 0,
+        studentId: 0,
+        department: 0,
         email: 0,
         pw: 0,
         confirmPw: 0,
@@ -50,13 +57,15 @@ const AddUser = (props) => {
 
     const funcOnSubmit = (e) => {
         e.preventDefault();
-        const { id, realname, email, pw, confirmPw } = e.target;
+        console.log(form);
 
-        const list = { id, realname, email, pw, confirmPw };
+        // const { id, realname, department, studentId, email, pw, confirmPw } = e.target;
+
+        // const list = { id, realname, department, studentId, email, pw, confirmPw };
 
         setAllFine((state) => 0);
 
-        Object.keys(list).forEach((item) => {
+        Object.keys(form).forEach((item) => {
             // console.log(item, typeof item);
 
             if (item !== 'pw' && item !== 'confirmPw') {
@@ -92,8 +101,8 @@ const AddUser = (props) => {
     };
 
     useEffect(async () => {
-        // console.log(`allFine changed : ${allFine}`);
-        if (allFine >= 5) {
+        console.log(`allFine changed : ${allFine}`);
+        if (allFine >= 7) {
             console.log('lets go');
             loadingRef.current.continuousStart();
             const res = await reduxAddAccount();
@@ -114,6 +123,63 @@ const AddUser = (props) => {
 
     // return <div>{`:(`}</div>;
 
+    const renderSelectElement = () => {
+        return (
+            <React.Fragment>
+                <div className="menu-container__section-form">
+                    <select
+                        className="menu-container__section-form-input"
+                        name="gender"
+                        id="gender"
+                        style={{ padding: '1rem' }}
+                        onChange={(e) => funcOnChange(e)}
+                    >
+                        <option value="male">남자</option>
+                        <option value="female">여자</option>
+                    </select>
+                </div>
+
+                <div className="menu-container__section-form__error" style={{ height: `${err['gender'] * 2}rem` }}>
+                    <p className={seto.language === 1 ? '' : 'en'}>입력란이 비었습니다.</p>
+                </div>
+            </React.Fragment>
+        );
+    };
+
+    const inputElements = [
+        ['text', '아이디', 'id', '입력란이 비었습니다.'],
+        ['text', '이름', 'realname', '입력란이 비었습니다.'],
+        ['text', '학과', 'department', '입력란이 비었습니다.'],
+        ['text', '학번', 'studentId', '입력란이 비었습니다.'],
+        ['select', '성별', 'gender', '입력란이 비었습니다.'],
+        ['email', '이메일', 'email', '입력란이 비었습니다.'],
+        ['password', '비밀번호', 'pw', '입력란이 비었거나 하위 항목과 일치하지 않습니다'],
+        ['password', '비밀번호 확인', 'confirmPw', '입력란이 비었거나 하위 항목과 일치하지 않습니다'],
+    ];
+
+    const renderElements = () => {
+        return inputElements.map((i, index) => {
+            if (i[0] !== 'select') {
+                return (
+                    <InputCustom
+                        key={index}
+                        type={i[0]}
+                        name={i[2]}
+                        value={form[i[2]]}
+                        placeholder=" "
+                        autoComplete="off"
+                        onChange={(e) => funcOnChange(e)}
+                        thisName={i[1]}
+                        errorValue={err[i[2]]}
+                        errorMessage={i[3]}
+                    />
+                );
+            }
+
+            return renderSelectElement();
+        });
+    };
+
     return (
         <main className={colorMainClassname[seto.theme]}>
             <LoadingBar color="#0a33cc" ref={loadingRef} />
@@ -127,126 +193,12 @@ const AddUser = (props) => {
                     style={{ width: 'calc(100% - 10rem)', maxWidth: '48rem', padding: '2rem' }}
                 >
                     <form name="login" onSubmit={(e) => funcOnSubmit(e)}>
-                        <div className="menu-container__section-form">
-                            <input
-                                className="menu-container__section-form-input"
-                                type="text"
-                                name="id"
-                                value={form.id}
-                                placeholder=" "
-                                autoComplete="off"
-                                onChange={(e) => funcOnChange(e)}
-                            />
-                            <p className="menu-container__section-form-title">
-                                <span className={seto.language === 1 ? '' : 'en'}>아이디</span>
-                            </p>
-                        </div>
-
-                        <div className="menu-container__section-form__error" style={{ height: `${err['id'] * 2}rem` }}>
-                            <p className={seto.language === 1 ? '' : 'en'}>입력란이 비었습니다.</p>
-                        </div>
-
-                        <div className="menu-container__section-form">
-                            <input
-                                className="menu-container__section-form-input"
-                                type="text"
-                                name="realname"
-                                value={form.realname}
-                                placeholder=" "
-                                autoComplete="off"
-                                onChange={(e) => funcOnChange(e)}
-                            />
-                            <p className="menu-container__section-form-title">
-                                <span className={seto.language === 1 ? '' : 'en'}>이름</span>
-                            </p>
-                        </div>
-
-                        <div
-                            className="menu-container__section-form__error"
-                            style={{ height: `${err['realname'] * 2}rem` }}
-                        >
-                            <p className={seto.language === 1 ? '' : 'en'}>입력란이 비었습니다.</p>
-                        </div>
-
-                        <div className="menu-container__section-form">
-                            <input
-                                className="menu-container__section-form-input"
-                                type="email"
-                                name="email"
-                                value={form.email}
-                                placeholder=" "
-                                autoComplete="off"
-                                onChange={(e) => funcOnChange(e)}
-                            />
-                            <p className="menu-container__section-form-title">
-                                <span className={seto.language === 1 ? '' : 'en'}>이메일</span>
-                            </p>
-                        </div>
-
-                        <div
-                            className="menu-container__section-form__error"
-                            style={{ height: `${err['email'] * 2}rem` }}
-                        >
-                            <p className={seto.language === 1 ? '' : 'en'}>입력란이 비었습니다.</p>
-                        </div>
-
-                        <div className="menu-container__section-form">
-                            <input
-                                className="menu-container__section-form-input"
-                                type="password"
-                                name="pw"
-                                value={form.pw}
-                                placeholder=" "
-                                onChange={(e) => funcOnChange(e)}
-                            />
-                            <p className="menu-container__section-form-title">
-                                <span className={seto.language === 1 ? '' : 'en'}>비밀번호</span>
-                            </p>
-                        </div>
-
-                        <div className="menu-container__section-form__error" style={{ height: `${err['pw'] * 2}rem` }}>
-                            <p className={seto.language === 1 ? '' : 'en'}>
-                                입력란이 비었거나 하위 항목과 일치하지 않습니다
-                            </p>
-                        </div>
-
-                        <div className="menu-container__section-form">
-                            <input
-                                className="menu-container__section-form-input"
-                                type="password"
-                                name="confirmPw"
-                                value={form.confirmPw}
-                                placeholder=" "
-                                onChange={(e) => funcOnChange(e)}
-                            />
-                            <p className="menu-container__section-form-title">
-                                <span className={seto.language === 1 ? '' : 'en'}>비밀번호 확인</span>
-                            </p>
-                        </div>
-
-                        <div
-                            className="menu-container__section-form__error"
-                            style={{ height: `${err['confirmPw'] * 2}rem` }}
-                        >
-                            <p className={seto.language === 1 ? '' : 'en'}>
-                                입력란이 비었거나 상위 항목과 일치하지 않습니다
-                            </p>
-                        </div>
+                        {renderElements()}
 
                         <div style={{ height: '2rem' }}></div>
 
                         <button className="menu-container__section-form-submit" type="submit"></button>
                     </form>
-
-                    {/* <Link
-                        className="menu-container__section-form-join"
-                        to="/join"
-                        style={{ color: colorMainRecentPostItemText[seto.theme] }}
-                    >
-                        <span className={seto.language === 1 ? '' : 'en'}>
-                            {translated.section.register[seto.language]}
-                        </span>
-                    </Link> */}
                 </section>
 
                 <div style={{ height: '10rem' }}></div>

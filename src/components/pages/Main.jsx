@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import MainItemCard from './feeds/MainItemCard';
@@ -40,6 +41,7 @@ const Main = () => {
 
     const ref = useRef([]);
     const [logo, setLogo] = useState('icon icon-white');
+    const [tempDataRemoveThisLater, setTempDataRemoveThisLater] = useState({});
 
     useEffect(() => {
         function shouldOriginal() {
@@ -68,11 +70,40 @@ const Main = () => {
         };
 
         window.addEventListener('scroll', funcScrollEvent);
+        renderTempFromPlaceHolder();
 
         return () => {
             window.removeEventListener('scroll', funcScrollEvent);
         };
     }, []);
+
+    const renderTempFromPlaceHolder = async () => {
+        const res = await axios.get('https://jsonplaceholder.typicode.com/posts');
+        // console.log(res.data);
+
+        setTempDataRemoveThisLater((state) => res);
+    };
+
+    const renderAlly = () => {
+        console.log(tempDataRemoveThisLater, Object.keys(tempDataRemoveThisLater).length);
+        if (Object.keys(tempDataRemoveThisLater).length > 0) {
+            // console.log('렌더시작');
+            return tempDataRemoveThisLater.data.map((i, index) => {
+                return (
+                    <MainItemCard
+                        key={index}
+                        image=""
+                        category={`${Math.round(Math.random())}`}
+                        title={i.title}
+                        subtitle={i.body}
+                        profileImage=""
+                        uploaderName="Jasmin Pay"
+                        uploadedDate="2022-02-22"
+                    />
+                );
+            });
+        }
+    };
 
     return (
         <main className={colorMainClassname[seto.theme]}>
@@ -134,96 +165,22 @@ const Main = () => {
                     </h3>
 
                     <div className="feed-items">
-                        <MainItemCard
-                            image=""
-                            category="0"
-                            title="Enter Title Here"
-                            subtitle="서브 타이틀을 여기에 넣으세요. 세부 내용이 길어지면 점점점 처리하는 방향으로"
-                            profileImage=""
-                            uploaderName="Jasmin Pay"
-                            uploadedDate="2022-02-22"
-                        />
-                        <MainItemCard
-                            image=""
-                            category="0"
-                            title="Enter Title Here"
-                            subtitle="서브 타이틀을 여기에 넣으세요"
-                            profileImage=""
-                            uploaderName="Jasmin Pay"
-                            uploadedDate="2022-02-22"
-                        />
-                        <MainItemCard
-                            image=""
-                            category="0"
-                            title="Enter Title Here"
-                            subtitle="서브 타이틀을 여기에 넣으세요"
-                            profileImage=""
-                            uploaderName="Jasmin Pay"
-                            uploadedDate="2022-02-22"
-                        />
-                        <MainItemCard
-                            image=""
-                            category="0"
-                            title="Enter Title Here"
-                            subtitle="서브 타이틀을 여기에 넣으세요"
-                            profileImage=""
-                            uploaderName="Jasmin Pay"
-                            uploadedDate="2022-02-22"
-                        />
-                        <MainItemCard
-                            image=""
-                            category="0"
-                            title="Enter Title Here"
-                            subtitle="서브 타이틀을 여기에 넣으세요"
-                            profileImage=""
-                            uploaderName="Jasmin Pay"
-                            uploadedDate="2022-02-22"
-                        />
-                        <MainItemCard
-                            image=""
-                            category="0"
-                            title="Enter Title Here"
-                            subtitle="서브 타이틀을 여기에 넣으세요"
-                            profileImage=""
-                            uploaderName="Jasmin Pay"
-                            uploadedDate="2022-02-22"
-                        />
-                        <MainItemCard
-                            image=""
-                            category="0"
-                            title="Enter Title Here"
-                            subtitle="서브 타이틀을 여기에 넣으세요"
-                            profileImage=""
-                            uploaderName="Jasmin Pay"
-                            uploadedDate="2022-02-22"
-                        />
-                        <MainItemCard
-                            image=""
-                            category="0"
-                            title="Enter Title Here"
-                            subtitle="서브 타이틀을 여기에 넣으세요"
-                            profileImage=""
-                            uploaderName="Jasmin Pay"
-                            uploadedDate="2022-02-22"
-                        />
-                        <MainItemCard
-                            image=""
-                            category="0"
-                            title="Enter Title Here"
-                            subtitle="서브 타이틀을 여기에 넣으세요"
-                            profileImage=""
-                            uploaderName="Jasmin Pay"
-                            uploadedDate="2022-02-22"
-                        />
-                        <MainItemCard
-                            image=""
-                            category="0"
-                            title="Enter Title Here"
-                            subtitle="서브 타이틀을 여기에 넣으세요"
-                            profileImage=""
-                            uploaderName="Jasmin Pay"
-                            uploadedDate="2022-02-22"
-                        />
+                        {/* {Array.from(Array(32).keys()).map((i, index) => {
+                            return (
+                                <MainItemCard
+                                    key={index}
+                                    image=""
+                                    category="0"
+                                    title="Enter Title Here"
+                                    subtitle="서브 타이틀을 여기에 넣으세요. 세부 내용이 길어지면 점점점 처리하는 방향으로"
+                                    profileImage=""
+                                    uploaderName="Jasmin Pay"
+                                    uploadedDate="2022-02-22"
+                                />
+                            );
+                        })} */}
+
+                        {renderAlly()}
                     </div>
                 </div>
             </section>

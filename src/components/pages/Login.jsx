@@ -7,6 +7,7 @@ import LoadingBar from 'react-top-loading-bar';
 
 import { fetchAccount, logoutAccount } from '../../actions';
 import { colorMainClassname, colorThemeBackgroundText, colorMainRecentPostItemText } from './utils';
+import InputCustom from './forms/InputCustom';
 
 export const translated = {
     title: ['Login', '로그인', '登录'],
@@ -86,6 +87,7 @@ const Login = () => {
         }
 
         if (id.value.length !== 0 && pw.value.length !== 0) {
+            // console.log(form.id, form.pw);
             loadingRef.current.continuousStart();
             reduxCheckAccount(id.value, pw.value);
             loadingRef.current.complete();
@@ -138,61 +140,31 @@ const Login = () => {
                         style={{ width: 'calc(100% - 10rem)', maxWidth: '48rem', padding: '2rem' }}
                     >
                         <form name="login" onSubmit={(e) => funcOnSubmit(e)}>
-                            <div className="menu-container__section-form">
-                                <input
-                                    className="menu-container__section-form-input"
-                                    ref={(el) => (ref.current[0] = el)}
-                                    type="text"
-                                    name="id"
-                                    value={form.id}
-                                    placeholder=" "
-                                    autoComplete="off"
-                                    onFocus={(e) => funcScrollToMe(e)}
-                                    onChange={(e) => funcOnChange(e)}
-                                />
-                                <p className="menu-container__section-form-title">
-                                    <span className={seto.language === 1 ? '' : 'en'}>
-                                        {translated.section.id.placeholder[seto.language]}
-                                    </span>
-                                </p>
-                            </div>
+                            <InputCustom
+                                ref={(el) => (ref.current[0] = el)}
+                                type="text"
+                                name="id"
+                                value={form.id}
+                                placeholder=" "
+                                autoComplete="off"
+                                onChange={(e) => funcOnChange(e)}
+                                thisName={translated.section.id.placeholder[seto.language]}
+                                errorValue={err.id}
+                                errorMessage={translated.section.id.errorDescription[seto.language]}
+                            />
 
-                            <div
-                                className="menu-container__section-form__error"
-                                style={{ height: `${err['id'] * 2}rem` }}
-                            >
-                                <p className={seto.language === 1 ? '' : 'en'}>
-                                    {translated.section.id.errorDescription[seto.language]}
-                                </p>
-                            </div>
-
-                            <div className="menu-container__section-form">
-                                <input
-                                    className="menu-container__section-form-input"
-                                    ref={(el) => (ref.current[1] = el)}
-                                    type="password"
-                                    name="pw"
-                                    value={form.pw}
-                                    placeholder=" "
-                                    onChange={(e) => funcOnChange(e)}
-                                />
-                                <p className="menu-container__section-form-title">
-                                    <span className={seto.language === 1 ? '' : 'en'}>
-                                        {translated.section.password.placeholder[seto.language]}
-                                    </span>
-                                </p>
-                            </div>
-
-                            <div
-                                className="menu-container__section-form__error"
-                                style={{ height: `${err['pw'] * 2}rem` }}
-                            >
-                                <p className={seto.language === 1 ? '' : 'en'}>
-                                    {translated.section.password.errorDescription[seto.language]}
-                                </p>
-                            </div>
-
-                            <div style={{ height: '2rem' }}></div>
+                            <InputCustom
+                                ref={(el) => (ref.current[1] = el)}
+                                type="password"
+                                name="pw"
+                                value={form.pw}
+                                placeholder=" "
+                                autoComplete="off"
+                                onChange={(e) => funcOnChange(e)}
+                                thisName={translated.section.password.placeholder[seto.language]}
+                                errorValue={err.pw}
+                                errorMessage={translated.section.password.errorDescription[seto.language]}
+                            />
 
                             <button className="menu-container__section-form-submit" type="submit"></button>
                         </form>
