@@ -63,7 +63,10 @@ const User = () => {
                                     <Link to="/" className="section-profile__textsContainer__tools-button noselect">
                                         출석체크하기
                                     </Link>
-                                    <Link to="/" className="section-profile__textsContainer__tools-button noselect">
+                                    <Link
+                                        to="/editmember/root"
+                                        className="section-profile__textsContainer__tools-button noselect"
+                                    >
                                         내 정보 수정
                                     </Link>
                                 </div>

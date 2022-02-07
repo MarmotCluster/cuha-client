@@ -6,6 +6,8 @@ import {
     colorMainRecentPostItemText,
 } from '../utils';
 
+import { Link } from 'react-router-dom';
+
 export const translated = {
     boards: {
         types: [
@@ -45,7 +47,7 @@ const MainItemCard = (props) => {
     };
 
     return (
-        <a
+        <div
             href="#"
             className="feed-items__item"
             style={{
@@ -53,35 +55,39 @@ const MainItemCard = (props) => {
                 color: colorMainRecentPostItemText[seto.theme],
             }}
         >
-            <div className="feed-items__item-image" style={makeImageURL()}></div>
-            <div className="feed-items__item-container">
-                <p className="feed-items__item-container__category">
-                    <span className={seto.language === 1 ? '' : 'en'}>{getBoardType()}</span>
-                </p>
-                <p className="feed-items__item-container__title">
-                    <span className={seto.language === 1 ? '' : 'en'}>{props.title}</span>
-                </p>
-                <p className="feed-items__item-container__subtitle">
-                    <span className={seto.language === 1 ? '' : 'en'}>{props.subtitle}</span>
-                </p>
-            </div>
-            <div
-                className="feed-items__item-profile"
-                style={{ borderTop: colorMainRecentPostItemProfileBorderTop[seto.theme] }}
-            >
-                <div className="feed-items__item-profile__left">
-                    <div className="feed-items__item-profile-image" style={makeProfileImageURL()}></div>
-                    <div className="feed-items__item-profile__text">
-                        <p className="feed-items__item-profile-name">
-                            <span className={seto.language === 1 ? '' : 'en'}>{props.uploaderName}</span>
-                        </p>
-                        <p className="feed-items__item-profile-date">
-                            <span className={seto.language === 1 ? '' : 'en'}>2022-02-22</span>
-                        </p>
+            <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div className="feed-items__item-image" style={makeImageURL()}></div>
+                <div className="feed-items__item-container">
+                    <p className="feed-items__item-container__category">
+                        <span className={seto.language === 1 ? '' : 'en'}>{getBoardType()}</span>
+                    </p>
+                    <p className="feed-items__item-container__title">
+                        <span className={seto.language === 1 ? '' : 'en'}>{props.title}</span>
+                    </p>
+                    <p className="feed-items__item-container__subtitle">
+                        <span className={seto.language === 1 ? '' : 'en'}>{props.subtitle}</span>
+                    </p>
+                </div>
+            </Link>
+            <Link to="/member/root" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div
+                    className="feed-items__item-profile"
+                    style={{ borderTop: colorMainRecentPostItemProfileBorderTop[seto.theme] }}
+                >
+                    <div className="feed-items__item-profile__left">
+                        <div className="feed-items__item-profile-image" style={makeProfileImageURL()}></div>
+                        <div className="feed-items__item-profile__text">
+                            <p className="feed-items__item-profile-name">
+                                <span className={seto.language === 1 ? '' : 'en'}>{props.uploaderName}</span>
+                            </p>
+                            <p className="feed-items__item-profile-date">
+                                <span className={seto.language === 1 ? '' : 'en'}>2022-02-22</span>
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </a>
+            </Link>
+        </div>
     );
 };
 

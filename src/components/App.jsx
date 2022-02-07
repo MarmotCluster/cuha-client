@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AddUser from './AddUser';
+import EditUser from './EditUser';
 // import history from '../history';
 
 import Header from './Header';
@@ -27,6 +28,7 @@ const App = () => {
                     <Route path="settings" exact element={<Settings />} />
 
                     <Route path="member/:username" exact element={<User />} />
+                    <Route path="editmember/:username" exact element={<EditUser />} />
 
                     <Route path="join" exact element={<Join />} />
                     <Route path="addmember" exact element={<AddUser />} />
