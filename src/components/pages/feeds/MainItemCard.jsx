@@ -46,6 +46,12 @@ const MainItemCard = (props) => {
         return translated.boards.types[Number(props.category)][seto.language];
     };
 
+    const renderImageIfExists = () => {
+        if (makeImageURL() !== null) {
+            return <div className="feed-items__item-image" style={makeImageURL()}></div>;
+        }
+    };
+
     return (
         <div
             href="#"
@@ -56,7 +62,7 @@ const MainItemCard = (props) => {
             }}
         >
             <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-                <div className="feed-items__item-image" style={makeImageURL()}></div>
+                {renderImageIfExists()}
                 <div className="feed-items__item-container">
                     <p className="feed-items__item-container__category">
                         <span className={seto.language === 1 ? '' : 'en'}>{getBoardType()}</span>

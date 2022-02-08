@@ -42,6 +42,19 @@ const Main = () => {
     const ref = useRef([]);
     const [logo, setLogo] = useState('icon icon-white');
     const [tempDataRemoveThisLater, setTempDataRemoveThisLater] = useState({});
+    const [columnCount, setColumnCount] = useState((state) => {
+        let val = window.document.documentElement.clientWidth;
+
+        if (val < 500) {
+            return 1;
+        } else if (val >= 500 && val < 700) {
+            return 2;
+        } else if (val >= 700 && val < 900) {
+            return 3;
+        } else {
+            return 4;
+        }
+    });
 
     useEffect(() => {
         function shouldOriginal() {
@@ -69,11 +82,27 @@ const Main = () => {
             }
         };
 
+        const funcResizeEvent = (e) => {
+            let val = window.document.documentElement.clientWidth;
+
+            if (val < 500) {
+                setColumnCount((state) => 1);
+            } else if (val >= 500 && val < 700) {
+                setColumnCount((state) => 2);
+            } else if (val >= 700 && val < 900) {
+                setColumnCount((state) => 3);
+            } else {
+                setColumnCount((state) => 4);
+            }
+        };
+
         window.addEventListener('scroll', funcScrollEvent);
+        window.addEventListener('resize', funcResizeEvent);
         renderTempFromPlaceHolder();
 
         return () => {
             window.removeEventListener('scroll', funcScrollEvent);
+            window.removeEventListener('resize', funcResizeEvent);
         };
     }, []);
 
@@ -84,25 +113,47 @@ const Main = () => {
         setTempDataRemoveThisLater((state) => res);
     };
 
-    const renderAlly = () => {
-        console.log(tempDataRemoveThisLater, Object.keys(tempDataRemoveThisLater).length);
+    const renderInnerAlly = (cols) => {
         if (Object.keys(tempDataRemoveThisLater).length > 0) {
             // console.log('렌더시작');
+
             return tempDataRemoveThisLater.data.map((i, index) => {
-                return (
-                    <MainItemCard
-                        key={index}
-                        image=""
-                        category={`${Math.round(Math.random())}`}
-                        title={i.title}
-                        subtitle={i.body}
-                        profileImage=""
-                        uploaderName="Jasmin Pay"
-                        uploadedDate="2022-02-22"
-                    />
-                );
+                if (index % columnCount === cols) {
+                    return (
+                        <MainItemCard
+                            key={index}
+                            image=""
+                            category={`${Math.round(Math.random())}`}
+                            title={i.title}
+                            subtitle={i.body}
+                            profileImage=""
+                            uploaderName="Jasmin Pay"
+                            uploadedDate="2022-02-22"
+                        />
+                    );
+                }
             });
         }
+    };
+
+    const renderAlly = () => {
+        // console.log(tempDataRemoveThisLater, Object.keys(tempDataRemoveThisLater).length);
+
+        return Array.from(Array(columnCount).keys()).map((i, index) => {
+            return (
+                <div
+                    className="feed-items-col"
+                    key={index}
+                    style={{
+                        width: `${(1 / columnCount) * 100}%`,
+                        // position: 'relative',
+                        // backgroundColor: ['red', 'yellow', 'green', 'blue'][Math.round(Math.random() * 3)],
+                    }}
+                >
+                    {renderInnerAlly(index)}
+                </div>
+            );
+        });
     };
 
     return (
