@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingBar from 'react-top-loading-bar';
 import { useNavigate } from 'react-router-dom';
-import { colorMainClassname, colorThemeBackgroundText, colorMainRecentPostItemText } from './pages/utils';
-import { createAccount, testAxios } from '../actions';
+import { colorMainClassname, colorThemeBackgroundText } from './pages/utils';
+import { testAxios } from '../actions';
 import InputCustom from './pages/forms/InputCustom';
 import forums from '../apis/forums';
 
