@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { colorMainClassname, colorThemeBackgroundText, colorMainRecentPostItemText } from './pages/utils';
 import { createAccount, testAxios } from '../actions';
 import InputCustom from './pages/forms/InputCustom';
+import forums from '../apis/forums';
 
 const AddUser = (props) => {
     const navigate = useNavigate();
@@ -29,7 +30,7 @@ const AddUser = (props) => {
         realname: '',
         studentId: '',
         department: '',
-        gender: '',
+        gender: 'male',
         email: '',
         pw: '',
         confirmPw: '',
@@ -52,7 +53,7 @@ const AddUser = (props) => {
             ...form,
             [e.target.name]: e.target.value,
         });
-        // console.log(ref);
+        // console.log(e.target.name, e.target.value);
     };
 
     const funcOnSubmit = (e) => {
@@ -105,8 +106,26 @@ const AddUser = (props) => {
         if (allFine >= 7) {
             console.log('lets go');
             loadingRef.current.continuousStart();
-            const res = await reduxAddAccount();
-            console.log(res);
+
+            let _data = {
+                department: 'DIGITAL_SECURITY',
+                email: form.email,
+                male: form.gender === 'male' ? true : false,
+                name: form.realname,
+                password: form.pw,
+                phoneNumber: '010-0000-0000',
+                studentNumber: form.studentId,
+                username: form.id,
+            };
+
+            console.log(_data);
+
+            forums
+                .post('/members/join', _data)
+                .then((res) => console.log(res))
+                .catch((e) => console.log(e));
+
+            // console.log(res);
             loadingRef.current.complete();
         }
     }, [allFine]);

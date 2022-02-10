@@ -25,25 +25,31 @@ const User = () => {
     // Parameter
 
     const [isUserExist, SetIsUserExist] = useState(true);
-    const [userData, setUserData] = useState({});
+    const [userInfo, setUserInfo] = useState({});
     // useLocals
 
     useEffect(() => {
         const { username } = param;
 
-        if (accounts.userAccessToken !== null) {
-            setUserData((state) => jwtDecode(accounts.userAccessToken));
-        } else if (username.length > 0) {
-            // reduxLookupUser(param.username);
-            forums
-                .post('/members', JSON.stringify({ username }))
-                .then((res) => {
-                    console.log(res);
-                    SetIsUserExist((state) => true);
-                })
-                .catch((err) => console.log(err));
+        // if (accounts.userAccessToken !== null) {
+        //     setUserData((state) => jwtDecode(accounts.userAccessToken));
+        // } else if (username.length > 0) {
+        //     // reduxLookupUser(param.username);
+        //     forums
+        //         .post('/members', JSON.stringify({ username }))
+        //         .then((res) => {
+        //             console.log(res);
+        //             SetIsUserExist((state) => true);
+        //         })
+        //         .catch((err) => console.log(err));
+        // }
+
+        if (accounts.isSignedIn) {
+            forums.get('/members').then((res) => {
+                setUserInfo((state) => res.data);
+            });
         }
-    });
+    }, []);
 
     if (isUserExist) {
         return (
@@ -56,8 +62,8 @@ const User = () => {
                                 style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/no-profile.svg)` }}
                             ></div>
                             <div className="section-profile__textsContainer">
-                                <p className="section-profile__textsContainer-username">김호연</p>
-                                <p className="section-profile__textsContainer-shortIntroduce">하루하루가 너무 빨라</p>
+                                <p className="section-profile__textsContainer-username">{userInfo.name}</p>
+                                <p className="section-profile__textsContainer-shortIntroduce">{userInfo.department}</p>
 
                                 <div className="section-profile__textsContainer__tools">
                                     <Link to="/" className="section-profile__textsContainer__tools-button noselect">

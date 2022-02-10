@@ -6,6 +6,7 @@ import { colorMainClassname, colorThemeBackgroundText, colorMainRecentPostItemTe
 import { createAccount, testAxios } from '../actions';
 import InputCustom from './pages/forms/InputCustom';
 import history from '../history';
+import forums from '../apis/forums';
 
 const EditUser = (props) => {
     const navigate = useNavigate();
@@ -266,6 +267,10 @@ const EditUser = (props) => {
         });
     };
 
+    const withdrawAccount = () => {
+        forums.delete('/members').then((res) => console.log(res));
+    };
+
     const renderProfileImageUploader = () => {
         return (
             <div
@@ -323,6 +328,8 @@ const EditUser = (props) => {
                         {renderProfileImageUploader()}
 
                         {renderElements()}
+
+                        <button onClick={() => withdrawAccount()}>탈퇴</button>
 
                         <div style={{ height: '2rem' }}></div>
 
