@@ -44,11 +44,12 @@ const User = () => {
         //         .catch((err) => console.log(err));
         // }
 
-        if (accounts.isSignedIn) {
-            forums.get('/members').then((res) => {
-                setUserInfo((state) => res.data);
-            });
-        }
+        // if (accounts.isSignedIn) {
+        forums.get(`/members/${username}`).then((res) => {
+            console.log(res);
+            setUserInfo((state) => res.data);
+        });
+        // }
     }, []);
 
     if (isUserExist) {
