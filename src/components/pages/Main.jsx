@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import ExpiredPassword from '../ExpiredPassword';
 import MainItemCard from './feeds/MainItemCard';
 import {
     colorMainClassname,
@@ -100,6 +101,10 @@ const Main = () => {
         window.addEventListener('resize', funcResizeEvent);
         renderTempFromPlaceHolder();
 
+        //
+
+        // alert('비밀번호 변경일로부터 180일을 초과했습니다.');
+
         return () => {
             window.removeEventListener('scroll', funcScrollEvent);
             window.removeEventListener('resize', funcResizeEvent);
@@ -122,6 +127,7 @@ const Main = () => {
                     return (
                         <MainItemCard
                             key={index}
+                            postId={index}
                             image=""
                             category={`${Math.round(Math.random())}`}
                             title={i.title}
@@ -157,68 +163,72 @@ const Main = () => {
     };
 
     return (
-        <main className={colorMainClassname[seto.theme]}>
-            <div style={{ position: 'fixed', padding: '2rem', zIndex: '100' }}>
-                <div className={logo} onClick={() => ref.current[0].scrollIntoView()}></div>
-            </div>
+        <>
+            {/* <ExpiredPassword /> */}
 
-            <section ref={(e) => (ref.current[0] = e)} className="section-welcome">
-                <div className="section-welcome__back noselect">
-                    <div className="symbol"></div>
-                    <div className="title-wrap">
-                        <h3 className="title">
-                            <span className={seto.language === 1 ? '' : 'en'}>
-                                {translated.section.welcome.title[seto.language]}
-                            </span>
-                        </h3>
-                    </div>
-                    <p className="subtitle">프로젝트에 즐거움을, 모두에게 기회를.</p>
+            <main className={colorMainClassname[seto.theme]}>
+                <div style={{ position: 'fixed', padding: '2rem', zIndex: '100' }}>
+                    <div className={logo} onClick={() => ref.current[0].scrollIntoView()}></div>
                 </div>
-            </section>
 
-            <section
-                ref={(e) => (ref.current[1] = e)}
-                className="section-notice"
-                style={{ backgroundColor: colorMainSection[seto.theme] }}
-            >
-                <div className="section-notice__area area" style={{ padding: '2rem' }}>
-                    <div className="container-big">
+                <section ref={(e) => (ref.current[0] = e)} className="section-welcome">
+                    <div className="section-welcome__back noselect">
+                        <div className="symbol"></div>
+                        <div className="title-wrap">
+                            <h3 className="title">
+                                <span className={seto.language === 1 ? '' : 'en'}>
+                                    {translated.section.welcome.title[seto.language]}
+                                </span>
+                            </h3>
+                        </div>
+                        <p className="subtitle">프로젝트에 즐거움을, 모두에게 기회를.</p>
+                    </div>
+                </section>
+
+                <section
+                    ref={(e) => (ref.current[1] = e)}
+                    className="section-notice"
+                    style={{ backgroundColor: colorMainSection[seto.theme] }}
+                >
+                    <div className="section-notice__area area" style={{ padding: '2rem' }}>
+                        <div className="container-big">
+                            <h3 className="title" style={{ color: colorThemeContainerText[seto.theme] }}>
+                                <span className={seto.language === 1 ? '' : 'en'}>
+                                    {translated.section.notices.title[seto.language]}
+                                </span>
+                            </h3>
+                            <a className={colorMainRecentNotice[seto.theme]}>동아리 인원을 모집합니다</a>
+                            <p className="title-date">2022년 2월 2일</p>
+                        </div>
+                        <div className="container-small">
+                            <a className="container-small__notice">
+                                <p className={colorMainRecentNoticeSmall[seto.theme]}>
+                                    이제 막 시작된 서비스입니다. 이제 막 시작된 서비스입니다.
+                                </p>
+                                <p className="container-small__notice-date">2022년 2월 1일</p>
+                            </a>
+
+                            <a className="container-small__notice">
+                                <p className={colorMainRecentNoticeSmall[seto.theme]}>이제 막 시작된 서비스입니다.</p>
+                                <p className="container-small__notice-date">2022년 1월 31일</p>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <section ref={(e) => (ref.current[2] = e)} className={colorMainFeedBackground[seto.theme]}>
+                    <div className="area" style={{ padding: '2rem' }}>
                         <h3 className="title" style={{ color: colorThemeContainerText[seto.theme] }}>
                             <span className={seto.language === 1 ? '' : 'en'}>
-                                {translated.section.notices.title[seto.language]}
+                                {translated.section.recents.title[seto.language]}
                             </span>
                         </h3>
-                        <a className={colorMainRecentNotice[seto.theme]}>동아리 인원을 모집합니다</a>
-                        <p className="title-date">2022년 2월 2일</p>
+
+                        <div className="feed-items">{renderAlly()}</div>
                     </div>
-                    <div className="container-small">
-                        <a className="container-small__notice">
-                            <p className={colorMainRecentNoticeSmall[seto.theme]}>
-                                이제 막 시작된 서비스입니다. 이제 막 시작된 서비스입니다.
-                            </p>
-                            <p className="container-small__notice-date">2022년 2월 1일</p>
-                        </a>
-
-                        <a className="container-small__notice">
-                            <p className={colorMainRecentNoticeSmall[seto.theme]}>이제 막 시작된 서비스입니다.</p>
-                            <p className="container-small__notice-date">2022년 1월 31일</p>
-                        </a>
-                    </div>
-                </div>
-            </section>
-
-            <section ref={(e) => (ref.current[2] = e)} className={colorMainFeedBackground[seto.theme]}>
-                <div className="area" style={{ padding: '2rem' }}>
-                    <h3 className="title" style={{ color: colorThemeContainerText[seto.theme] }}>
-                        <span className={seto.language === 1 ? '' : 'en'}>
-                            {translated.section.recents.title[seto.language]}
-                        </span>
-                    </h3>
-
-                    <div className="feed-items">{renderAlly()}</div>
-                </div>
-            </section>
-        </main>
+                </section>
+            </main>
+        </>
     );
 };
 
