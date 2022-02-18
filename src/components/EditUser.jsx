@@ -7,6 +7,7 @@ import { createAccount, testAxios } from '../actions';
 import InputCustom from './pages/forms/InputCustom';
 import history from '../history';
 import forums from '../apis/forums';
+import AlertPopup from './AlertPopup';
 
 const EditUser = (props) => {
     const navigate = useNavigate();
@@ -93,7 +94,7 @@ const EditUser = (props) => {
 
     const funcOnSubmit = (e) => {
         e.preventDefault();
-        console.log(form);
+        // console.log(form);
 
         setAllFine((state) => 0);
 
@@ -268,7 +269,18 @@ const EditUser = (props) => {
     };
 
     const withdrawAccount = () => {
-        forums.delete('/members').then((res) => console.log(res));
+        forums
+            .delete('/members')
+            .then((res) => {
+                console.log(res);
+                setIsWidthdrawing((state) => false);
+                setIsShownAlert((state) => false);
+            })
+            .catch((e) => {
+                console.log(e);
+                setIsWidthdrawing((state) => false);
+                setIsShownAlert((state) => false);
+            });
     };
 
     const renderProfileImageUploader = () => {
@@ -312,34 +324,80 @@ const EditUser = (props) => {
         );
     };
 
+    const [isShownAlert, setIsShownAlert] = useState(false);
+
+    const [isWithdrawing, setIsWidthdrawing] = useState(false);
+
+    const cancelWithdrawHandler = (e) => {
+        // console.log(alertRef.current);
+
+        if (!isWithdrawing) {
+            setIsShownAlert((state) => false);
+        } else {
+            alert('Is on process. Please wait a moment.');
+        }
+    };
+
+    const confirmWithdrawHandler = () => {
+        if (!isWithdrawing) {
+            setIsWidthdrawing((state) => true);
+            loadingRef.current.continuousStart();
+            withdrawAccount();
+            loadingRef.current.complete();
+        } else {
+            alert('Is on process. Please wait a moment.');
+        }
+    };
+
+    const onMouseDownHandler = (e) => {
+        console.log(e);
+    };
+
     return (
-        <main className={colorMainClassname[seto.theme]}>
-            <LoadingBar color="#0a33cc" ref={loadingRef} />
+        <>
+            <AlertPopup
+                visible={isShownAlert}
+                handlerCancel={() => cancelWithdrawHandler()}
+                handlerConfirm={() => confirmWithdrawHandler()}
+                onMouseDown={(e) => cancelWithdrawHandler(e)}
+                title="계정 탈퇴"
+                desc="다시한번 확인을 누르면 탈퇴를 진행합니다."
+            />
+            <main className={colorMainClassname[seto.theme]}>
+                <LoadingBar color="#0a33cc" ref={loadingRef} />
 
-            <div className="menu-container">
-                <p className="title" style={{ color: colorThemeBackgroundText[seto.theme] }}>
-                    <span className={seto.language === 1 ? '' : 'en'}>내 정보 수정</span>
-                </p>
-                <section
-                    className="menu-container__section"
-                    style={{ width: 'calc(100% - 10rem)', maxWidth: '48rem', padding: '2rem' }}
-                >
-                    <form name="login" onSubmit={(e) => funcOnSubmit(e)}>
-                        {renderProfileImageUploader()}
+                <div className="menu-container">
+                    <p className="title" style={{ color: colorThemeBackgroundText[seto.theme] }}>
+                        <span className={seto.language === 1 ? '' : 'en'}>내 정보 수정</span>
+                    </p>
+                    <section
+                        className="menu-container__section"
+                        style={{ width: 'calc(100% - 10rem)', maxWidth: '48rem', padding: '2rem' }}
+                    >
+                        <form name="login" onSubmit={(e) => funcOnSubmit(e)}>
+                            {renderProfileImageUploader()}
 
-                        {renderElements()}
+                            {renderElements()}
 
-                        <button onClick={() => withdrawAccount()}>탈퇴</button>
+                            <div style={{ height: '2rem' }}></div>
+                            <button
+                                className="menu-container__section-form-button-outer"
+                                type="button"
+                                onClick={() => setIsShownAlert((state) => true)}
+                            >
+                                계정 탈퇴를 원합니다.
+                            </button>
 
-                        <div style={{ height: '2rem' }}></div>
+                            <div style={{ height: '2rem' }}></div>
 
-                        <button className="menu-container__section-form-submit" type="submit"></button>
-                    </form>
-                </section>
+                            <button className="menu-container__section-form-submit" type="submit"></button>
+                        </form>
+                    </section>
 
-                <div style={{ height: '10rem' }}></div>
-            </div>
-        </main>
+                    <div style={{ height: '10rem' }}></div>
+                </div>
+            </main>
+        </>
     );
 };
 export default EditUser;

@@ -1,6 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import { dispatchDismissPw180 } from '../../reducers/accountReducer';
+import AlertPopup from '../AlertPopup';
+import AlertPopup2 from '../AlertPopup2';
 import ExpiredPassword from '../ExpiredPassword';
 import MainItemCard from './feeds/MainItemCard';
 import {
@@ -34,9 +38,14 @@ export const translated = {
 };
 
 const Main = () => {
-    const { seto } = useSelector((state) => ({
+    const { seto, accounts } = useSelector((state) => ({
         seto: state.seto,
+        accounts: state.accounts,
     }));
+
+    const dispatch = useDispatch();
+
+    const closePopupChangePassword = () => dispatch(dispatchDismissPw180());
 
     // const faker = require('@faker-js/faker');
 
@@ -162,9 +171,110 @@ const Main = () => {
         });
     };
 
+    const [isShownPasswordExpired, setIsShownPasswordExpired] = useState(!accounts.isShown180daysPasswordLimitation);
+
+    const dismissPopupChangePasswordHandler = () => {
+        closePopupChangePassword();
+        setIsShownPasswordExpired((state) => false);
+    };
+
+    const confirmPopupChangePasswordHandler = (e) => {
+        const { currentpw, newpw, confirmNewpw } = popupFormPasswords;
+        let validated = 0;
+        let vmax = 3;
+
+        if (currentpw.length > 0) {
+            validated++;
+            setPopupFormError((state) => ({ ...state, currentpw: 0 }));
+        } else {
+            setPopupFormError((state) => ({ ...state, currentpw: 1 }));
+        }
+
+        if (newpw.length > 0 && confirmNewpw.length > 0 && newpw === confirmNewpw) {
+            validated += 2;
+            setPopupFormError((state) => ({ ...state, newpw: 0, confirmNewpw: 0 }));
+        } else {
+            setPopupFormError((state) => ({ ...state, newpw: 1, confirmNewpw: 1 }));
+        }
+
+        if (validated >= vmax) {
+            console.log('모든 조건 만족. 변경 여기서 진행');
+        }
+    };
+
+    const [popupFormPasswords, setPopupFormPasswords] = useState({
+        currentpw: '',
+        newpw: '',
+        confirmNewpw: '',
+    });
+
+    const [popupFormError, setPopupFormError] = useState({
+        currentpw: 0,
+        newpw: 0,
+        confirmNewpw: 0,
+    });
+
+    const handlePopupOnSubmit = (e) => {
+        e.preventDefault();
+    };
+
     return (
         <>
-            {/* <ExpiredPassword /> */}
+            <AlertPopup2
+                visible={isShownPasswordExpired}
+                confirmButtonType="submit"
+                preventClickOuterToClose="true"
+                handlerCancel={() => dismissPopupChangePasswordHandler()}
+                handlerConfirm={() => confirmPopupChangePasswordHandler()}
+                onMouseDown={(e) => dismissPopupChangePasswordHandler(e)}
+                title="비밀번호 재설정"
+                confirmText="변경"
+                dismissText="다음에 하기"
+                confirmType="positive"
+            >
+                <p style={{ paddingBottom: '2rem' }}>마지막으로 비밀번호를 변경한 기간으로부터 180일이 지났습니다.</p>
+                <form name="epw" onSubmit={(e) => handlePopupOnSubmit(e)}>
+                    <input
+                        className="popup-input"
+                        name="currentpw"
+                        type="password"
+                        value={popupFormPasswords.currentpw}
+                        onChange={(e) =>
+                            setPopupFormPasswords((state) => ({ ...state, [e.target.name]: e.target.value }))
+                        }
+                        placeholder="현재 비밀번호"
+                    />
+                    <p className="popup-input-error" style={{ display: popupFormError.currentpw ? '' : 'none' }}>
+                        입력란이 비었거나 일치하지 않습니다.
+                    </p>
+                    <input
+                        className="popup-input"
+                        name="newpw"
+                        type="password"
+                        value={popupFormPasswords.newpw}
+                        onChange={(e) =>
+                            setPopupFormPasswords((state) => ({ ...state, [e.target.name]: e.target.value }))
+                        }
+                        placeholder="새 비밀번호"
+                    />
+                    <p className="popup-input-error" style={{ display: popupFormError.newpw ? '' : 'none' }}>
+                        입력란이 비었거나 하위 항목과 일치하지 않습니다.
+                    </p>
+                    <input
+                        className="popup-input"
+                        name="confirmNewpw"
+                        type="password"
+                        value={popupFormPasswords.confirmNewpw}
+                        onChange={(e) =>
+                            setPopupFormPasswords((state) => ({ ...state, [e.target.name]: e.target.value }))
+                        }
+                        placeholder="새 비밀번호 재입력"
+                    />
+                    <p className="popup-input-error" style={{ display: popupFormError.confirmNewpw ? '' : 'none' }}>
+                        입력란이 비었거나 상위 항목과 일치하지 않습니다.
+                    </p>
+                </form>
+            </AlertPopup2>
 
             <main className={colorMainClassname[seto.theme]}>
                 <div style={{ position: 'fixed', padding: '2rem', zIndex: '100' }}>

@@ -61,7 +61,7 @@ const MainItemCard = (props) => {
                 color: colorMainRecentPostItemText[seto.theme],
             }}
         >
-            <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link to={`/post/${props.postId}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                 {renderImageIfExists()}
                 <div className="feed-items__item-container">
                     <p className="feed-items__item-container__category">

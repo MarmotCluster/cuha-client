@@ -5,7 +5,10 @@ const INITIAL_STATE = {
     userAccessToken: null,
     isAdmin: null,
     profileImageUrl: null,
+    isShown180daysPasswordLimitation: false,
 };
+
+export const dispatchDismissPw180 = (payload) => ({ type: 'DISMISS_PW180' });
 
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
@@ -27,6 +30,12 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 isSignedIn: false,
                 userAccessToken: null,
+            };
+
+        case 'DISMISS_PW180':
+            return {
+                ...state,
+                isShown180daysPasswordLimitation: true,
             };
 
         default:
