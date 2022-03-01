@@ -28,28 +28,22 @@ const User = () => {
     const [userInfo, setUserInfo] = useState({});
     // useLocals
 
+    const hashDepartment = (val) => {
+        switch (val) {
+            case 'DIGITAL_SECURITY':
+                return '디지털보안전공';
+            default:
+                return val;
+        }
+    };
+
     useEffect(() => {
         const { username } = param;
 
-        // if (accounts.userAccessToken !== null) {
-        //     setUserData((state) => jwtDecode(accounts.userAccessToken));
-        // } else if (username.length > 0) {
-        //     // reduxLookupUser(param.username);
-        //     forums
-        //         .post('/members', JSON.stringify({ username }))
-        //         .then((res) => {
-        //             console.log(res);
-        //             SetIsUserExist((state) => true);
-        //         })
-        //         .catch((err) => console.log(err));
-        // }
-
-        // if (accounts.isSignedIn) {
-        forums.get(`/members/${username}`).then((res) => {
+        forums.get(`/members`).then((res) => {
             console.log(res);
             setUserInfo((state) => res.data);
         });
-        // }
     }, []);
 
     if (isUserExist) {
@@ -60,11 +54,17 @@ const User = () => {
                         <section className="section-profile">
                             <div
                                 className="section-profile__profileImage"
-                                style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/no-profile.svg)` }}
+                                style={{
+                                    backgroundImage: userInfo.profileImage
+                                        ? `url(${forums.defaults.baseURL}/members/profiles/${userInfo.profileImage})`
+                                        : `url(${process.env.PUBLIC_URL}/images/no-profile.svg)`,
+                                }}
                             ></div>
                             <div className="section-profile__textsContainer">
                                 <p className="section-profile__textsContainer-username">{userInfo.name}</p>
-                                <p className="section-profile__textsContainer-shortIntroduce">{userInfo.department}</p>
+                                <p className="section-profile__textsContainer-shortIntroduce">
+                                    {hashDepartment(userInfo.department)}
+                                </p>
 
                                 <div className="section-profile__textsContainer__tools">
                                     <Link to="/" className="section-profile__textsContainer__tools-button noselect">

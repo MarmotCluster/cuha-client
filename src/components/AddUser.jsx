@@ -16,7 +16,7 @@ const AddUser = (props) => {
     }));
 
     const dispatch = useDispatch();
-    const reduxAddAccount = (id, name, department, studentId, gender, email, pw) =>
+    const reduxAddAccount = (id, name, department, studentNumber, gender, email, pw) =>
         dispatch(testAxios() /*createAccount(id, name, email, pw)*/);
 
     // REDUX AREA
@@ -26,20 +26,22 @@ const AddUser = (props) => {
 
     const [focus, setFocus] = useState(false);
     const [form, setForm] = useState({
-        id: '',
-        realname: '',
-        studentId: '',
-        department: '',
+        id: 'temp',
+        realname: '템프',
+        phoneNumber: '010-0000-0000',
+        studentNumber: '20220202',
+        department: 'DIGITAL_SECURITY',
         gender: 'male',
-        email: '',
-        pw: '',
-        confirmPw: '',
+        email: 'temp@temp.com',
+        pw: 'temp',
+        confirmPw: 'temp',
     });
 
     const [err, setErr] = useState({
         id: 0,
         realname: 0,
-        studentId: 0,
+        phoneNumber: 0,
+        studentNumber: 0,
         department: 0,
         email: 0,
         pw: 0,
@@ -58,11 +60,11 @@ const AddUser = (props) => {
 
     const funcOnSubmit = (e) => {
         e.preventDefault();
-        console.log(form);
+        // console.log(form);
 
-        // const { id, realname, department, studentId, email, pw, confirmPw } = e.target;
+        // const { id, realname, department, studentNumber, email, pw, confirmPw } = e.target;
 
-        // const list = { id, realname, department, studentId, email, pw, confirmPw };
+        // const list = { id, realname, department, studentNumber, email, pw, confirmPw };
 
         setAllFine((state) => 0);
 
@@ -103,7 +105,7 @@ const AddUser = (props) => {
 
     useEffect(async () => {
         console.log(`allFine changed : ${allFine}`);
-        if (allFine >= 7) {
+        if (allFine >= 8) {
             console.log('lets go');
             loadingRef.current.continuousStart();
 
@@ -113,15 +115,16 @@ const AddUser = (props) => {
                 male: form.gender === 'male' ? true : false,
                 name: form.realname,
                 password: form.pw,
-                phoneNumber: '010-0000-0000',
-                studentNumber: form.studentId,
+                repeatPassword: form.confirmPw,
+                phoneNumber: form.phoneNumber,
+                studentNumber: form.studentNumber,
                 username: form.id,
             };
 
             console.log(_data);
 
             forums
-                .post('/members/join', _data)
+                .post('/members/join', JSON.stringify(_data))
                 .then((res) => console.log(res))
                 .catch((e) => console.log(e));
 
@@ -169,7 +172,8 @@ const AddUser = (props) => {
         ['text', '아이디', 'id', '입력란이 비었습니다.'],
         ['text', '이름', 'realname', '입력란이 비었습니다.'],
         ['text', '학과', 'department', '입력란이 비었습니다.'],
-        ['text', '학번', 'studentId', '입력란이 비었습니다.'],
+        ['text', '학번', 'studentNumber', '입력란이 비었습니다.'],
+        ['text', '휴대폰 번호', 'phoneNumber', '입력란이 비었습니다.'],
         ['select', '성별', 'gender', '입력란이 비었습니다.'],
         ['email', '이메일', 'email', '입력란이 비었습니다.'],
         ['password', '비밀번호', 'pw', '입력란이 비었거나 하위 항목과 일치하지 않습니다'],

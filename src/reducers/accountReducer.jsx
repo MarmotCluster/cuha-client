@@ -6,6 +6,7 @@ const INITIAL_STATE = {
     isAdmin: null,
     profileImageUrl: null,
     isShown180daysPasswordLimitation: false,
+    loginData: null,
 };
 
 export const dispatchDismissPw180 = (payload) => ({ type: 'DISMISS_PW180' });
@@ -13,6 +14,8 @@ export const dispatchDismissPw180 = (payload) => ({ type: 'DISMISS_PW180' });
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case 'LOGIN':
+            // console.log(`로그인이 잘 되면 리덕스에서 콘솔 : ${action.payload}`);
+
             if (action.payload.data.code === 200) {
                 forums.defaults.headers.common['Authorization'] = action.payload.data.token.accessToken;
             }
@@ -21,6 +24,7 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 isSignedIn: true,
                 userAccessToken: action.payload.data.token.accessToken,
+                loginData: action.payload.data,
             };
 
         case 'LOGOUT':
@@ -37,6 +41,9 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 isShown180daysPasswordLimitation: true,
             };
+
+        case 'UPDATE_ACCOUNT':
+            return action.payload;
 
         default:
             return state;

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import LoadingBar from 'react-top-loading-bar';
 import { useNavigate } from 'react-router-dom';
 import { colorMainClassname, colorThemeBackgroundText, colorMainRecentPostItemText } from './pages/utils';
-import { createAccount, testAxios } from '../actions';
+import { createAccount, testAxios, updateAccountWithoutPassword } from '../actions';
 import InputCustom from './pages/forms/InputCustom';
 import history from '../history';
 import forums from '../apis/forums';
@@ -18,8 +18,8 @@ const EditUser = (props) => {
     }));
 
     const dispatch = useDispatch();
-    const reduxAddAccount = (id, name, department, studentId, gender, email, pw) =>
-        dispatch(testAxios() /*createAccount(id, name, email, pw)*/);
+    const reduxAddAccount = (id, name, department, studentNumber, gender, email, profileImage) =>
+        dispatch(updateAccountWithoutPassword(id, name, department, studentNumber, gender, email, profileImage));
 
     // REDUX AREA
 
@@ -38,9 +38,12 @@ const EditUser = (props) => {
         url: '',
     });
 
+    const [profileImage119, setProfileImage119] = useState();
+
     const onUploadImage = (e) => {
         let reader = new FileReader();
         let file = e.target.files[0];
+        // let formData = new FormData
 
         reader.onloadend = () => {
             setNewImage((state) => ({
@@ -57,29 +60,33 @@ const EditUser = (props) => {
             ...state,
             profileImage: e.target.files[0].name ? e.target.files[0].name : '변경하지 않음',
         }));
+
+        setProfileImage119((state) => e.target.files[0]);
     };
+
+    const [currentUser, setCurrentUser] = useState({}); // This fills after axios get
 
     const [focus, setFocus] = useState(false);
     const [form, setForm] = useState({
-        id: 'constmyid',
+        id: currentUser.username ? currentUser.username : 'constmyid',
         realname: '',
-        studentId: '',
-        department: '',
+        studentNumber: '',
+        department: 'DIGITAL_SECURITY',
         gender: '',
         email: '',
-        pw: '',
-        confirmPw: '',
+        // pw: '',
+        // confirmPw: '',
         profileImage: '변경하지 않음',
     });
 
     const [err, setErr] = useState({
         id: 0,
         realname: 0,
-        studentId: 0,
+        studentNumber: 0,
         department: 0,
         email: 0,
-        pw: 0,
-        confirmPw: 0,
+        // pw: 0,
+        // confirmPw: 0,
     });
 
     const [allFine, setAllFine] = useState(0);
@@ -102,29 +109,29 @@ const EditUser = (props) => {
             // console.log(item, typeof item);
 
             if (item !== 'profileImage') {
-                if (item !== 'pw' && item !== 'confirmPw') {
-                    if (e.target[item].value.length === 0) {
-                        setErr((state) => {
-                            return { ...state, [item]: 1 };
-                        });
-                    } else {
-                        setErr((state) => {
-                            return { ...state, [item]: 0 };
-                        });
-                        setAllFine((state) => state + 1);
-                    }
+                // if (item !== 'pw' && item !== 'confirmPw') {
+                if (e.target[item].value.length === 0) {
+                    setErr((state) => {
+                        return { ...state, [item]: 1 };
+                    });
                 } else {
-                    if (e.target.pw.value === e.target.confirmPw.value && e.target[item].value.length > 0) {
-                        setErr((state) => {
-                            return { ...state, [item]: 0 };
-                        });
-                        setAllFine((state) => state + 1);
-                    } else {
-                        setErr((state) => {
-                            return { ...state, [item]: 1 };
-                        });
-                    }
+                    setErr((state) => {
+                        return { ...state, [item]: 0 };
+                    });
+                    setAllFine((state) => state + 1);
                 }
+                // } else {
+                //     if (e.target.pw.value === e.target.confirmPw.value && e.target[item].value.length > 0) {
+                //         setErr((state) => {
+                //             return { ...state, [item]: 0 };
+                //         });
+                //         setAllFine((state) => state + 1);
+                //     } else {
+                //         setErr((state) => {
+                //             return { ...state, [item]: 1 };
+                //         });
+                //     }
+                // }
             }
         });
 
@@ -138,27 +145,51 @@ const EditUser = (props) => {
     useEffect(async () => {
         console.log(`allFine changed : ${allFine}`);
         if (allFine >= 6) {
+            let formData = new FormData();
+
+            const { id, studentNumber, department, gender, email, profileImage } = form;
             console.log('lets go');
             loadingRef.current.continuousStart();
-            const res = await reduxAddAccount();
-            console.log(res);
+
+            Object.keys(form).map((i) => {
+                if (i !== 'profileImage') {
+                    formData.append(i, form[i]);
+                } else {
+                    formData.append('profileImage', profileImage119);
+                }
+            });
+            formData.append('name', '심형래');
+            formData.append('phoneNumber', '010-0000-0000');
+
+            forums({
+                method: 'patch',
+                url: '/members',
+                data: formData,
+                headers: { 'Content-Type': 'multipart/form-data' },
+            }).then((res) => console.log(res));
+
+            // reduxAddAccount(
+            //     id,
+            //     realname,
+            //     department,
+            //     studentNumber,
+            //     gender,
+            //     email,
+            //     profileImage === '변경하지 않음' ? null : profileImage
+            // );
+            // console.log(res);
             loadingRef.current.complete();
 
             setIsUpdateDone((state) => true);
         }
     }, [allFine]);
 
-    // useEffect(() => {
-    //     if (!global.accounts.isAdmin) {
-    //         navigate('/');
-    //     }
-    // }, [global.accounts.isAdmin]);
-
-    // if (global.accounts.isAdmin === true) {
-    //     return <main className="main">EditUser</main>;
-    // }
-
-    // return <div>{`:(`}</div>;
+    useEffect(() => {
+        forums.get('members').then((res) => {
+            console.log(res.data);
+            setCurrentUser((state) => res.data);
+        });
+    }, []);
 
     const renderSelectElement = (key, targetName) => {
         switch (targetName) {
@@ -172,6 +203,7 @@ const EditUser = (props) => {
                                 id="gender"
                                 style={{ padding: '1rem' }}
                                 onChange={(e) => funcOnChange(e)}
+                                value={currentUser.male ? 'male' : 'female'}
                             >
                                 <option value="male">남자</option>
                                 <option value="female">여자</option>
@@ -199,9 +231,9 @@ const EditUser = (props) => {
                                 onChange={(e) => funcOnChange(e)}
                             >
                                 <optgroup label="소프트웨어융합학부">
-                                    <option value="0">디지털보안전공</option>
-                                    <option value="1">인공지능전공</option>
-                                    <option value="1">빅데이터전공</option>
+                                    <option value="DIGITAL_SECURITY">디지털보안전공</option>
+                                    <option value="AI">인공지능전공</option>
+                                    <option value="BIG_DATA">빅데이터전공</option>
                                 </optgroup>
                             </select>
                         </div>
@@ -218,18 +250,19 @@ const EditUser = (props) => {
     };
 
     const inputElements = [
-        ['text', '아이디', 'id', '입력란이 비었습니다.'],
-        ['text', '이름', 'realname', '입력란이 비었습니다.'],
-        ['select', '학과', 'department', '입력란이 비었습니다.'],
-        ['text', '학번', 'studentId', '입력란이 비었습니다.'],
-        ['select', '성별', 'gender', '입력란이 비었습니다.'],
-        ['email', '이메일', 'email', '입력란이 비었습니다.'],
-        ['password', '비밀번호', 'pw', '입력란이 비었거나 하위 항목과 일치하지 않습니다'],
-        ['password', '비밀번호 확인', 'confirmPw', '입력란이 비었거나 하위 항목과 일치하지 않습니다'],
+        ['text', '아이디', 'id', '입력란이 비었습니다.', 'username'],
+        ['text', '이름', 'realname', '입력란이 비었습니다.', 'name'],
+        ['select', '학과', 'department', '입력란이 비었습니다.', 'department'],
+        ['text', '학번', 'studentNumber', '입력란이 비었습니다.', 'studentNumber'],
+        ['select', '성별', 'gender', '입력란이 비었습니다.', 'male'],
+        ['email', '이메일', 'email', '입력란이 비었습니다.', 'email'],
+        // ['password', '비밀번호', 'pw', '입력란이 비었거나 하위 항목과 일치하지 않습니다', null],
+        // ['password', '비밀번호 확인', 'confirmPw', '입력란이 비었거나 하위 항목과 일치하지 않습니다', null],
     ];
 
     const renderElements = () => {
         return inputElements.map((i, index) => {
+            console.log(form[i[2]]);
             if (i[2] === 'id') {
                 return (
                     <InputCustom

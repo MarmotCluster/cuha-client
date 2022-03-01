@@ -3,9 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { dispatchDismissPw180 } from '../../reducers/accountReducer';
-import AlertPopup from '../AlertPopup';
 import AlertPopup2 from '../AlertPopup2';
-import ExpiredPassword from '../ExpiredPassword';
 import MainItemCard from './feeds/MainItemCard';
 import {
     colorMainClassname,

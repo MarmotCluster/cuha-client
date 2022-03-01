@@ -29,6 +29,40 @@ const PostView = () => {
         }
     };
 
+    const renderComments = () => {
+        return Object.keys([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).map((i, index) => {
+            return (
+                <div className="section-comments__item" key={index}>
+                    <Link to="/member/root" className="section-comments__item-profile">
+                        <img src={`${process.env.PUBLIC_URL}/images/no-profile.svg`} alt="Profile image" width="100%" />
+                    </Link>
+                    <div className="section-comments__item-texts">
+                        <p className="username">
+                            루트사용자 <span className="username-posteddate">하루 전</span>
+                        </p>
+                        <p className="comment">
+                            댓글을 입력했어요.
+                            <br />
+                            댓글을 입력했어요.
+                            <br />
+                            댓글을 입력했어요.
+                            <br />
+                            댓글을 입력했어요.
+                        </p>
+                        <div className="comment-tools">
+                            <button className="transparent" type="button">
+                                수정
+                            </button>
+                            <button className="negative" type="button">
+                                삭제
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        });
+    };
+
     const renderNotFound = () => {
         return (
             <div
@@ -68,136 +102,57 @@ const PostView = () => {
 
     const renderFoundPost = () => {
         return (
-            <div style={{ fontSize: '1.4rem', position: 'relative' }}>
-                <section
-                    style={{
-                        textAlign: 'center',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        width: '100%',
-                        height: '10rem',
-                    }}
-                >
-                    <p style={{ fontWeight: '500', fontSize: '2rem' }}>게시물의 제목을 여기에 표시합니다.</p>
+            <div className="main-posts">
+                <section className="section-posttitle">
+                    <p className="title">게시물의 제목을 여기에 표시합니다.</p>
                 </section>
-                <section
-                    style={{
-                        margin: '0 auto',
-                        display: 'flex',
-                        alignItems: 'center',
-                        height: '3.2rem',
-                        justifyContent: 'space-between',
-                        width: 'calc(100% - 4rem)',
-                    }}
-                >
+                <section className="section-postinfo">
                     <div>
-                        <Link to="/board/free" style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <Link className="section-postinfo__link" to="/board/free">
                             자유게시판
                         </Link>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <Link to="/member/root" style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <Link className="section-postinfo__link" to="/member/root">
                             김감각
                         </Link>
-                        <span>&nbsp;|&nbsp;</span>
-                        <p>2022-02-22</p>
-                        <span>&nbsp;</span>
-                        <p style={{ backgroundColor: 'white', padding: '.4rem', borderRadius: '100px' }}>10</p>
+                        <p className="section-postinfo__date">2022-02-22</p>
+                        <p className="section-postinfo__commentcount">10</p>
                     </div>
                 </section>
-                <section
-                    style={{
-                        position: 'relative',
-                        minHeight: 'calc(100vh - 10rem)',
-                        backgroundColor: 'white',
-                        marginBottom: '2rem',
-                        borderRadius: '2rem',
-                        overflow: 'hidden',
-                        padding: '2rem',
-                    }}
-                >
+                <section className="section-post">
                     <div dangerouslySetInnerHTML={{ __html: `<p style="color: red">hello world</p>` }}></div>
                 </section>
 
-                <section
-                    name="posttool"
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        alignItems: 'center',
-                        marginBottom: '2rem',
-                        padding: '0 2rem',
-                    }}
-                >
-                    <button
-                        type="button"
-                        style={{
-                            border: 'none',
-                            outline: 'none',
-                            backgroundColor: '#e0e0e0',
-                            color: '#333',
-                            padding: '1rem 2rem',
-                        }}
-                    >
+                <section className="section-posttool">
+                    <button className="button-general" type="button">
                         수정
                     </button>
                     <button
+                        className="button-negative"
                         type="button"
-                        style={{
-                            border: 'none',
-                            outline: 'none',
-                            backgroundColor: '#D0342C',
-                            color: 'white',
-                            padding: '1rem 2rem',
-                        }}
                         onClick={() => setIsAlertDeleteShown((state) => true)}
                     >
                         삭제
                     </button>
                 </section>
 
-                <section
-                    name="comments"
-                    style={{
-                        position: 'relative',
-
-                        padding: '2rem',
-                        backgroundColor: 'white',
-                        marginBottom: '5.8rem',
-                        borderRadius: '2rem',
-                        overflow: 'hidden',
-                    }}
-                >
-                    <p style={{ padding: '0 0 1rem 0', fontSize: '1.6rem', fontWeight: '900' }}>
-                        댓글 <span style={{ fontSize: '1.4rem', fontWeight: '500' }}>총 12개</span>
+                <section className="section-comments" name="comments">
+                    <p className="section-comments__totals">
+                        댓글 <span className="section-comments__totals-count">총 12개</span>
                     </p>
 
-                    <form name="comments" onSubmit={(e) => e.preventDefault()} style={{ display: 'flex' }}>
+                    <form name="comments" className="section-comments__form" onSubmit={(e) => e.preventDefault()}>
                         <textarea
                             name="comment"
-                            style={{
-                                resize: 'none',
-                                border: '1px solid #e0e0e0',
-                                outline: 'none',
-                                width: '100%',
-                                height: '10rem',
-                                padding: '1rem',
-                                fontFamily: `'NanumSquare', sans-serif`,
-                            }}
+                            className="section-comments__form-inputbox"
                             placeholder="댓글을 입력하세요"
                             value={comment.value}
                             onChange={(e) => setComment((state) => ({ ...state, value: e.target.value }))}
                         ></textarea>
                         <button
                             type="button"
-                            style={{
-                                cursor: 'pointer',
-                                minWidth: '4rem',
-                                border: 'none',
-                                outline: 'none',
-                                padding: '1rem',
-                            }}
+                            className="section-comments__form-send"
                             onClick={() => handleSubmitComment()}
                         >
                             <img src={`${process.env.PUBLIC_URL}/images/ico_send.svg`} />
@@ -207,43 +162,7 @@ const PostView = () => {
                     <div style={{ height: '2rem' }}></div>
 
                     {/* comment item block */}
-                    {Object.keys([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).map((i, index) => {
-                        return (
-                            <div key={index} style={{ display: 'flex', padding: '1rem 0' }}>
-                                <Link
-                                    to="/member/root"
-                                    style={{ overflow: 'hidden', borderRadius: '100px', width: '6rem', height: '6rem' }}
-                                >
-                                    <img
-                                        src={`${process.env.PUBLIC_URL}/images/no-profile.svg`}
-                                        alt="Profile image"
-                                        width="100%"
-                                    />
-                                </Link>
-                                <div style={{ marginLeft: '1rem' }}>
-                                    <p>
-                                        루트사용자{' '}
-                                        <span style={{ paddingLeft: '5px', fontSize: '1.2rem', color: '#999' }}>
-                                            하루 전
-                                        </span>
-                                    </p>
-                                    <p style={{ paddingTop: '5px' }}>
-                                        댓글을 입력했어요.
-                                        <br />
-                                        댓글을 입력했어요.
-                                        <br />
-                                        댓글을 입력했어요.
-                                        <br />
-                                        댓글을 입력했어요.
-                                    </p>
-                                    <div style={{ display: 'flex' }}>
-                                        <button type="button">삭제</button>
-                                        <button type="button">수정</button>
-                                    </div>
-                                </div>
-                            </div>
-                        );
-                    })}
+                    {renderComments()}
                     {/* comment item block */}
                 </section>
             </div>

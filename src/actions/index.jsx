@@ -46,6 +46,24 @@ export const lookupUser = (username) => async (dispatch) => {
     dispatch({ type: 'FETCH_USER', payload: res });
 };
 
+export const updateAccountWithoutPassword =
+    (username, name, department, studentNumber, gender, email, profileImage) => async (dispatch) => {
+        let _data = {
+            name,
+            department,
+            studentNumber,
+            male: gender === 'male' ? true : false,
+            phoneNumber: '010-0000-0000',
+            email,
+        };
+        console.log('리덕스에서 받은 데이터', _data);
+
+        // profileImage === null ? null : (_data.profileImage = profileImage);
+
+        const res = await forums.patch('/members', JSON.stringify(_data));
+        dispatch({ type: 'UPDATE_ACCOUNT', payload: res });
+    };
+
 export const createAccount = (id, username, department, studentId, email, password) => async (dispatch) => {
     let _data = {
         id,
