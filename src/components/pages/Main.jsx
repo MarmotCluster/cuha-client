@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import forums from '../../apis/forums';
 import { dispatchDismissPw180 } from '../../reducers/accountReducer';
 import AlertPopup2 from '../AlertPopup2';
 import MainItemCard from './feeds/MainItemCard';
@@ -169,7 +170,9 @@ const Main = () => {
         });
     };
 
-    const [isShownPasswordExpired, setIsShownPasswordExpired] = useState(!accounts.isShown180daysPasswordLimitation);
+    const [isShownPasswordExpired, setIsShownPasswordExpired] = useState(
+        accounts.isSignedIn && !accounts.isShown180daysPasswordLimitation
+    );
 
     const dismissPopupChangePasswordHandler = () => {
         closePopupChangePassword();
@@ -197,6 +200,17 @@ const Main = () => {
 
         if (validated >= vmax) {
             console.log('모든 조건 만족. 변경 여기서 진행');
+            forums
+                .patch('/members/password', {
+                    oldPassword: currentpw,
+                    password: newpw,
+                    repeatPassword: confirmNewpw,
+                })
+                .then((res) => {
+                    console.log('비밀번호 변경 성공');
+                    console.log(res);
+                    dismissPopupChangePasswordHandler();
+                });
         }
     };
 

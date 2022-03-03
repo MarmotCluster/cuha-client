@@ -55,8 +55,8 @@ const User = () => {
                             <div
                                 className="section-profile__profileImage"
                                 style={{
-                                    backgroundImage: userInfo.profileImage
-                                        ? `url(${forums.defaults.baseURL}/members/profiles/${userInfo.profileImage})`
+                                    backgroundImage: userInfo.profileFilename
+                                        ? `url(${forums.defaults.baseURL}/members/profiles/${userInfo.profileFilename})`
                                         : `url(${process.env.PUBLIC_URL}/images/no-profile.svg)`,
                                 }}
                             ></div>

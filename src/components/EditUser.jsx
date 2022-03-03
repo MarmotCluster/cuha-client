@@ -145,21 +145,28 @@ const EditUser = (props) => {
     useEffect(async () => {
         console.log(`allFine changed : ${allFine}`);
         if (allFine >= 6) {
-            let formData = new FormData();
+            const { id, studentNumber, department, gender, email, realname } = form;
 
-            const { id, studentNumber, department, gender, email, profileImage } = form;
+            let formData = new FormData();
+            let _tmpO = {
+                json: {
+                    department: 'DIGITAL_SECURITY',
+                    email,
+                    isMale: gender === 'male' ? true : false,
+                    name: realname,
+                    phoneNumber: '010-0000-0000',
+                    studentNumber,
+                    // username: id,
+                },
+                profileFile: profileImage119,
+            };
+
+            console.log(_tmpO);
             console.log('lets go');
             loadingRef.current.continuousStart();
 
-            Object.keys(form).map((i) => {
-                if (i !== 'profileImage') {
-                    formData.append(i, form[i]);
-                } else {
-                    formData.append('profileImage', profileImage119);
-                }
-            });
-            formData.append('name', '심형래');
-            formData.append('phoneNumber', '010-0000-0000');
+            formData.append('json', new Blob([JSON.stringify(_tmpO.json)], { type: 'application/json' }));
+            if (profileImage119 !== null) formData.append('profileFile', _tmpO.profileFile);
 
             forums({
                 method: 'patch',
@@ -188,6 +195,20 @@ const EditUser = (props) => {
         forums.get('members').then((res) => {
             console.log(res.data);
             setCurrentUser((state) => res.data);
+
+            const { department, email, isMale, name, phoneNumber, profileFilename, studentNumber, username } = res.data;
+
+            setForm((state) => ({
+                ...state,
+                department,
+                email,
+                gender: isMale ? 'male' : 'female',
+                realname: name,
+                phoneNumber,
+                profileImage: profileFilename,
+                studentNumber,
+                id: username,
+            }));
         });
     }, []);
 
@@ -203,7 +224,7 @@ const EditUser = (props) => {
                                 id="gender"
                                 style={{ padding: '1rem' }}
                                 onChange={(e) => funcOnChange(e)}
-                                value={currentUser.male ? 'male' : 'female'}
+                                value={form.gender === 'male' ? 'male' : 'female'}
                             >
                                 <option value="male">남자</option>
                                 <option value="female">여자</option>
@@ -328,7 +349,7 @@ const EditUser = (props) => {
                         style={{
                             backgroundImage: newImage.url
                                 ? `url(${newImage.url})`
-                                : `url(${process.env.PUBLIC_URL}/images/no-profile.svg)`,
+                                : `url(${forums.defaults.baseURL}/members/profiles/${currentUser.profileFilename})`,
                         }}
                     >
                         <input

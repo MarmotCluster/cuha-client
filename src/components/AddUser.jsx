@@ -112,7 +112,7 @@ const AddUser = (props) => {
             let _data = {
                 department: 'DIGITAL_SECURITY',
                 email: form.email,
-                male: form.gender === 'male' ? true : false,
+                isMale: form.gender === 'male' ? true : false,
                 name: form.realname,
                 password: form.pw,
                 repeatPassword: form.confirmPw,
