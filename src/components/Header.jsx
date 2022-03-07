@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import { colorHeaderClassname } from './pages/utils';
 
 import jwtDecode from 'jwt-decode';
@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import forums from '../apis/forums';
 import { useState } from 'react';
 
-const Header = () => {
+const Header = (props) => {
     const { seto, accounts } = useSelector((state) => ({
         seto: state.seto,
         accounts: state.accounts,

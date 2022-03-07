@@ -32,7 +32,7 @@ const Login = () => {
     }));
 
     const dispatch = useDispatch();
-    const reduxCheckAccount = (id, pw) => dispatch(fetchAccount(id, pw));
+    const reduxTrySignIn = (id, pw) => dispatch(fetchAccount(id, pw));
     const reduxLogoutAccount = () => dispatch(logoutAccount());
 
     // REDUX AREA
@@ -89,7 +89,7 @@ const Login = () => {
         if (id.value.length !== 0 && pw.value.length !== 0) {
             // console.log(form.id, form.pw);
             loadingRef.current.continuousStart();
-            reduxCheckAccount(id.value, pw.value);
+            reduxTrySignIn(id.value, pw.value);
             loadingRef.current.complete();
         }
     };
@@ -110,9 +110,9 @@ const Login = () => {
         reduxLogoutAccount();
     };
 
-    // useEffect(() => {
-    //     console.log(accounts);
-    // }, [accounts]);
+    useEffect(() => {
+        console.log(accounts.recentCallResponse);
+    }, [accounts.recentCallResponse]);
 
     if (accounts.isSignedIn) {
         return (

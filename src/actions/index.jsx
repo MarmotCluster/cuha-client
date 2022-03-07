@@ -17,14 +17,19 @@ export const fetchAccount = (_id, pw) => async (dispatch) => {
 
     // history.push('/info');
 
-    const res = await forums.post(`/members/login`, JSON.stringify(_data));
+    try {
+        const res = await forums.post(`/members/login`, JSON.stringify(_data));
 
-    console.log(res);
-
-    dispatch({
-        type: 'LOGIN',
-        payload: res,
-    });
+        dispatch({
+            type: 'LOGIN',
+            payload: res,
+        });
+    } catch (err) {
+        // console.log('네트워크 오류 가능성 농후 : ', err);
+        dispatch({
+            type: 'FETCH_FAILED',
+        });
+    }
 };
 
 export const logoutAccount = () => async (dispatch) => {

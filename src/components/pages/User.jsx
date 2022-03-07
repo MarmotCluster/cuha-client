@@ -61,9 +61,11 @@ const User = () => {
                                 }}
                             ></div>
                             <div className="section-profile__textsContainer">
-                                <p className="section-profile__textsContainer-username">{userInfo.name}</p>
+                                <p className="section-profile__textsContainer-username">
+                                    {userInfo.name ? userInfo.name : 'Name'}
+                                </p>
                                 <p className="section-profile__textsContainer-shortIntroduce">
-                                    {hashDepartment(userInfo.department)}
+                                    {userInfo.department ? hashDepartment(userInfo.department) : 'Unknown'}
                                 </p>
 
                                 <div className="section-profile__textsContainer__tools">
