@@ -13,7 +13,7 @@ const PostView = () => {
 
     // REDUX
 
-    const params = useParams();
+    const { postId } = useParams();
 
     const [isDataFound, setIsDataFound] = useState(false);
 
@@ -22,6 +22,8 @@ const PostView = () => {
     });
 
     const [isAlertDeleteShown, setIsAlertDeleteShown] = useState(false);
+
+    const [sortCommentByNew, setSortCommentByNew] = useState(false);
 
     const handleSubmitComment = () => {
         if (comment.value.length <= 0) {
@@ -50,6 +52,11 @@ const PostView = () => {
                             댓글을 입력했어요.
                         </p>
                         <div className="comment-tools">
+                            <button
+                                className={`comment-tools__like ${i.isLiked ? 'comment-tools__like__liked' : null}`}
+                                type="button"
+                            ></button>
+                            <p className="comment-tools__like-count">123</p>
                             <button className="transparent" type="button">
                                 수정
                             </button>
@@ -103,68 +110,77 @@ const PostView = () => {
     const renderFoundPost = () => {
         return (
             <div className="main-posts">
-                <section className="section-posttitle">
-                    <p className="title">게시물의 제목을 여기에 표시합니다.</p>
-                </section>
-                <section className="section-postinfo">
-                    <div>
-                        <Link className="section-postinfo__link" to="/board/free">
-                            자유게시판
+                <div className="area">
+                    <section className="section-posttitle">
+                        <p className="title">게시물의 제목을 여기에 표시합니다.</p>
+                    </section>
+                    <section className="section-postinfo">
+                        <div>
+                            <Link className="section-postinfo__link" to="/board/free">
+                                자유게시판
+                            </Link>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                            <Link className="section-postinfo__link" to="/member/root">
+                                김감각
+                            </Link>
+                            <p className="section-postinfo__date">2022-02-22</p>
+                            <p className="section-postinfo__commentcount">10</p>
+                        </div>
+                    </section>
+                    <section className="section-post">
+                        <div dangerouslySetInnerHTML={{ __html: `<p style="color: red">hello world</p>` }}></div>
+                    </section>
+
+                    <section className="section-posttool">
+                        <Link to={`/post/edit/${postId}`} className="button-general" type="button">
+                            수정
                         </Link>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <Link className="section-postinfo__link" to="/member/root">
-                            김감각
-                        </Link>
-                        <p className="section-postinfo__date">2022-02-22</p>
-                        <p className="section-postinfo__commentcount">10</p>
-                    </div>
-                </section>
-                <section className="section-post">
-                    <div dangerouslySetInnerHTML={{ __html: `<p style="color: red">hello world</p>` }}></div>
-                </section>
-
-                <section className="section-posttool">
-                    <button className="button-general" type="button">
-                        수정
-                    </button>
-                    <button
-                        className="button-negative"
-                        type="button"
-                        onClick={() => setIsAlertDeleteShown((state) => true)}
-                    >
-                        삭제
-                    </button>
-                </section>
-
-                <section className="section-comments" name="comments">
-                    <p className="section-comments__totals">
-                        댓글 <span className="section-comments__totals-count">총 12개</span>
-                    </p>
-
-                    <form name="comments" className="section-comments__form" onSubmit={(e) => e.preventDefault()}>
-                        <textarea
-                            name="comment"
-                            className="section-comments__form-inputbox"
-                            placeholder="댓글을 입력하세요"
-                            value={comment.value}
-                            onChange={(e) => setComment((state) => ({ ...state, value: e.target.value }))}
-                        ></textarea>
                         <button
+                            className="button-negative"
                             type="button"
-                            className="section-comments__form-send"
-                            onClick={() => handleSubmitComment()}
+                            onClick={() => setIsAlertDeleteShown((state) => true)}
                         >
-                            <img src={`${process.env.PUBLIC_URL}/images/ico_send.svg`} />
+                            삭제
                         </button>
-                    </form>
+                    </section>
 
-                    <div style={{ height: '2rem' }}></div>
+                    <section className="section-comments" name="comments">
+                        <p className="section-comments__totals">
+                            댓글 <span className="section-comments__totals-count">총 12개</span>
+                            <button
+                                type="button"
+                                className="section-comments__totals-sort"
+                                onClick={() => setSortCommentByNew((state) => !state)}
+                            >
+                                {sortCommentByNew ? '최신순 정렬' : '인기순 정렬'}
+                            </button>
+                        </p>
 
-                    {/* comment item block */}
-                    {renderComments()}
-                    {/* comment item block */}
-                </section>
+                        <form name="comments" className="section-comments__form" onSubmit={(e) => e.preventDefault()}>
+                            <textarea
+                                name="comment"
+                                className="section-comments__form-inputbox"
+                                placeholder="댓글을 입력하세요"
+                                value={comment.value}
+                                onChange={(e) => setComment((state) => ({ ...state, value: e.target.value }))}
+                            ></textarea>
+                            <button
+                                type="button"
+                                className="section-comments__form-send"
+                                onClick={() => handleSubmitComment()}
+                            >
+                                <img src={`${process.env.PUBLIC_URL}/images/ico_send.svg`} />
+                            </button>
+                        </form>
+
+                        <div style={{ height: '2rem' }}></div>
+
+                        {/* comment item block */}
+                        {renderComments()}
+                        {/* comment item block */}
+                    </section>
+                </div>
             </div>
         );
     };

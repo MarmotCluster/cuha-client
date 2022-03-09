@@ -11,6 +11,8 @@ import ErrorPage from './pages/ErrorPage';
 import Join from './pages/Join';
 import Login from './pages/Login';
 import Main from './pages/Main';
+import PostCreate from './pages/PostCreate';
+import PostEdit from './pages/PostEdit';
 import PostView from './pages/PostView';
 import Settings from './pages/Settings';
 import User from './pages/User';
@@ -29,6 +31,9 @@ const App = () => {
                     <Route path="settings" exact element={<Settings />} />
 
                     <Route path="post/:postId" exact element={<PostView />} />
+                    <Route path="post/edit/:postId" exact element={<PostEdit />} />
+                    <Route path="post/create/:type" exact element={<PostCreate />} />
+                    <Route path="post/create" exact element={<PostCreate />} />
 
                     <Route path="member/:username" exact element={<User />} />
                     <Route path="editmember/:username" exact element={<EditUser />} />
