@@ -9,9 +9,10 @@ npm start
 ````
 
 # relese note
-22.02.07 : Tools for both Admin and general User are drafted</br>
-22.01.29 : Updated Dark Mode</br>
-22.01.28 : Redux Ready</br>
-22.01.26 : half advanced Home design</br>
-22.01.22 : rollback to before the build main complete
+03.10.22 : Pre-added Create post page</br>
+02.07.22 : Tools for both Admin and general User are drafted</br>
+01.29.22 : Updated Dark Mode</br>
+01.28.22 : Redux Ready</br>
+01.26.22 : half advanced Home design</br>
+01.22.22 : rollback to before the build main complete
  
