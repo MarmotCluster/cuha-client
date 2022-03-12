@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import jwtDecode from 'jwt-decode';
 import LoadingBar from 'react-top-loading-bar';
@@ -37,10 +37,12 @@ const Login = () => {
 
     // REDUX AREA
 
+    const navigate = useNavigate();
+
     let ref = useRef([]);
     let loadingRef = useRef();
 
-    const [focus, setFocus] = useState(false);
+    const [lastSubmitResponse, setLastSubmitResponse] = useState('');
     const [form, setForm] = useState({
         id: '',
         pw: '',
@@ -111,7 +113,12 @@ const Login = () => {
     };
 
     useEffect(() => {
-        console.log(accounts.recentCallResponse);
+        // console.log(accounts.recentCallResponse);
+        // setLastSubmitResponse(accounts.recentCallResponse);
+        if (accounts.recentCallResponse === 'LOGIN_SUCCEED') {
+            // console.log(accounts.fromToken);
+            navigate(`/member/${accounts.fromToken.username}`);
+        }
     }, [accounts.recentCallResponse]);
 
     if (accounts.isSignedIn) {
@@ -139,6 +146,11 @@ const Login = () => {
                         className="menu-container__section"
                         style={{ width: 'calc(100% - 10rem)', maxWidth: '48rem', padding: '2rem' }}
                     >
+                        {lastSubmitResponse === 'FETCH_FAILED' ? (
+                            <div className="menu-container__section-submitstatus" style={{ fontSize: '1.4rem' }}>
+                                <span>아이디 혹은 비밀번호가 일치하지 않습니다.</span>
+                            </div>
+                        ) : null}
                         <form name="login" onSubmit={(e) => funcOnSubmit(e)}>
                             <InputCustom
                                 ref={(el) => (ref.current[0] = el)}

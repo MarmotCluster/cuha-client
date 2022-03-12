@@ -4,6 +4,8 @@ import { Link, NavLink, useParams } from 'react-router-dom';
 import { colorMainClassname } from './utils';
 import axios from 'axios';
 import AlertPopup from '../AlertPopup';
+import forums from '../../apis/forums';
+import { getRecalculatedTime } from '../../utils';
 
 const Board = (props) => {
     const { seto, accounts } = useSelector((state) => ({
@@ -31,23 +33,34 @@ const Board = (props) => {
     const [isOnRequest, setIsOnRequest] = useState(true);
     const [hasDataNomore, setHasDataNomore] = useState(false);
 
-    // const [trace, setTrace] = useState({});
+    const [category, setCategory] = useState([]);
 
     function requestData() {
         const { start, offset } = requestRange;
         if (!hasDataNomore && type === 'notice') {
-            axios
-                .get(`https://jsonplaceholder.typicode.com/posts?_start=${start}&_end=${start + offset}`)
-                .then((res) => {
-                    console.log(res.data);
+            // axios
+            //     .get(`https://jsonplaceholder.typicode.com/posts?_start=${start}&_end=${start + offset}`)
+            //     .then((res) => {
+            //         console.log(res.data);
 
-                    setIsOnRequest((state) => false);
-                    if (res.data.length > 0) {
-                        setBoardData((state) => [...state, ...res.data]);
-                    } else {
-                        setHasDataNomore((state) => true);
-                    }
-                });
+            //         setIsOnRequest((state) => false);
+            //         if (res.data.length > 0) {
+            //             setBoardData((state) => [...state, ...res.data]);
+            //         } else {
+            //             setHasDataNomore((state) => true);
+            //         }
+            //     });
+
+            forums.get(`/posts/${type}`).then((res) => {
+                console.log(res.data);
+
+                setIsOnRequest((state) => false);
+                if (res.data.length > 0) {
+                    setBoardData((state) => [...state, ...res.data]);
+                } else {
+                    setHasDataNomore((state) => true);
+                }
+            });
         }
     }
 
@@ -88,6 +101,27 @@ const Board = (props) => {
 
         window.addEventListener('scroll', handleScroll);
 
+        forums.get('/categories').then((res) => {
+            const { data } = res;
+
+            const _icon = {
+                notice: 'ico_board_notice.svg',
+                free: 'ico_board_free.svg',
+                question: 'ico_board_qna.svg',
+            };
+
+            data.forEach((i) => {
+                setCategory((state) => [
+                    ...state,
+                    {
+                        title: i.description,
+                        link: `/board/${i.name}`,
+                        icon: _icon[i.name],
+                    },
+                ]);
+            });
+        });
+
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
@@ -108,7 +142,8 @@ const Board = (props) => {
 
         if (isFromRequest) {
             return boardData.map((i, index) => {
-                const { body, id, title, userId } = i;
+                const { id, title, content, views, username, name, createdAt } = i;
+                const _reCalculatedDate = getRecalculatedTime(i.createdAt);
 
                 return (
                     <div key={index} className="section-allpost__container-item">
@@ -120,11 +155,11 @@ const Board = (props) => {
                         <div className="section-allpost__container-item__texts">
                             <div className="section-allpost__container-item__texts-title">
                                 {icon ? renderTitleIcon(icon) : null}
-                                <Link to={`/post/${id}`}>{`${id} ${title}`}</Link>
+                                <Link to={`/post/${type}/${id}`}>{`${id} ${title}`}</Link>
                             </div>
                             <div className="section-allpost__container-item__texts-postinfo">
                                 <Link
-                                    to="/member/root"
+                                    to={`/member/${username}`}
                                     className="section-allpost__container-item__texts-postinfo__info"
                                 >
                                     <img
@@ -132,7 +167,7 @@ const Board = (props) => {
                                         src={`${process.env.PUBLIC_URL}/images/no-profile.svg`}
                                         className="section-allpost__container-item__texts-postinfo__info-icon"
                                     ></img>
-                                    <p className="section-allpost__container-item__texts-postinfo__info-text">관리자</p>
+                                    <p className="section-allpost__container-item__texts-postinfo__info-text">{name}</p>
                                 </Link>
 
                                 <div className="section-allpost__container-item__texts-postinfo__info">
@@ -142,7 +177,7 @@ const Board = (props) => {
                                         className="section-allpost__container-item__texts-postinfo__info-icon"
                                     ></img>
                                     <p className="section-allpost__container-item__texts-postinfo__info-text">
-                                        2022년 2월 22일
+                                        {`${_reCalculatedDate.year}년 ${_reCalculatedDate.month}월 ${_reCalculatedDate.day}일`}
                                     </p>
                                     {accounts.isAdmin ? (
                                         <button
@@ -257,7 +292,7 @@ const Board = (props) => {
                     <p className="section-allpost__title-title">공지사항</p>
                     <Link to="/post/create/notice" className="section-allpost__title-create">
                         글 쓰기
-                        <span class="section-allpost__title-showmore__icon">
+                        <span className="section-allpost__title-showmore__icon">
                             <img alt="" src="/images/ico_create.svg" />
                         </span>
                     </Link>
@@ -290,14 +325,14 @@ const Board = (props) => {
     };
 
     const renderSubMenu = () => {
-        const _menu = [
-            // { title: '전체', link: '/board/all' },
-            { title: '공지', link: '/board/notice', icon: 'ico_board_notice.svg' },
-            { title: '자유게시판', link: '/board/free', icon: 'ico_board_free.svg' },
-            { title: '질문게시판', link: '/board/question', icon: 'ico_board_qna.svg' },
-        ];
+        // const _menu = [
+        //     // { title: '전체', link: '/board/all' },
+        //     { title: '공지', link: '/board/notice', icon: 'ico_board_notice.svg' },
+        //     { title: '자유게시판', link: '/board/free', icon: 'ico_board_free.svg' },
+        //     { title: '질문게시판', link: '/board/question', icon: 'ico_board_qna.svg' },
+        // ];
 
-        return _menu.map((i, index) => {
+        return category.map((i, index) => {
             return (
                 <NavLink
                     key={index}

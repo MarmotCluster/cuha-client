@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import forums from '../../apis/forums';
 import { colorMainClassname } from './utils';
 
 const PostEdit = (props) => {
+    const navigate = useNavigate();
+
     const { accounts, seto } = useSelector((state) => ({
         accounts: state.accounts,
         seto: state.seto,
@@ -11,7 +14,7 @@ const PostEdit = (props) => {
 
     // REDUX
 
-    const { postId } = useParams();
+    const { type, postId } = useParams();
 
     const ref = useRef([]);
 
@@ -19,7 +22,7 @@ const PostEdit = (props) => {
 
     const [form, setForm] = useState({
         title: '',
-        category: 'none',
+        category: type,
         content: '',
     });
 
@@ -61,10 +64,34 @@ const PostEdit = (props) => {
             let _errorCount = Object.keys(err).filter((i) => err[i] > 0);
             // console.log(_errorCount);
             if (_errorCount.length === 0) {
-                console.log(_errorCount, '전송 이벤트 시작');
+                // console.log(_errorCount, '전송 이벤트 시작');
+                forums
+                    .patch(
+                        `/posts/${type}/${postId}`,
+                        (function () {
+                            let { content, title } = form;
+                            return {
+                                content,
+                                title,
+                            };
+                        })()
+                    )
+                    .then((res) => {
+                        console.log('패치 성공!');
+                        navigate(`/post/${type}/${postId}`);
+                    });
             }
         }
     }, [submitAttempt, err]);
+
+    useEffect(() => {
+        forums.get(`/posts/${type}/${postId}`).then((res) => {
+            console.log(res.data);
+            const { content, createdAt, id, name, title, username, views } = res.data;
+
+            setForm((state) => ({ ...state, title: title, content: content }));
+        });
+    }, []);
 
     const renderDocumentEditor = () => {
         return (
@@ -76,6 +103,7 @@ const PostEdit = (props) => {
                             type="text"
                             name="title"
                             className="title-input"
+                            value={form.title}
                             onChange={(e) => setForms(e)}
                             placeholder="제목을 입력하세요."
                         />
@@ -114,7 +142,12 @@ const PostEdit = (props) => {
                     </section>
                     <section className="section-post">
                         {/* <div dangerouslySetInnerHTML={{ __html: `<p style="color: red">hello world</p>` }}></div> */}
-                        <textarea name="contents" style={{ width: '100%', height: '80vh', resize: 'none' }}></textarea>
+                        <textarea
+                            name="content"
+                            style={{ width: '100%', height: '80vh', resize: 'none' }}
+                            value={form.content}
+                            onChange={(e) => setForms(e)}
+                        ></textarea>
                     </section>
 
                     <section className="section-posttool">

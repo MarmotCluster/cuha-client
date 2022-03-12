@@ -20,7 +20,7 @@ const Header = (props) => {
         if (accounts.isSignedIn) {
             forums.get('/members').then((res) => {
                 // console.log(res.data.profileImage);
-                setLocalProfileImage((state) => res.data.profileFilename);
+                setLocalProfileImage((state) => res.data.profileImage);
             });
         }
     }, [accounts.isSignedIn]);

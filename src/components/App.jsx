@@ -30,8 +30,8 @@ const App = () => {
                     <Route path="ctf" exact element={<CTF />} />
                     <Route path="settings" exact element={<Settings />} />
 
-                    <Route path="post/:postId" exact element={<PostView />} />
-                    <Route path="post/edit/:postId" exact element={<PostEdit />} />
+                    <Route path="post/:type/:postId" exact element={<PostView />} />
+                    <Route path="post/edit/:type/:postId" exact element={<PostEdit />} />
                     <Route path="post/create/:type" exact element={<PostCreate />} />
                     <Route path="post/create" exact element={<PostCreate />} />
 

@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import forums from '../../apis/forums';
 import { colorMainClassname } from './utils';
 
 const PostCreate = (props) => {
+    const navigate = useNavigate();
+
     const { accounts, seto } = useSelector((state) => ({
         accounts: state.accounts,
         seto: state.seto,
@@ -34,6 +37,7 @@ const PostCreate = (props) => {
     };
 
     const handleValidation = () => {
+        // console.log('form :',)
         let { title, category } = form;
 
         title.length === 0 ? setErr((state) => ({ ...state, title: 1 })) : setErr((state) => ({ ...state, title: 0 }));
@@ -61,7 +65,22 @@ const PostCreate = (props) => {
             let _errorCount = Object.keys(err).filter((i) => err[i] > 0);
             // console.log(_errorCount);
             if (_errorCount.length === 0) {
-                console.log(_errorCount, '전송 이벤트 시작');
+                // console.log(_errorCount, '전송 이벤트 시작');
+                forums
+                    .post(
+                        `/posts/${type}`,
+                        (function () {
+                            let { content, title } = form;
+                            return {
+                                content,
+                                title,
+                            };
+                        })()
+                    )
+                    .then((res) => {
+                        console.log('업로드 성공!', res);
+                        navigate(`/post/${type}/${res.data.id}`);
+                    });
             }
         }
     }, [submitAttempt, err]);
@@ -76,6 +95,7 @@ const PostCreate = (props) => {
                             type="text"
                             name="title"
                             className="title-input"
+                            value={form.title}
                             onChange={(e) => setForms(e)}
                             placeholder="제목을 입력하세요."
                         />
@@ -114,7 +134,12 @@ const PostCreate = (props) => {
                     </section>
                     <section className="section-post">
                         {/* <div dangerouslySetInnerHTML={{ __html: `<p style="color: red">hello world</p>` }}></div> */}
-                        <textarea name="contents" style={{ width: '100%', height: '80vh', resize: 'none' }}></textarea>
+                        <textarea
+                            name="content"
+                            style={{ width: '100%', height: '80vh', resize: 'none' }}
+                            value={form.content}
+                            onChange={(e) => setForms(e)}
+                        ></textarea>
                     </section>
 
                     <section className="section-posttool">

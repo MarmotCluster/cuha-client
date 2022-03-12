@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { colorMainClassname } from './utils';
 import history from '../../history';
 import AlertPopup from '../AlertPopup';
+import forums from '../../apis/forums';
+import { getRecalculatedTime } from '../../utils';
 
 const PostView = () => {
+    const navigate = useNavigate();
+
     const { accounts, seto } = useSelector((state) => ({
         accounts: state.accounts,
         seto: state.seto,
@@ -13,9 +17,11 @@ const PostView = () => {
 
     // REDUX
 
-    const { postId } = useParams();
+    const { type, postId } = useParams();
 
     const [isDataFound, setIsDataFound] = useState(false);
+
+    const [contentData, setContentData] = useState({});
 
     const [comment, setComment] = useState({
         value: '',
@@ -108,42 +114,70 @@ const PostView = () => {
     };
 
     const renderFoundPost = () => {
+        const { content, createdAt, id, name, title, username, views } = contentData;
+        console.log('contentData :', contentData);
+
         return (
             <div className="main-posts">
                 <div className="area">
                     <section className="section-posttitle">
-                        <p className="title">게시물의 제목을 여기에 표시합니다.</p>
+                        <p className="title">{title ? title : 'Loading...'}</p>
                     </section>
                     <section className="section-postinfo">
                         <div>
-                            <Link className="section-postinfo__link" to="/board/free">
-                                자유게시판
+                            <Link className="section-postinfo__link" to={`/board/${type}`}>
+                                {(function () {
+                                    switch (type) {
+                                        case 'notice':
+                                            return '공지사항';
+                                        case 'free':
+                                            return '자유게시판';
+                                        case 'question':
+                                            return '질문게시판';
+                                        default:
+                                            return null;
+                                    }
+                                })()}
                             </Link>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                            <Link className="section-postinfo__link" to="/member/root">
-                                김감각
+                            <Link className="section-postinfo__link" to={`/member/${username}`}>
+                                {name ? name : 'Uplaoder'}
                             </Link>
-                            <p className="section-postinfo__date">2022-02-22</p>
-                            <p className="section-postinfo__commentcount">10</p>
+                            <p className="section-postinfo__date">
+                                {createdAt
+                                    ? (function () {
+                                          const _res = getRecalculatedTime(createdAt);
+                                          return `${_res.year}년 ${_res.month}월 ${_res.day}일`;
+                                      })()
+                                    : 'Jan 1, 1970'}
+                            </p>
+                            <p className="section-postinfo__commentcount">{views !== null ? views : '-'}</p>
                         </div>
                     </section>
-                    <section className="section-post">
-                        <div dangerouslySetInnerHTML={{ __html: `<p style="color: red">hello world</p>` }}></div>
+                    <section className="section-post" style={{ width: '100%' }}>
+                        <div
+                            dangerouslySetInnerHTML={{ __html: content }}
+                            style={{ width: '100%', overflow: 'hidden' }}
+                        ></div>
                     </section>
 
-                    <section className="section-posttool">
-                        <Link to={`/post/edit/${postId}`} className="button-general" type="button">
-                            수정
-                        </Link>
-                        <button
-                            className="button-negative"
-                            type="button"
-                            onClick={() => setIsAlertDeleteShown((state) => true)}
-                        >
-                            삭제
-                        </button>
-                    </section>
+                    {accounts.fromToken && accounts.fromToken.username === username ? (
+                        <>
+                            <section className="section-posttool">
+                                <Link to={`/post/edit/${type}/${postId}`} className="button-general" type="button">
+                                    수정
+                                </Link>
+                                <button
+                                    className="button-negative"
+                                    type="button"
+                                    onClick={() => setIsAlertDeleteShown((state) => true)}
+                                >
+                                    삭제
+                                </button>
+                            </section>
+                        </>
+                    ) : null}
 
                     <section className="section-comments" name="comments">
                         <p className="section-comments__totals">
@@ -191,10 +225,18 @@ const PostView = () => {
 
     const alertConfirmHandler = () => {
         console.log('글 삭제 진행');
+        forums.delete(`/posts/${type}/${postId}`).then((res) => {
+            console.log(res);
+            navigate(`/board/${type}`);
+        });
     };
 
     useEffect(() => {
         window.scrollTo(0, 0);
+        forums.get(`/posts/${type}/${postId}`).then((res) => {
+            console.log(res);
+            setContentData(res.data);
+        });
     }, []);
 
     return (

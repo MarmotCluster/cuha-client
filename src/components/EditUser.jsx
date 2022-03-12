@@ -18,8 +18,8 @@ const EditUser = (props) => {
     }));
 
     const dispatch = useDispatch();
-    const reduxAddAccount = (id, name, department, studentNumber, gender, email, profileImage) =>
-        dispatch(updateAccountWithoutPassword(id, name, department, studentNumber, gender, email, profileImage));
+    const reduxAddAccount = (id, name, department, studentId, gender, email, profileImage) =>
+        dispatch(updateAccountWithoutPassword(id, name, department, studentId, gender, email, profileImage));
 
     // REDUX AREA
 
@@ -70,7 +70,7 @@ const EditUser = (props) => {
     const [form, setForm] = useState({
         id: currentUser.username ? currentUser.username : 'constmyid',
         realname: '',
-        studentNumber: '',
+        studentId: '',
         department: 'DIGITAL_SECURITY',
         gender: '',
         email: '',
@@ -82,7 +82,7 @@ const EditUser = (props) => {
     const [err, setErr] = useState({
         id: 0,
         realname: 0,
-        studentNumber: 0,
+        studentId: 0,
         department: 0,
         email: 0,
         // pw: 0,
@@ -145,7 +145,7 @@ const EditUser = (props) => {
     useEffect(async () => {
         console.log(`allFine changed : ${allFine}`);
         if (allFine >= 6) {
-            const { id, studentNumber, department, gender, email, realname } = form;
+            const { id, studentId, department, gender, email, realname } = form;
 
             let formData = new FormData();
             let _tmpO = {
@@ -155,11 +155,13 @@ const EditUser = (props) => {
                     isMale: gender === 'male' ? true : false,
                     name: realname,
                     phoneNumber: '010-0000-0000',
-                    studentNumber,
+                    studentId,
                     // username: id,
                 },
                 profileFile: profileImage119,
             };
+
+            console.log(`_tmpO : ${_tmpO}`);
 
             console.log(_tmpO);
             console.log('lets go');
@@ -179,7 +181,7 @@ const EditUser = (props) => {
             //     id,
             //     realname,
             //     department,
-            //     studentNumber,
+            //     studentId,
             //     gender,
             //     email,
             //     profileImage === '변경하지 않음' ? null : profileImage
@@ -196,7 +198,7 @@ const EditUser = (props) => {
             console.log(res.data);
             setCurrentUser((state) => res.data);
 
-            const { department, email, isMale, name, phoneNumber, profileFilename, studentNumber, username } = res.data;
+            const { department, email, isMale, name, phoneNumber, profileFilename, studentId, username } = res.data;
 
             setForm((state) => ({
                 ...state,
@@ -206,7 +208,7 @@ const EditUser = (props) => {
                 realname: name,
                 phoneNumber,
                 profileImage: profileFilename,
-                studentNumber,
+                studentId,
                 id: username,
             }));
         });
@@ -274,7 +276,7 @@ const EditUser = (props) => {
         ['text', '아이디', 'id', '입력란이 비었습니다.', 'username'],
         ['text', '이름', 'realname', '입력란이 비었습니다.', 'name'],
         ['select', '학과', 'department', '입력란이 비었습니다.', 'department'],
-        ['text', '학번', 'studentNumber', '입력란이 비었습니다.', 'studentNumber'],
+        ['text', '학번', 'studentId', '입력란이 비었습니다.', 'studentId'],
         ['select', '성별', 'gender', '입력란이 비었습니다.', 'male'],
         ['email', '이메일', 'email', '입력란이 비었습니다.', 'email'],
         // ['password', '비밀번호', 'pw', '입력란이 비었거나 하위 항목과 일치하지 않습니다', null],
@@ -373,7 +375,9 @@ const EditUser = (props) => {
                     </div>
                 </div>
 
-                <p style={{ fontSize: '1.4rem', textAlign: 'center', paddingTop: '2rem' }}>{form.profileImage}</p>
+                <p style={{ fontSize: '1.4rem', textAlign: 'center', paddingTop: '2rem' }}>
+                    {form.profileImage ? form.profileImage : '변경하지 않음'}
+                </p>
             </div>
         );
     };

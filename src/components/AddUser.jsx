@@ -16,8 +16,8 @@ const AddUser = (props) => {
     }));
 
     const dispatch = useDispatch();
-    const reduxAddAccount = (id, name, department, studentNumber, gender, email, pw) =>
-        dispatch(testAxios() /*createAccount(id, name, email, pw)*/);
+    // const reduxAddAccount = (id, name, department, studentNumber, gender, email, pw) =>
+    //     dispatch(testAxios() /*createAccount(id, name, email, pw)*/);
 
     // REDUX AREA
 
