@@ -17,11 +17,16 @@ const PostView = () => {
 
     // REDUX
 
+    const [init, setInit] = useState(false);
+
     const { type, postId } = useParams();
 
     const [isDataFound, setIsDataFound] = useState(false);
 
     const [contentData, setContentData] = useState({});
+
+    const [commentsData, setCommentsData] = useState([]);
+    const [commentCount, setCommentCount] = useState(0);
 
     const [comment, setComment] = useState({
         value: '',
@@ -34,46 +39,93 @@ const PostView = () => {
     const handleSubmitComment = () => {
         if (comment.value.length <= 0) {
             console.log('댓글을 입력하세요.');
+        } else {
+            forums.post(`/posts/${type}/${postId}/comments`, { body: comment.value }).then((res) => {
+                console.log('댓글 포스트 완료');
+                //그리고
+                forums.get(`/posts/${type}/${postId}/comments`).then((res) => {
+                    console.log('다시 받아온 댓글?', res.data);
+                    setCommentsData((state) => res.data);
+                    setCommentCount(res.data.length);
+                    setComment((state) => ({ ...state, value: '' }));
+                });
+            });
         }
     };
 
+    const handleRemoveComment = (commentId) => {
+        forums.delete(`/posts/${type}/${postId}/comments/${commentId}`).then((res) => {
+            console.log(`${commentId}번 댓글 삭제 완료`);
+            //그리고
+            forums.get(`/posts/${type}/${postId}/comments`).then((res) => {
+                console.log('다시 받아온 댓글?', res.data);
+                setCommentsData((state) => res.data);
+                setCommentCount(res.data.length);
+                setComment((state) => ({ ...state, value: '' }));
+            });
+        });
+    };
+
     const renderComments = () => {
-        return Object.keys([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).map((i, index) => {
-            return (
-                <div className="section-comments__item" key={index}>
-                    <Link to="/member/root" className="section-comments__item-profile">
-                        <img src={`${process.env.PUBLIC_URL}/images/no-profile.svg`} alt="Profile image" width="100%" />
-                    </Link>
-                    <div className="section-comments__item-texts">
-                        <p className="username">
-                            루트사용자 <span className="username-posteddate">하루 전</span>
-                        </p>
-                        <p className="comment">
-                            댓글을 입력했어요.
-                            <br />
-                            댓글을 입력했어요.
-                            <br />
-                            댓글을 입력했어요.
-                            <br />
-                            댓글을 입력했어요.
-                        </p>
-                        <div className="comment-tools">
-                            <button
-                                className={`comment-tools__like ${i.isLiked ? 'comment-tools__like__liked' : null}`}
-                                type="button"
-                            ></button>
-                            <p className="comment-tools__like-count">123</p>
-                            <button className="transparent" type="button">
-                                수정
-                            </button>
-                            <button className="negative" type="button">
-                                삭제
-                            </button>
+        if (commentsData.length > 0) {
+            return commentsData.map((i, index) => {
+                // console.log(`커멘트 ${index}번`, i);
+
+                const { body, createdAt, id, like, name, profileImage, username } = i;
+                let _redate = getRecalculatedTime(createdAt);
+
+                return (
+                    <div className="section-comments__item" key={index}>
+                        <Link to="/member/root" className="section-comments__item-profile">
+                            <img
+                                src={
+                                    profileImage
+                                        ? `${forums.defaults.baseURL}/members/profiles/${profileImage}`
+                                        : `${process.env.PUBLIC_URL}/images/no-profile.svg`
+                                }
+                                alt="Profile image"
+                                width="100%"
+                            />
+                        </Link>
+                        <div className="section-comments__item-texts">
+                            <p className="username">
+                                {name}{' '}
+                                <span className="username-posteddate">{`${_redate.month}월 ${_redate.day}일`}</span>
+                            </p>
+                            <p className="comment">{body}</p>
+                            <div className="comment-tools">
+                                <button
+                                    className={`comment-tools__like ${i.isLiked ? 'comment-tools__like__liked' : null}`}
+                                    type="button"
+                                ></button>
+                                <p className="comment-tools__like-count">{like ? like : '0'}</p>
+
+                                {accounts.fromToken ? (
+                                    accounts.fromToken.username === username || accounts.isAdmin === true ? (
+                                        <>
+                                            <button className="transparent" type="button">
+                                                수정
+                                            </button>
+                                            <button
+                                                className="negative"
+                                                type="button"
+                                                onClick={() => handleRemoveComment(id)}
+                                            >
+                                                삭제
+                                            </button>
+                                        </>
+                                    ) : null
+                                ) : null}
+                            </div>
                         </div>
                     </div>
-                </div>
+                );
+            });
+        } else {
+            return (
+                <p style={{ padding: '1rem 0', textAlign: 'center' }}>아직 댓글이 없어요. 첫번째로 댓글을 써 보아요.</p>
             );
-        });
+        }
     };
 
     const renderNotFound = () => {
@@ -114,8 +166,8 @@ const PostView = () => {
     };
 
     const renderFoundPost = () => {
-        const { content, createdAt, id, name, title, username, views } = contentData;
-        console.log('contentData :', contentData);
+        const { body, createdAt, id, name, title, username, views } = contentData;
+        // console.log('contentData :', contentData);
 
         return (
             <div className="main-posts">
@@ -157,7 +209,7 @@ const PostView = () => {
                     </section>
                     <section className="section-post" style={{ width: '100%' }}>
                         <div
-                            dangerouslySetInnerHTML={{ __html: content }}
+                            dangerouslySetInnerHTML={{ __html: body }}
                             style={{ width: '100%', overflow: 'hidden' }}
                         ></div>
                     </section>
@@ -181,7 +233,7 @@ const PostView = () => {
 
                     <section className="section-comments" name="comments">
                         <p className="section-comments__totals">
-                            댓글 <span className="section-comments__totals-count">총 12개</span>
+                            댓글 <span className="section-comments__totals-count">{`총 ${commentCount}개`}</span>
                             <button
                                 type="button"
                                 className="section-comments__totals-sort"
@@ -232,11 +284,21 @@ const PostView = () => {
     };
 
     useEffect(() => {
-        window.scrollTo(0, 0);
-        forums.get(`/posts/${type}/${postId}`).then((res) => {
-            console.log(res);
-            setContentData(res.data);
-        });
+        if (!init) {
+            window.scrollTo(0, 0);
+            forums.get(`/posts/${type}/${postId}`).then((res) => {
+                console.log(res);
+                setContentData(res.data);
+            });
+
+            forums.get(`/posts/${type}/${postId}/comments`).then((res) => {
+                // console.log('하위는 댓글');
+                setCommentsData((state) => [...state, ...res.data]);
+                setCommentCount(res.data.length);
+            });
+
+            setInit(true);
+        }
     }, []);
 
     return (

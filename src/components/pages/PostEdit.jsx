@@ -71,7 +71,7 @@ const PostEdit = (props) => {
                         (function () {
                             let { content, title } = form;
                             return {
-                                content,
+                                body: content,
                                 title,
                             };
                         })()

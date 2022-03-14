@@ -38,19 +38,6 @@ const Board = (props) => {
     function requestData() {
         const { start, offset } = requestRange;
         if (!hasDataNomore && type === 'notice') {
-            // axios
-            //     .get(`https://jsonplaceholder.typicode.com/posts?_start=${start}&_end=${start + offset}`)
-            //     .then((res) => {
-            //         console.log(res.data);
-
-            //         setIsOnRequest((state) => false);
-            //         if (res.data.length > 0) {
-            //             setBoardData((state) => [...state, ...res.data]);
-            //         } else {
-            //             setHasDataNomore((state) => true);
-            //         }
-            //     });
-
             forums.get(`/posts/${type}`).then((res) => {
                 console.log(res.data);
 
@@ -142,8 +129,8 @@ const Board = (props) => {
 
         if (isFromRequest) {
             return boardData.map((i, index) => {
-                const { id, title, content, views, username, name, createdAt } = i;
-                const _reCalculatedDate = getRecalculatedTime(i.createdAt);
+                const { id, title, content, views, username, name, createdAt, profileImage } = i;
+                const _reCalculatedDate = getRecalculatedTime(createdAt);
 
                 return (
                     <div key={index} className="section-allpost__container-item">
@@ -164,7 +151,11 @@ const Board = (props) => {
                                 >
                                     <img
                                         alt=""
-                                        src={`${process.env.PUBLIC_URL}/images/no-profile.svg`}
+                                        src={
+                                            profileImage
+                                                ? `${forums.defaults.baseURL}/members/profiles/${profileImage}`
+                                                : `${process.env.PUBLIC_URL}/images/no-profile.svg`
+                                        }
                                         className="section-allpost__container-item__texts-postinfo__info-icon"
                                     ></img>
                                     <p className="section-allpost__container-item__texts-postinfo__info-text">{name}</p>

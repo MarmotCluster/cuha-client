@@ -72,7 +72,7 @@ const PostCreate = (props) => {
                         (function () {
                             let { content, title } = form;
                             return {
-                                content,
+                                body: content,
                                 title,
                             };
                         })()
