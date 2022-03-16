@@ -1,0 +1,168 @@
+*,
+*::after,
+*::before,
+html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    scroll-behavior: smooth;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    /* This defines what 1rem is*/
+
+    font-size: 62.5%;
+
+    // @include respond(p144) {
+    //     // font-size: 25%;
+    //     // background-color: red;
+    // }
+
+    // @include respond(p240) {
+    //     // font-size: 32.5%;
+    //     // background-color: orange;
+    // }
+
+    // @include respond(p360) {
+    //     // font-size: 50%;
+    //     // background-color: yellow;
+    // }
+
+    // @include respond(p480) {
+    //     // font-size: 50%;
+    //     background-color: yellowgreen;
+    // }
+
+    // @include respond(p720) {
+    //     // font-size: 50%;
+    //     background-color: green;
+    // }
+
+    // @include respond(p1080) {
+    //     background-color: skyblue;
+    // }
+}
+
+body {
+    // @include respond(tab-port) {
+    //     padding: 0;
+    // }
+
+    min-width: 28rem;
+
+    font-family: 'NanumSquare', sans-serif;
+    color: #333;
+    font-weight: 300;
+
+    input,
+    select,
+    option,
+    optgroup {
+        font-family: 'NanumSquare', sans-serif;
+    }
+
+    input[type='password'] {
+        font-family: 'Lato', sans-serif;
+    }
+
+    button {
+        font-family: 'NanumSquare', sans-serif;
+    }
+}
+
+.en {
+    font-family: 'Lato', sans-serif;
+}
+
+.area {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 144rem;
+}
+
+::selection {
+    background-color: rgba($color: #000000, $alpha: 0.2);
+    color: white;
+}
+
+.base {
+    &-bg {
+        border-radius: 10px;
+        // background: linear-gradient(145deg, #f0f0f0, #cacaca);
+        // box-shadow: 2px 2px 6px #bebebe, -2px -2px 6px #ffffff;
+        box-shadow: 0px 5px 20px rgba($color: black, $alpha: 0.28);
+        // background-color: rgba($color: white, $alpha: 0.38);
+        // box-shadow: 5px 5px 15px #bebebe, -5px -5px 15px #ffffff;
+
+        // background: rgba(255, 255, 255, 0.25);
+        // box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
+        // backdrop-filter: blur(5px);
+        // -webkit-backdrop-filter: blur(5px);
+        // border-radius: 10px;
+        border: 1px solid rgba($color: white, $alpha: 0.18) // backface-visibility: hidden;
+            &__dark {
+            background: rgba($color: black, $alpha: 0.38);
+            box-shadow: 0 25px 45px rgba($color: black, $alpha: 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border-radius: 10px;
+            border: 1px solid rgba($color: black, $alpha: 0.18);
+            backface-visibility: hidden;
+        }
+    }
+}
+
+::-webkit-scrollbar-track {
+    // -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    // border-radius: 10px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    // border-radius: 10px;
+    // -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: red;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.area {
+    width: 100%;
+    max-width: 128rem;
+    margin: 0 auto;
+}
+
+.nohrefdefault {
+    text-decoration: none;
+    color: white;
+}
+
+select {
+    /*ios대응*/
+    // -webkit-appearance: none;
+    // -moz-appearance: none;
+    // appearance: none;
+
+    /*화살표 배경 넣기*/
+    // background: url('이미지경로') no-repeat 98% 50% #fff; /*화살표 select박스 오른쪽 중앙 배치,배경 흰색*/
+    background-color: white;
+}
+select::-ms-expand {
+    display: none; /* 화살표 없애기 for IE10, 11*/
+}

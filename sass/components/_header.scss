@@ -1,0 +1,159 @@
+.header {
+    // width: 100%;
+    // overflow: hidden;
+    // height: auto;
+    // background-color: rgba($color: white, $alpha: 0.5);
+    background-color: white;
+    // backdrop-filter: blur(25px);
+    // -webkit-backdrop-filter: blur(25px);
+    font-size: 0;
+    position: fixed;
+    bottom: 0;
+    border-radius: 2rem 2rem 0 0;
+    // overflow: hidden;
+    text-align: center;
+    height: 8rem;
+    box-shadow: 0px -4px 20px rgba($color: black, $alpha: 0.25);
+    // box-shadow: -0px -5px 20px #f4f4f4;
+    border: 1px solid rgba($color: #e0e0e0, $alpha: 0.38);
+    z-index: 1000;
+
+    width: 100%;
+    min-width: 28rem;
+    height: 6rem;
+
+    &__dark {
+        background-color: #202020;
+        border: 1px solid rgba($color: #1f1f1f, $alpha: 0.38);
+    }
+
+    &-menu {
+        // z-index: 1000;
+        // position: absolute;
+        font-size: 1.4rem;
+        color: black;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        // background-color: bisque;
+
+        &__profile {
+            width: 20%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            // background-color: bisque;
+            cursor: pointer;
+
+            &-target {
+                // display: inline-block;
+                // text-align: center;
+                width: 4rem;
+                height: 4rem;
+                background-color: #f4f4f4;
+                border-radius: 100rem;
+
+                background-position: center;
+                background-size: contain;
+
+                transition: opacity 0.2s ease, box-shadow 0.2s ease;
+                border: 1px solid #e0e0e0;
+
+                // box-shadow: 4px 4px 15px #bebebe, -4px -4px 15px #ffffff;
+            }
+
+            &:active > .header-menu__profile-target {
+                opacity: 0.5;
+                // box-shadow: 0px 0px 0px #bebebe, 0px 0px 0px #ffffff;
+            }
+        }
+
+        &__icon {
+            width: 20%;
+            height: 2.6rem;
+            // background-color: red;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+
+            transition: opacity 0.2s ease;
+
+            cursor: pointer;
+
+            &:active {
+                opacity: 0.5;
+            }
+        }
+
+        &__container {
+            display: flex;
+            margin: 0 auto;
+            width: 100%;
+            height: 100%;
+            justify-content: space-around;
+            align-items: center;
+        }
+    }
+
+    //
+
+    &__area {
+        width: 100%;
+        height: 4rem;
+        background-color: white;
+    }
+
+    &-logo {
+        width: 10rem;
+        height: 10rem;
+        background-color: white;
+        background-image: url('../images/cuha_ico.svg');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 60%;
+        border-radius: 50%;
+        border: 10px solid rgba($color: black, $alpha: 1);
+
+        display: inline-block;
+        position: relative;
+        bottom: 3rem;
+    }
+}
+
+.icon {
+    &-home {
+        background-image: url('../images/home-ol.svg');
+        &-active {
+            background-image: url('../images/home.svg');
+        }
+    }
+
+    &-boards {
+        background-image: url('../images/boards-ol.svg');
+        &-active {
+            background-image: url('../images/boards.svg');
+        }
+    }
+
+    &-ctf {
+        background-image: url('../images/ctf-ol.svg');
+        &-active {
+            background-image: url('../images/ctf.svg');
+        }
+    }
+
+    &-settings {
+        background-image: url('../images/settings-ol.svg');
+        &-active {
+            background-image: url('../images/settings.svg');
+        }
+    }
+
+    &-dark {
+        filter: invert(15%) sepia(0%) saturate(24%) hue-rotate(140deg) brightness(97%) contrast(84%);
+    }
+}

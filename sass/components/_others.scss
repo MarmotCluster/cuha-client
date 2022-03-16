@@ -1,0 +1,85 @@
+.negative {
+    background-color: #d0342c;
+}
+
+.positive {
+    background-color: #007acd;
+}
+
+.popup {
+    &-input {
+        width: 100%;
+        display: block;
+        border: 1px solid #e0e0e0;
+        outline: none;
+
+        padding: 1rem;
+
+        // &:not(:first-child) {
+        margin-bottom: 1rem;
+        // }
+
+        &-error {
+            text-align: left;
+            font-size: 1.2rem;
+            color: red;
+
+            &:not(:first-child) {
+                margin: 1rem 0;
+            }
+        }
+    }
+
+    &-message {
+        //means message box
+        background-color: white;
+        font-size: 1.4rem;
+        border-radius: 5px;
+        overflow: hidden;
+        margin: 1rem;
+        box-shadow: 0px 4px 20px rgba($color: black, $alpha: 0.4);
+
+        &__title {
+            font-weight: 500;
+            font-size: 2rem;
+            border-bottom: 1px solid #f4f4f4;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        &-buttons {
+            display: flex;
+            width: 100%;
+            padding: 1rem;
+            background-color: #e0e0e0;
+            justify-content: flex-end;
+        }
+
+        &__button {
+            outline: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            padding: 1rem 2rem;
+            width: 50%;
+            background-color: #e0e0e0;
+            transition: all 0.2s ease;
+
+            &:active {
+                color: #666;
+            }
+
+            &-negative {
+                background-color: #d0342c;
+
+                &:active {
+                    background-color: #bb150c;
+                }
+            }
+
+            &-positive {
+                background-color: #007acd;
+            }
+        }
+    }
+}
