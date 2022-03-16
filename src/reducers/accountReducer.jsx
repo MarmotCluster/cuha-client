@@ -1,3 +1,4 @@
+import jwtDecode from 'jwt-decode';
 import forums from '../apis/forums';
 
 const INITIAL_STATE = {
@@ -7,7 +8,7 @@ const INITIAL_STATE = {
     isAdmin: null,
     profileImageUrl: null,
     isShown180daysPasswordLimitation: false,
-    loginData: null,
+    fromToken: null,
 };
 
 export const dispatchDismissPw180 = (payload) => ({ type: 'DISMISS_PW180' });
@@ -26,7 +27,8 @@ export default (state = INITIAL_STATE, action) => {
                 recentCallResponse: 'LOGIN_SUCCEED',
                 isSignedIn: true,
                 userAccessToken: action.payload.data.token.accessToken,
-                loginData: action.payload.data,
+                fromToken: jwtDecode(action.payload.data.token.accessToken),
+                isAdmin: jwtDecode(action.payload.data.token.accessToken).username === 'root' ? true : false,
             };
 
         case 'LOGOUT':

@@ -2,35 +2,53 @@ import axios from 'axios';
 import forums from '../apis/forums';
 import history from '../history';
 
-export const testAxios = () => async (dispatch) => {
-    const res = await axios.get('http://localhost:3001/accounts');
-
-    console.log(res);
-    dispatch({ type: 'NULL', payload: res });
-};
-
 export const fetchAccount = (_id, pw) => async (dispatch) => {
     let _data = {
         username: _id,
         password: pw,
     };
 
-    // history.push('/info');
-
     try {
         const res = await forums.post(`/members/login`, JSON.stringify(_data));
+        console.log(res);
 
         dispatch({
             type: 'LOGIN',
             payload: res,
         });
     } catch (err) {
-        // console.log('네트워크 오류 가능성 농후 : ', err);
         dispatch({
             type: 'FETCH_FAILED',
         });
     }
 };
+
+// export const fetchAccount = (_id, pw) => (dispatch) => {
+//     let _data = {
+//         username: _id,
+//         password: pw,
+//     };
+
+//     try {
+//         const res = forums
+//             .post(`/members/login`, JSON.stringify(_data))
+//             .then((res) => res)
+//             .catch((err) => {
+//                 console.log('err', err);
+//                 return err;
+//             });
+//         // console.log(res);
+
+//         dispatch({
+//             type: 'LOGIN',
+//             payload: res,
+//         });
+//     } catch (err) {
+//         dispatch({
+//             type: 'FETCH_FAILED',
+//         });
+//     }
+// };
 
 export const logoutAccount = () => async (dispatch) => {
     dispatch({

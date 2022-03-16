@@ -9,4 +9,11 @@ const forums = axios.create({
 forums.defaults.headers.patch['Content-Type'] = `application/json`;
 forums.defaults.headers.post['Content-Type'] = 'application/json';
 
+// forums.interceptors.response.use(
+//     (response) => response,
+//     (error) => {
+//         return Promise.reject(error);
+//     }
+// );
+
 export default forums;
