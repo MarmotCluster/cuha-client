@@ -36,6 +36,46 @@ const PostView = () => {
 
     const [sortCommentByNew, setSortCommentByNew] = useState(false);
 
+    const [isEditingComment, setIsEditingComment] = useState(-1);
+
+    const [editingCommentTarget, setEditingCommentTarget] = useState('');
+
+    const handleEditComment = (num, body) => {
+        setIsEditingComment(num);
+        setEditingCommentTarget(body);
+    };
+
+    const handleSubmitEditedComment = (id) => {
+        if (editingCommentTarget.length <= 0) {
+            console.log('댓글을 입력하세요.');
+        } else {
+            forums.patch(`/posts/${type}/${postId}/comments/${id}`, { body: editingCommentTarget }).then((res) => {
+                console.log('댓글 패치 완료');
+                //그리고
+                forums.get(`/posts/${type}/${postId}/comments`).then((res) => {
+                    console.log('다시 받아온 댓글?', res.data);
+                    setCommentsData((state) => res.data);
+                    setCommentCount(res.data.length);
+                    setComment((state) => ({ ...state, value: '' }));
+                });
+                setIsEditingComment(-1);
+            });
+        }
+    };
+
+    const handleLikeComment = (id) => {
+        forums.post(`/posts/${type}/${postId}/comments/${id}/like`).then((res) => {
+            console.log('좋아요 성공');
+            //그리고
+            forums.get(`/posts/${type}/${postId}/comments`).then((res) => {
+                console.log('다시 받아온 댓글?', res.data);
+                setCommentsData((state) => res.data);
+                setCommentCount(res.data.length);
+                setComment((state) => ({ ...state, value: '' }));
+            });
+        });
+    };
+
     const handleSubmitComment = () => {
         if (comment.value.length <= 0) {
             console.log('댓글을 입력하세요.');
@@ -92,28 +132,68 @@ const PostView = () => {
                                 {name}{' '}
                                 <span className="username-posteddate">{`${_redate.month}월 ${_redate.day}일`}</span>
                             </p>
-                            <p className="comment">{body}</p>
+                            {isEditingComment === id ? (
+                                <input
+                                    type="text"
+                                    value={editingCommentTarget}
+                                    style={{
+                                        padding: '5px',
+                                        marginTop: '1rem',
+                                        width: '100%',
+                                        display: 'inline-block',
+                                        outline: 'none',
+                                        border: '1px solid #e0e0e0',
+                                    }}
+                                    onChange={(e) => setEditingCommentTarget(e.target.value)}
+                                />
+                            ) : (
+                                <p className="comment">{body}</p>
+                            )}
                             <div className="comment-tools">
                                 <button
                                     className={`comment-tools__like ${i.isLiked ? 'comment-tools__like__liked' : null}`}
                                     type="button"
+                                    onClick={() => handleLikeComment(id)}
                                 ></button>
                                 <p className="comment-tools__like-count">{like ? like : '0'}</p>
 
                                 {accounts.fromToken ? (
                                     accounts.fromToken.username === username || accounts.isAdmin === true ? (
-                                        <>
-                                            <button className="transparent" type="button">
-                                                수정
-                                            </button>
-                                            <button
-                                                className="negative"
-                                                type="button"
-                                                onClick={() => handleRemoveComment(id)}
-                                            >
-                                                삭제
-                                            </button>
-                                        </>
+                                        isEditingComment === -1 ? (
+                                            <>
+                                                <button
+                                                    className="transparent"
+                                                    type="button"
+                                                    onClick={(e) => handleEditComment(id, body)}
+                                                >
+                                                    수정
+                                                </button>
+                                                <button
+                                                    className="negative"
+                                                    type="button"
+                                                    onClick={() => handleRemoveComment(id)}
+                                                >
+                                                    삭제
+                                                </button>
+                                            </>
+                                        ) : isEditingComment === id ? (
+                                            <>
+                                                <button
+                                                    className="positive"
+                                                    type="button"
+                                                    onClick={(e) => handleSubmitEditedComment(id)}
+                                                >
+                                                    완료
+                                                </button>
+                                                <button
+                                                    className="transparent"
+                                                    type="button"
+                                                    onClick={() => setIsEditingComment(-1)}
+                                                >
+                                                    취소
+                                                </button>
+                                            </>
+                                        ) : null
                                     ) : null
                                 ) : null}
                             </div>
