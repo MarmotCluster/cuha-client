@@ -1,10 +1,12 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AddUser from './AddUser';
+import AdminHeader from './AdminHeader';
 import EditUser from './EditUser';
 // import history from '../history';
 
 import Header from './Header';
+import Admin from './pages/Admin';
 import Board from './pages/Board';
 import CTF from './pages/CTF';
 import ErrorPage from './pages/ErrorPage';
@@ -22,6 +24,7 @@ const App = () => {
         <React.Fragment>
             <BrowserRouter>
                 <Header />
+                <AdminHeader />
                 <Routes>
                     <Route path="/" exact element={<Main />} />
                     <Route path="login" exact element={<Login />} />
@@ -40,6 +43,9 @@ const App = () => {
 
                     <Route path="join" exact element={<Join />} />
                     <Route path="addmember" exact element={<AddUser />} />
+
+                    <Route path="admin" exact element={<Admin />} />
+
                     <Route path="*" element={<ErrorPage />} />
                 </Routes>
             </BrowserRouter>
