@@ -82,6 +82,7 @@ const Header = (props) => {
     };
 
     useEffect(() => {
+        console.log('path :', window.location.pathname);
         if (accounts.isSignedIn) {
             forums.get('/members').then((res) => {
                 // console.log(res.data.profileImage);

@@ -1,14 +1,23 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 const AdminHeader = () => {
     const renderHeaderMenu = () => {
-        let _list = [{ name: '통합' }, { name: '게시판' }, { name: '댓글' }, { name: '계정' }, { name: 'CTF' }];
+        let _list = [
+            { name: '통합', link: 'all' },
+            { name: '게시판', link: 'board' },
+            { name: '댓글', link: 'comment' },
+            { name: '계정', link: 'account' },
+            { name: 'CTF', link: 'ctf' },
+        ];
 
         return _list.map((i, index) => {
             return (
-                <div
+                <NavLink
+                    key={index}
+                    to={`/admin/${i.link}`}
                     className="header-admin__menu"
-                    style={{
+                    style={({ isActive }) => ({
                         display: 'flex',
                         // flex: '1',
                         alignItems: 'center',
@@ -17,11 +26,13 @@ const AdminHeader = () => {
                         height: '6rem',
                         fontSize: '1.6rem',
                         fontWeight: '500',
-                        backgroundColor: index === 0 ? '#e0e0e0' : 'transparent',
-                    }}
+                        backgroundColor: isActive ? '#e0e0e0' : 'transparent',
+                        color: 'inherit',
+                        textDecoration: 'inherit',
+                    })}
                 >
                     {i.name}
-                </div>
+                </NavLink>
             );
         });
     };

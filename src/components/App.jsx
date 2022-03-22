@@ -45,6 +45,7 @@ const App = () => {
                     <Route path="addmember" exact element={<AddUser />} />
 
                     <Route path="admin" exact element={<Admin />} />
+                    <Route path="admin/:type" exact element={<Admin />} />
 
                     <Route path="*" element={<ErrorPage />} />
                 </Routes>
