@@ -12,6 +12,8 @@ const CTF = () => {
   // Redux
 
   const [renderSort, setRenderSort] = useState(window.document.documentElement.clientWidth >= 900);
+  const [isOnRequestChallenges, setIsOnRequestChallenges] = useState(true);
+  const [requests, setRequests] = useState([]);
 
   useEffect(() => {
     const ueResizeHandler = (e) => {
@@ -20,10 +22,80 @@ const CTF = () => {
 
     window.addEventListener('resize', ueResizeHandler);
 
+    // console.log(forums.defaults.baseURL);
+
+    forums
+      .get('/problems', { params: { start: 0, end: 20 } })
+      .then((res) => {
+        // console.log(`데이터 불러오기 완료`, res.data);
+        setRequests([...res.data]);
+      })
+      .finally((i) => {
+        setIsOnRequestChallenges(false);
+      });
+
     return () => {
       window.removeEventListener('resize', ueResizeHandler);
     };
   }, []);
+
+  const renderRequests = () => {
+    let formula = function (i, index) {
+      return (
+        <Link key={index} to={i.id ? `/challenge/view/${i.id}` : '/'} className="challenge-list__item">
+          <div className="challenge-list__item-texts">
+            <p className="title">{i.title ? i.title : 'undefined'}</p>
+            <p className="status">
+              {/* <span>30명 도전</span> | <span>9명 통과</span> */}
+              <span>{i.score ? i.score : '0'} 포인트 증정</span>
+            </p>
+          </div>
+        </Link>
+      );
+    };
+
+    if (requests.length > 0) {
+      if (renderSort) {
+        let filtered = {
+          first: requests.filter((i, index) => index % 2 === 0),
+          last: requests.filter((i, index) => index % 2 === 1),
+        };
+
+        return Object.keys(filtered).map((i, index) => {
+          return (
+            <div className="challenge-list-half" key={index}>
+              {(function (e) {
+                console.log(e);
+                return e.map((j, jndex) => {
+                  {
+                    return formula(j, jndex);
+                  }
+                });
+              })(filtered[i])}
+            </div>
+          );
+        });
+      } else {
+        return (
+          <div className="challenge-list-full">
+            {(function () {
+              console.log(requests);
+              return requests.map((i, index) => {
+                // console.log(i);
+                return formula(i, index);
+              });
+            })()}
+          </div>
+        );
+      }
+    } else {
+      if (isOnRequestChallenges) {
+        return <p>로딩 중...</p>;
+      } else {
+        return <p>아직 준비된 도전과제가 없어요.</p>;
+      }
+    }
+  };
 
   return (
     <main className={colorMainClassname[seto.theme]}>
@@ -47,7 +119,7 @@ const CTF = () => {
                   {(function () {
                     return Array.from(Array(5).keys()).map((i, index) => {
                       return (
-                        <div className="checkbox-item">
+                        <div className="checkbox-item" key={index}>
                           <div className="checkbox-item-draws">
                             <input className="checkbox-item-input" type="checkbox" onChange={(e) => console.log(e.target.checked)} />
                             <div className="checkbox-item-draws__checkbox"></div>
@@ -64,7 +136,7 @@ const CTF = () => {
                   {(function () {
                     return Array.from(Array(5).keys()).map((i, index) => {
                       return (
-                        <div className="checkbox-item">
+                        <div className="checkbox-item" key={index}>
                           <div className="checkbox-item-draws">
                             <input className="checkbox-item-input" type="checkbox" onChange={(e) => console.log(e.target.checked)} />
                             <div className="checkbox-item-draws__checkbox"></div>
@@ -97,65 +169,7 @@ const CTF = () => {
                 <input type="text" name="filter" placeholder="필터 ..." />
                 <div className="ico-search"></div>
               </div>
-              <div className="challenge-list">
-                {renderSort ? (
-                  <>
-                    <div className="challenge-list-half">
-                      {(function () {
-                        return Array.from(Array(4).keys()).map((i, index) => {
-                          return (
-                            <div className="challenge-list__item">
-                              {/* <p className="challenge-list__item-level">{i * 2 + 1}</p> */}
-                              <div className="challenge-list__item-texts">
-                                <p className="title">문제제목</p>
-                                <p className="status">
-                                  <span>30명 도전</span> | <span>9명 통과</span>
-                                </p>
-                              </div>
-                            </div>
-                          );
-                        });
-                      })()}
-                    </div>
-
-                    <div className="challenge-list-half">
-                      {(function () {
-                        return Array.from(Array(4).keys()).map((i, index) => {
-                          return (
-                            <div className="challenge-list__item">
-                              {/* <p className="challenge-list__item-level">{i * 2 + 1}</p> */}
-                              <div className="challenge-list__item-texts">
-                                <p className="title">문제제목</p>
-                                <p className="status">
-                                  <span>30명 도전</span> | <span>9명 통과</span>
-                                </p>
-                              </div>
-                            </div>
-                          );
-                        });
-                      })()}
-                    </div>
-                  </>
-                ) : (
-                  <div className="challenge-list-full">
-                    {(function () {
-                      return Array.from(Array(4).keys()).map((i, index) => {
-                        return (
-                          <div className="challenge-list__item">
-                            {/* <p className="challenge-list__item-level">{i * 2 + 1}</p> */}
-                            <div className="challenge-list__item-texts">
-                              <p className="title">문제제목</p>
-                              <p className="status">
-                                <span>30명 도전</span> | <span>9명 통과</span>
-                              </p>
-                            </div>
-                          </div>
-                        );
-                      });
-                    })()}
-                  </div>
-                )}
-              </div>
+              <div className="challenge-list">{renderRequests()}</div>
             </div>
           </section>
         </div>
