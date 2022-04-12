@@ -15,6 +15,33 @@ const CTF = () => {
   const [isOnRequestChallenges, setIsOnRequestChallenges] = useState(true);
   const [requests, setRequests] = useState([]);
 
+  const [filters, setFilters] = useState({
+    type: {
+      FORENSIC: false,
+      REVERSING: false,
+      SYSTEM: false,
+      WEB: false,
+      MISC: false,
+    },
+    tier: {
+      BRONZE: false,
+      SILVER: false,
+      GOLD: false,
+      PLATINUM: false,
+      DIAMOND: false,
+    },
+  });
+
+  const setFiltersCustomed = (e, type) => {
+    setFilters((state) => {
+      let _res = {
+        ...filters[type],
+        [e.target.name]: e.target.value,
+      };
+      return { ...state, type: _res };
+    });
+  };
+
   useEffect(() => {
     const ueResizeHandler = (e) => {
       window.document.documentElement.clientWidth >= 900 ? setRenderSort(true) : setRenderSort(false);
@@ -38,6 +65,10 @@ const CTF = () => {
       window.removeEventListener('resize', ueResizeHandler);
     };
   }, []);
+
+  useEffect(() => {
+    //필터값이 바뀔 때 마다 axios 다시 찍어 보내기
+  }, [filters]);
 
   const renderRequests = () => {
     let formula = function (i, index) {
@@ -117,13 +148,27 @@ const CTF = () => {
                 <div className="main-challenges-container-left__block">
                   <p className="sort-name">분류</p>
                   {(function () {
-                    return Array.from(Array(5).keys()).map((i, index) => {
+                    let _navi = {
+                      FORENSIC: '포렌식',
+                      REVERSING: '리버싱',
+                      SYSTEM: '시스템해킹',
+                      WEB: '웹해킹',
+                      MISC: '기타',
+                    };
+
+                    return Object.keys(_navi).map((i, index) => {
                       return (
                         <div className="checkbox-item" key={index}>
                           <div className="checkbox-item-draws">
-                            <input className="checkbox-item-input" type="checkbox" onChange={(e) => console.log(e.target.checked)} />
+                            <input
+                              className="checkbox-item-input"
+                              type="checkbox"
+                              name={i}
+                              value={filters.type[i]}
+                              onChange={(e) => setFiltersCustomed(e, 'type')}
+                            />
                             <div className="checkbox-item-draws__checkbox"></div>
-                            <div className="checkbox-item-draws__title">항목 이름</div>
+                            <div className="checkbox-item-draws__title">{_navi[i]}</div>
                           </div>
                         </div>
                       );
@@ -134,13 +179,27 @@ const CTF = () => {
                 <div className="main-challenges-container-left__block">
                   <p className="sort-name">난이도</p>
                   {(function () {
-                    return Array.from(Array(5).keys()).map((i, index) => {
+                    let _navi = {
+                      BRONZE: '브론즈',
+                      SILVER: '실버',
+                      GOLD: '골드',
+                      PLATINUM: '플레티넘',
+                      DIAMOND: '다이아몬드',
+                    };
+
+                    return Object.keys(_navi).map((i, index) => {
                       return (
                         <div className="checkbox-item" key={index}>
                           <div className="checkbox-item-draws">
-                            <input className="checkbox-item-input" type="checkbox" onChange={(e) => console.log(e.target.checked)} />
+                            <input
+                              className="checkbox-item-input"
+                              type="checkbox"
+                              name={i}
+                              value={filters.tier[i]}
+                              onChange={(e) => setFiltersCustomed(e, 'tier')}
+                            />
                             <div className="checkbox-item-draws__checkbox"></div>
-                            <div className="checkbox-item-draws__title">항목 이름</div>
+                            <div className="checkbox-item-draws__title">{_navi[i]}</div>
                           </div>
                         </div>
                       );
@@ -161,10 +220,22 @@ const CTF = () => {
                     }
               }
             >
-              <Link to="/challenge/create" className="admin-add-challenge">
-                관리자 권한으로 문제 추가하기
-              </Link>
-              <div className="my-status"></div>
+              {accounts.isAdmin ? (
+                <>
+                  <Link to="/challenge/create" className="admin-add-challenge">
+                    관리자 권한으로 문제 추가하기
+                  </Link>
+                </>
+              ) : null}
+              <div className="my-status">
+                <p>
+                  환영합니다, <span className="my-status__username">관리자</span>님.
+                </p>
+                <p>누적 보유 포인트 1000점으로 1위에 있습니다.</p>
+                <Link to="/ranking" className="my-status__btn">
+                  리더보드
+                </Link>
+              </div>
               <div className="filter-box">
                 <input type="text" name="filter" placeholder="필터 ..." />
                 <div className="ico-search"></div>

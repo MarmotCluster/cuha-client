@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import forums from '../../apis/forums';
 import { colorMainClassname } from './utils';
 
-const ChallengeEdit = () => {
+const ChallengeEditSolution = () => {
   const { accounts, seto } = useSelector((state) => ({
     accounts: state.accounts,
     seto: state.seto,
@@ -193,4 +193,4 @@ const ChallengeEdit = () => {
   );
 };
 
-export default ChallengeEdit;
+export default ChallengeEditSolution;
