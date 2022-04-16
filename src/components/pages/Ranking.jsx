@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { colorMainClassname } from './utils';
+import forums from '../../apis/forums';
+import { buildSpotInNumber } from '../../utils';
 
 const Ranking = () => {
   const { accounts, seto } = useSelector((state) => ({
@@ -14,30 +16,61 @@ const Ranking = () => {
 
   const navigate = useNavigate();
 
+  const [requests, setRequests] = useState([]);
+
+  useEffect(() => {
+    forums.get(`/members/ranking`, { params: { page: 1, size: 20 } }).then((res) => {
+      // console.log(res);
+      setRequests([...res.data]);
+    });
+  }, []);
+
   return (
     <main className={colorMainClassname[seto.theme]}>
-      <div className="area" style={{ fontSize: '1.4rem', padding: '2rem 0' }}>
+      <div className="area" style={{ fontSize: '1.4rem', padding: '2rem 0', zoom: '0.8' }}>
         <div className="main-ranking">
           <div className="main-ranking-top3 main-ranking-default-bg">
             <div className="main-ranking-top3__bookmark"></div>
-            <div
-              className="main-ranking-top3__profile main-ranking-top3__small"
-              style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/no-profile.svg)` }}
-            >
-              <p className="rank rank-bronze">3</p>
-            </div>
-            <div
-              className="main-ranking-top3__profile main-ranking-top3__big"
-              style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/no-profile.svg)` }}
-            >
-              <p className="rank rank-gold">1</p>
-            </div>
-            <div
-              className="main-ranking-top3__profile main-ranking-top3__small"
-              style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/no-profile.svg)` }}
-            >
-              <p className="rank rank-silver">2</p>
-            </div>
+            {(function () {
+              if (requests.length > 0) {
+                let top3 = requests.filter((i, index) => index < 3);
+                let styles = [
+                  {
+                    className: 'small',
+                    tier: 'bronze',
+                    rank: 3,
+                  },
+                  {
+                    className: 'big',
+                    tier: 'gold',
+                    rank: 1,
+                  },
+                  {
+                    className: 'small',
+                    tier: 'silver',
+                    rank: 2,
+                  },
+                ];
+
+                return styles.map((i, index) => {
+                  return (
+                    <Link
+                      to={`/member/${top3[i.rank - 1].username}`}
+                      key={index}
+                      className={`main-ranking-top3__profile main-ranking-top3__${i.className}`}
+                      style={{
+                        backgroundImage: top3[i.rank - 1].profileImage
+                          ? `url('${forums.defaults.baseURL}/members/profiles/${top3[i.rank - 1].profileImage}')`
+                          : `url('${process.env.PUBLIC_URL}/images/no-profile.svg')`,
+                        // backgroundColor: 'red',
+                      }}
+                    >
+                      <p className={`rank rank-${i.tier}`}>{i.rank}</p>
+                    </Link>
+                  );
+                });
+              }
+            })()}
           </div>
 
           <div className="main-ranking-dummy" style={{ height: '2rem' }}></div>
@@ -45,23 +78,37 @@ const Ranking = () => {
             <p className="main-ranking-others__title">이하 순위</p>
             <div className="main-ranking-others__items">
               {(function () {
-                return [4, 5, 6, 7, 8, 9, 10].map((i) => {
-                  return (
-                    <div className="main-ranking-others__items-item">
-                      <p className="rank">{i}</p>
-                      <div className="profile"></div>
-                      <div className="texts">
-                        <p className="texts-username">Am i Wrong</p>
-                        <p className="texts-point">1,320 pt</p>
-                      </div>
-                    </div>
-                  );
-                });
+                if (requests.length > 0) {
+                  let filtered = requests.filter((i, index) => index >= 3);
+                  // console.log(filtered);
+
+                  return filtered.map((i, index) => {
+                    console.log(i);
+                    return (
+                      <Link to={`/member/${i.username}`} key={index} className="main-ranking-others__items-item">
+                        <p className="rank">{index + 4}</p>
+                        <div
+                          className="profile"
+                          style={{
+                            backgroundImage: i.profileImage
+                              ? `url('${forums.defaults.baseURL}/members/profiles/${i.profileImage}')`
+                              : `url('${process.env.PUBLIC_URL}/images/no-profile.svg')`,
+                          }}
+                        ></div>
+                        <div className="texts">
+                          <p className="texts-username">{i.name}</p>
+                          <p className="texts-point">{buildSpotInNumber(i.totalScore)} pt</p>
+                        </div>
+                      </Link>
+                    );
+                  });
+                }
               })()}
             </div>
           </div>
         </div>
       </div>
+      <div style={{ height: '5.8rem' }}></div>
     </main>
   );
 };
