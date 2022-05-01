@@ -30,15 +30,18 @@ const CTF = () => {
       PLATINUM: false,
       DIAMOND: false,
     },
+    byTitle: '',
   });
 
   const setFiltersCustomed = (e, type) => {
+    // console.log(e.target, type);s
     setFilters((state) => {
       let _res = {
         ...filters[type],
-        [e.target.name]: e.target.value,
+        [e.target.name]: e.target.checked,
       };
-      return { ...state, type: _res };
+
+      return { ...state, [type]: _res };
     });
   };
 
@@ -51,15 +54,15 @@ const CTF = () => {
 
     // console.log(forums.defaults.baseURL);
 
-    forums
-      .get('/problems', { params: { start: 0, end: 20 } })
-      .then((res) => {
-        // console.log(`데이터 불러오기 완료`, res.data);
-        setRequests([...res.data]);
-      })
-      .finally((i) => {
-        setIsOnRequestChallenges(false);
-      });
+    // forums
+    //   .get('/problems', { params: { page: 0, size: 20 } })
+    //   .then((res) => {
+    //     // console.log(`데이터 불러오기 완료`, res.data);
+    //     setRequests([...res.data]);
+    //   })
+    //   .finally((i) => {
+    //     setIsOnRequestChallenges(false);
+    //   });
 
     return () => {
       window.removeEventListener('resize', ueResizeHandler);
@@ -68,17 +71,53 @@ const CTF = () => {
 
   useEffect(() => {
     //필터값이 바뀔 때 마다 axios 다시 찍어 보내기
+    // console.log(filters);
+    const requestLink = (function () {
+      let __type = Object.keys(filters.type).filter((i) => filters.type[i] === true);
+
+      return '/problems';
+    })();
+
+    let sortProblemType = String(Object.keys(filters.type).filter((i) => filters.type[i] === true));
+    let sortTier = String(Object.keys(filters.tier).filter((i) => filters.tier[i] === true));
+
+    forums
+      .get('/problems', {
+        params: {
+          page: 0,
+          size: 20,
+          problemTypes: sortProblemType.length > 0 ? sortProblemType : null,
+          tiers: sortTier.length > 0 ? sortTier : null,
+          title: filters.byTitle.length > 0 ? filters.byTitle : null,
+        },
+      })
+      .then((res) => {
+        // console.log(`데이터 불러오기 완료`, res.data);
+        setRequests([...res.data]);
+      })
+      .finally((i) => {
+        setIsOnRequestChallenges(false);
+      });
   }, [filters]);
 
   const renderRequests = () => {
     let formula = function (i, index) {
       return (
-        <Link key={index} to={i.id ? `/challenge/view/${i.id}` : '/'} className="challenge-list__item">
+        <Link
+          key={index}
+          to={i.problemId ? `/challenge/view/${i.problemId}` : '/'}
+          className="challenge-list__item"
+          style={{
+            backgroundImage: `url(${process.env.PUBLIC_URL}/images/img-challenge-banner_${String(i.tier).toLocaleLowerCase()}.png)`,
+          }}
+        >
           <div className="challenge-list__item-texts">
             <p className="title">{i.title ? i.title : 'undefined'}</p>
             <p className="status">
               {/* <span>30명 도전</span> | <span>9명 통과</span> */}
-              <span>{i.score ? i.score : '0'} 포인트 증정</span>
+              <span>
+                {i.score ? i.score : '0'} 포인트 증정 | {i.problemType}
+              </span>
             </p>
           </div>
         </Link>
@@ -96,7 +135,7 @@ const CTF = () => {
           return (
             <div className="challenge-list-half" key={index}>
               {(function (e) {
-                console.log(e);
+                // console.log(e);
                 return e.map((j, jndex) => {
                   {
                     return formula(j, jndex);
@@ -131,6 +170,7 @@ const CTF = () => {
   return (
     <main className={colorMainClassname[seto.theme]}>
       <div className="area" style={{ padding: '2rem' }}>
+        {/* <input type="checkbox" onChange={(e) => console.log(e.target.checked)} /> */}
         <div className="main-challenges">
           <div
             className="main-challenges-banner"
@@ -164,7 +204,7 @@ const CTF = () => {
                               className="checkbox-item-input"
                               type="checkbox"
                               name={i}
-                              value={filters.type[i]}
+                              checked={filters.type[i]}
                               onChange={(e) => setFiltersCustomed(e, 'type')}
                             />
                             <div className="checkbox-item-draws__checkbox"></div>
@@ -195,7 +235,7 @@ const CTF = () => {
                               className="checkbox-item-input"
                               type="checkbox"
                               name={i}
-                              value={filters.tier[i]}
+                              checked={filters.tier[i]}
                               onChange={(e) => setFiltersCustomed(e, 'tier')}
                             />
                             <div className="checkbox-item-draws__checkbox"></div>
@@ -237,7 +277,13 @@ const CTF = () => {
                 </Link>
               </div>
               <div className="filter-box">
-                <input type="text" name="filter" placeholder="필터 ..." />
+                <input
+                  type="text"
+                  name="filter"
+                  placeholder="필터 ..."
+                  value={filters.byTitle}
+                  onChange={(e) => setFilters((state) => ({ ...state, byTitle: e.target.value }))}
+                />
                 <div className="ico-search"></div>
               </div>
               <div className="challenge-list">{renderRequests()}</div>

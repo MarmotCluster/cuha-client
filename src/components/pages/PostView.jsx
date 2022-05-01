@@ -111,18 +111,14 @@ const PostView = () => {
       return commentsData.map((i, index) => {
         // console.log(`커멘트 ${index}번`, i);
 
-        const { body, createdAt, id, like, name, profileImage, username } = i;
+        const { body, createdAt, postId, commentId, like, name, profileUrl, username } = i;
         let _redate = getRecalculatedTime(createdAt);
 
         return (
           <div className="section-comments__item" key={index}>
-            <Link to="/member/root" className="section-comments__item-profile">
+            <Link to={`/member/${username}`} className="section-comments__item-profile">
               <img
-                src={
-                  profileImage
-                    ? `${forums.defaults.baseURL}/members/profiles/${profileImage}`
-                    : `${process.env.PUBLIC_URL}/images/no-profile.svg`
-                }
+                src={profileUrl ? `${forums.defaults.baseURL}/profiles/${profileUrl}` : `${process.env.PUBLIC_URL}/images/no-profile.svg`}
                 alt="Profile image"
                 width="100%"
               />
@@ -131,7 +127,7 @@ const PostView = () => {
               <p className="username">
                 {name} <span className="username-posteddate">{`${_redate.month}월 ${_redate.day}일`}</span>
               </p>
-              {isEditingComment === id ? (
+              {isEditingComment === commentId ? (
                 <input
                   type="text"
                   value={editingCommentTarget}
@@ -152,7 +148,7 @@ const PostView = () => {
                 <button
                   className={`comment-tools__like ${i.isLiked ? 'comment-tools__like__liked' : null}`}
                   type="button"
-                  onClick={() => handleLikeComment(id)}
+                  onClick={() => handleLikeComment(commentId)}
                 ></button>
                 <p className="comment-tools__like-count">{like ? like : '0'}</p>
 
@@ -160,16 +156,16 @@ const PostView = () => {
                   accounts.fromToken.username === username || accounts.isAdmin === true ? (
                     isEditingComment === -1 ? (
                       <>
-                        <button className="transparent" type="button" onClick={(e) => handleEditComment(id, body)}>
+                        <button className="transparent" type="button" onClick={(e) => handleEditComment(commentId, body)}>
                           수정
                         </button>
-                        <button className="negative" type="button" onClick={() => handleRemoveComment(id)}>
+                        <button className="negative" type="button" onClick={() => handleRemoveComment(commentId)}>
                           삭제
                         </button>
                       </>
-                    ) : isEditingComment === id ? (
+                    ) : isEditingComment === commentId ? (
                       <>
-                        <button className="positive" type="button" onClick={(e) => handleSubmitEditedComment(id)}>
+                        <button className="positive" type="button" onClick={(e) => handleSubmitEditedComment(commentId)}>
                           완료
                         </button>
                         <button className="transparent" type="button" onClick={() => setIsEditingComment(-1)}>

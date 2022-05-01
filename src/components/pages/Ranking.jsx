@@ -19,7 +19,7 @@ const Ranking = () => {
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {
-    forums.get(`/members/ranking`, { params: { page: 1, size: 20 } }).then((res) => {
+    forums.get(`/members`, { params: { page: 0, size: 20, sort: 'score,desc' } }).then((res) => {
       // console.log(res);
       setRequests([...res.data]);
     });
@@ -59,8 +59,8 @@ const Ranking = () => {
                       key={index}
                       className={`main-ranking-top3__profile main-ranking-top3__${i.className}`}
                       style={{
-                        backgroundImage: top3[i.rank - 1].profileImage
-                          ? `url('${forums.defaults.baseURL}/members/profiles/${top3[i.rank - 1].profileImage}')`
+                        backgroundImage: top3[i.rank - 1].profileUrl
+                          ? `url('${forums.defaults.baseURL}/profiles/${top3[i.rank - 1].profileUrl}')`
                           : `url('${process.env.PUBLIC_URL}/images/no-profile.svg')`,
                         // backgroundColor: 'red',
                       }}
@@ -90,14 +90,14 @@ const Ranking = () => {
                         <div
                           className="profile"
                           style={{
-                            backgroundImage: i.profileImage
-                              ? `url('${forums.defaults.baseURL}/members/profiles/${i.profileImage}')`
+                            backgroundImage: i.profileUrl
+                              ? `url('${forums.defaults.baseURL}/profiles/${i.profileUrl}')`
                               : `url('${process.env.PUBLIC_URL}/images/no-profile.svg')`,
                           }}
                         ></div>
                         <div className="texts">
                           <p className="texts-username">{i.name}</p>
-                          <p className="texts-point">{buildSpotInNumber(i.totalScore)} pt</p>
+                          <p className="texts-point">{buildSpotInNumber(i.score)} pt</p>
                         </div>
                       </Link>
                     );
