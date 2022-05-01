@@ -25,6 +25,204 @@
     color: #f4f4f4;
   }
 
+  &-ranking {
+    position: relative;
+    width: 100%;
+
+    &-default {
+      &-bg {
+        width: calc(100% - 4rem);
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 0 6px 20px rgba($color: #000000, $alpha: 0.16);
+      }
+    }
+
+    &-top3 {
+      margin: 0 auto;
+      margin-top: 6rem;
+      position: inherit;
+      width: calc(100% - 4rem);
+      max-width: 96rem;
+      padding: 2rem;
+      padding-top: 7rem;
+      padding-bottom: 4rem;
+
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+
+      z-index: 1;
+
+      // overflow-x: scroll;
+
+      &__bookmark {
+        position: absolute;
+        transform: translate(-50%);
+        top: -5rem;
+        left: 50%;
+        width: 21rem;
+        height: 10rem;
+        border-radius: 5px 5px 0 0;
+        background: linear-gradient(-45deg, #eebc49 0%, #cf8f00 100%);
+        box-shadow: 0 2px 4px rgba($color: #000000, $alpha: 0.16);
+
+        &::before {
+          content: '';
+          position: absolute;
+          width: 10rem;
+          height: 10rem;
+          // background-color: red;
+          left: 50%;
+          transform: translateX(-50%);
+          background-image: url('../images/ico_ranking.svg');
+          background-size: 7rem;
+          background-repeat: no-repeat;
+          background-position: center;
+        }
+      }
+
+      &__profile {
+        border-radius: 100px;
+        border: 1px solid #f4f4f4;
+
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        // filter: drop-shadow(0 4px 2px rgba($color: #000000, $alpha: 0.16));
+
+        text-decoration: none;
+      }
+
+      &__small {
+        width: 14rem;
+        height: 14rem;
+      }
+
+      &__big {
+        width: 21rem;
+        height: 21rem;
+
+        margin: 0 2rem;
+      }
+
+      & .rank {
+        text-align: center;
+        min-width: 9rem;
+        font-size: 2.4rem;
+        font-weight: 900;
+        padding: 1rem 2rem;
+        transform: translateY(2rem);
+        border-radius: 5px;
+        color: #f4f4f4;
+        box-shadow: inset 0px 3px 6px rgba($color: #000000, $alpha: 0.16);
+
+        &-gold {
+          background-color: rgb(236, 154, 0);
+        }
+
+        &-silver {
+          background-color: rgb(67, 95, 122);
+        }
+
+        &-bronze {
+          background-color: rgb(173, 86, 0);
+        }
+      }
+    }
+
+    &-dummy {
+      position: inherit;
+      &::after {
+        content: '';
+        width: 100%;
+        max-width: 108rem;
+        min-height: 32rem;
+        // background-color: white;
+        position: absolute;
+        top: -16rem;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 5px;
+        box-shadow: 0 6px 20px rgba($color: #000000, $alpha: 0.16);
+        z-index: 0;
+      }
+    }
+
+    &-others {
+      position: inherit;
+      width: 100%;
+      max-width: 128rem;
+      padding: 2rem 0;
+      margin: 0 auto;
+
+      &__title {
+        text-align: center;
+        font-size: 3.2rem;
+        color: #999;
+        font-weight: 900;
+      }
+
+      &__items {
+        padding-top: 4rem;
+
+        &-item {
+          width: 100%;
+          min-height: 16rem;
+          // background-color: wheat;
+          color: #999;
+
+          display: flex;
+          align-items: center;
+
+          text-decoration: none;
+
+          & .rank {
+            font-size: 4.8rem;
+            font-weight: 200;
+            width: 10rem;
+            text-align: center;
+          }
+
+          & .profile {
+            border: 1px solid #e0e0e0;
+            width: 12rem;
+            height: 12rem;
+            border-radius: 100px;
+
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+          }
+
+          & .texts {
+            padding-left: 5rem;
+
+            &-username {
+              font-size: 4.8rem;
+            }
+
+            &-point {
+              font-size: 2.8rem;
+              font-weight: 900;
+              color: #32aac9;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @include respond(phone600) {
+    .main-ranking {
+      zoom: 0.6;
+    }
+  }
+
   &-post-challenge {
     position: relative;
     width: 100%;
@@ -167,10 +365,10 @@
       cursor: pointer;
 
       outline: none;
-      background-color: #30c4e2;
+      background-color: $color-cju-dark;
       padding: 1rem;
       border-radius: 5px;
-      border: 1px solid #2599b0;
+      border: 1px solid $color-cju-darker;
       color: #f4f4f4;
       box-shadow: inset 0 -3px 0 rgba($color: black, $alpha: 0.16);
       font-family: inherit;
@@ -187,6 +385,179 @@
 
   &-challenges {
     position: relative;
+
+    &-bg {
+      position: inherit;
+      margin: 0 auto;
+      margin-top: 2rem;
+      padding: 1rem;
+      width: calc(100% - 4rem);
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 6px 20px rgba($color: #000000, $alpha: 0.16);
+
+      &__button {
+        display: block;
+        text-align: center;
+        text-decoration: inherit;
+        color: inherit;
+        font-weight: 500;
+        border: none;
+        outline: none;
+        cursor: pointer;
+
+        &-positive {
+          background-color: #436fb9;
+        }
+      }
+    }
+
+    &-body {
+      position: inherit;
+      margin: 0 auto;
+      // margin-top: 2rem;
+      padding: 2rem;
+      padding-bottom: 1rem;
+      width: calc(100% - 4rem);
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 6px 20px rgba($color: #000000, $alpha: 0.16);
+      // overflow: hidden;
+
+      &__bookmark {
+        width: 10.4rem;
+        height: 10rem;
+        background-color: #436fb9;
+        border-radius: 5px 5px 0 0;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        font-size: 2.4rem;
+        color: #fff;
+        font-weight: 900;
+
+        position: absolute;
+        top: -2rem;
+        left: 4rem;
+      }
+
+      &__head {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 14rem;
+        min-height: 6rem;
+
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 3rem;
+
+        &-headers {
+          & .challenge {
+            &-title {
+              color: #666;
+              font-size: 2.4rem;
+              font-weight: 900;
+              padding-bottom: 5px;
+            }
+
+            &-info {
+              color: #999;
+            }
+          }
+        }
+
+        &-reward {
+          font-size: 2rem;
+          color: #436fb9;
+          font-weight: 900;
+        }
+      }
+
+      &__body {
+        min-height: 36rem;
+        padding: 2rem 0 1rem 0;
+        display: flex;
+        border-bottom: 1px solid #f4f4f4;
+
+        &-title {
+          color: #436fb9;
+          font-size: 1.8rem;
+          font-weight: 900;
+          width: 14rem;
+          padding: 0 2rem;
+          text-align: center;
+          // background-color: black;
+        }
+
+        &-contain {
+          font-size: 1.8rem;
+          width: calc(100% - 14rem);
+
+          & .body {
+            &-explains {
+              margin-bottom: 1rem;
+            }
+
+            &-downloads {
+              display: flex;
+              align-items: center;
+
+              padding: 0.5rem;
+              background-color: #f0f0f0;
+              border-radius: 5px;
+              width: 100%;
+              font-size: 1.4rem;
+              text-decoration: none;
+              color: #c500ff;
+
+              &__icon {
+                display: block;
+                width: 2rem;
+                height: 2rem;
+                // background-color: red;
+                background-image: url('../images/ico_file.svg');
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: contain;
+                margin-right: 0.5rem;
+              }
+            }
+          }
+        }
+      }
+
+      &__answer {
+        display: flex;
+        align-items: center;
+
+        &-title {
+          color: #436fb9;
+          font-size: 1.8rem;
+          font-weight: 900;
+          width: 14rem;
+          padding: 0 2rem;
+          text-align: center;
+          // background-color: black;
+        }
+
+        &-input {
+          margin-top: 1rem;
+          border: 1px solid #f0f0f0;
+          background-color: #f4f4f4;
+          outline: none;
+          width: calc(100% - 12rem);
+          padding: 1rem;
+          box-shadow: inset 0px 3px 6px rgba($color: #000000, $alpha: 0.16);
+
+          &::placeholder {
+            color: #999;
+          }
+        }
+      }
+    }
+
+    //이 위에는 view만
 
     &-banner {
       padding: 6rem;
@@ -292,7 +663,7 @@
         overflow: hidden;
 
         & .admin-add-challenge {
-          background-color: #30c4e2;
+          background-color: $color-cju-dark;
           color: #f4f4f4;
           text-decoration: inherit;
           display: block;
@@ -300,8 +671,8 @@
           padding: 2rem;
           border-radius: 5px;
           margin-bottom: 2rem;
-          box-shadow: inset 0 -3px 0 rgba($color: black, $alpha: 0.16);
-          border: 1px solid #2599b0;
+          box-shadow: inset 0 -3px 0 rgba($color: black, $alpha: 0.96);
+          border: 1px solid $color-cju-darker;
           font-weight: 500;
         }
 
@@ -310,6 +681,27 @@
           border-radius: 4px;
           border: 1px solid #e0e0e0;
           min-height: 10.4rem;
+
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+
+          &__username {
+            font-weight: 900;
+          }
+
+          &__btn {
+            display: inline-block;
+            text-decoration: inherit;
+            color: inherit;
+            margin-top: 1rem;
+            padding: 1rem 2rem;
+            background-color: #97a7fb;
+            color: #f4f4f4;
+            border-radius: 2px;
+            box-shadow: 0px 4px 8px rgba($color: #000000, $alpha: 0.08);
+          }
         }
 
         & .filter-box {
@@ -352,11 +744,13 @@
           justify-content: center;
           // align-items: center;
 
+          /* 반 나눌까 아니면 하나로 뭉칠까 */
           &-half {
             width: 50%;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 0 1rem;
           }
 
           &-full {
@@ -365,9 +759,13 @@
             flex-direction: column;
             align-items: center;
           }
+          /* 반 나눌까 아니면 하나로 뭉칠까 */
 
           &__item {
             position: inherit;
+
+            text-decoration: inherit;
+            color: inherit;
 
             width: 100%;
             // max-width: 42rem;
