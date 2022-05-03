@@ -17,7 +17,7 @@ const PostView = () => {
 
   // REDUX
 
-  const [init, setInit] = useState(false);
+  // const [init, setInit] = useState(false);
 
   const { type, postId } = useParams();
 
@@ -223,7 +223,7 @@ const PostView = () => {
   };
 
   const renderFoundPost = () => {
-    const { body, createdAt, id, name, title, username, views } = contentData;
+    const { body, createdAt, id, name, title, username, views, __like } = contentData;
     // console.log('contentData :', contentData);
 
     return (
@@ -250,8 +250,9 @@ const PostView = () => {
               </Link>
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+              <p className="section-postinfo__like">{__like ? __like : '-'} Likes</p>
               <Link className="section-postinfo__link" to={`/member/${username}`}>
-                {name ? name : 'Uplaoder'}
+                {name ? name : 'Uploader'}
               </Link>
               <p className="section-postinfo__date">
                 {createdAt
@@ -266,6 +267,25 @@ const PostView = () => {
           </section>
           <section className="section-post" style={{ width: '100%' }}>
             <div dangerouslySetInnerHTML={{ __html: body }} style={{ width: '100%', overflow: 'hidden' }}></div>
+          </section>
+          <section className="section-recommand" style={{ width: '100%' }}>
+            <button
+              className="section-recommand-btn"
+              onClick={() =>
+                (function () {
+                  forums
+                    .post(`api글 좋아요`)
+                    .then((res) => {
+                      console.log('좋아요 성공');
+                    })
+                    .catch((err) => {
+                      console.log(err.toJSON(), '좋아요 실패');
+                    });
+                })()
+              }
+            >
+              이 글을 추천하기
+            </button>
           </section>
 
           {accounts.fromToken && accounts.fromToken.username === username ? (
@@ -326,34 +346,45 @@ const PostView = () => {
   };
 
   useEffect(() => {
-    if (!init) {
-      window.scrollTo(0, 0);
-      forums.get(`/posts/${type}/${postId}`).then((res) => {
-        console.log(res);
-        setContentData(res.data);
-      });
+    window.scrollTo(0, 0);
+    forums.get(`/posts/${type}/${postId}`).then((res) => {
+      console.log(res);
+      setContentData(res.data);
+    });
+  }, []);
 
-      forums.get(`/posts/${type}/${postId}/comments`).then((res) => {
-        // console.log('하위는 댓글');
-
-        setCommentsData((state) => [...state, ...res.data]);
+  useEffect(() => {
+    // console.log('정렬 컨트롤');
+    // if (!init) {
+    forums
+      .get(`/posts/${type}/${postId}/comments`, {
+        params: { sort: `commentId,${sortCommentByNew ? 'desc' : 'asc'}` },
+        onUploadProgress: (progressEvent) => {
+          const progress = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total));
+          // Update state here
+          console.log(progress);
+          // onUploadProgress(progress);
+        },
+      })
+      .then((res) => {
+        setCommentsData((state) => {
+          if (state.length > 0) {
+            return res.data;
+          } else {
+            return [...state, ...res.data];
+          }
+        });
         setCommentCount(res.data.length);
       });
 
-      forums.get(`/posts/${type}/${postId}/comments/like`).then((res) => {
-        console.log('하위는 좋아요');
-        console.log(res);
+    forums.get(`/posts/${type}/${postId}/comments/like`).then((res) => {
+      console.log('하위는 좋아요');
+      console.log(res);
+    });
 
-        //   let _dbefore = [];
-
-        //   commentsData.forEach(i => {
-        //       _dbefore.push({...i, isAlreadyLiked: })
-        //   })
-      });
-
-      setInit(true);
-    }
-  }, []);
+    // setInit(true);
+    // }
+  }, [sortCommentByNew]);
 
   return (
     <>
