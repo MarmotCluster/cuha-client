@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { colorMainClassname } from './utils';
 import history from '../../history';
 import AlertPopup from '../AlertPopup';
 import forums from '../../apis/forums';
 import { getRecalculatedTime } from '../../utils';
+import { setToastMessage } from '../../reducers/notificationReducer';
 
 const PostView = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { accounts, seto } = useSelector((state) => ({
     accounts: state.accounts,
     seto: state.seto,
   }));
+
+  const setMessage = (msg) => dispatch(setToastMessage(msg));
 
   // REDUX
 
@@ -78,18 +82,24 @@ const PostView = () => {
 
   const handleSubmitComment = () => {
     if (comment.value.length <= 0) {
-      console.log('댓글을 입력하세요.');
+      // console.log('댓글을 입력하세요.');
+      setMessage('댓글을 입력하세요.');
     } else {
-      forums.post(`/posts/${type}/${postId}/comments`, { body: comment.value }).then((res) => {
-        console.log('댓글 포스트 완료');
-        //그리고
-        forums.get(`/posts/${type}/${postId}/comments`).then((res) => {
-          console.log('다시 받아온 댓글?', res.data);
-          setCommentsData((state) => res.data);
-          setCommentCount(res.data.length);
-          setComment((state) => ({ ...state, value: '' }));
+      if (accounts.isSignedIn) {
+        forums.post(`/posts/${type}/${postId}/comments`, { body: comment.value }).then((res) => {
+          console.log('댓글 포스트 완료');
+          //그리고
+          forums.get(`/posts/${type}/${postId}/comments`).then((res) => {
+            console.log('다시 받아온 댓글?', res.data);
+            setCommentsData((state) => res.data);
+            setCommentCount(res.data.length);
+            setComment((state) => ({ ...state, value: '' }));
+          });
         });
-      });
+      } else {
+        setMessage('로그인 이후에 작성해주세요.');
+        navigate('/login');
+      }
     }
   };
 
@@ -273,14 +283,18 @@ const PostView = () => {
               className="section-recommand-btn"
               onClick={() =>
                 (function () {
-                  forums
-                    .post(`api글 좋아요`)
-                    .then((res) => {
-                      console.log('좋아요 성공');
-                    })
-                    .catch((err) => {
-                      console.log(err.toJSON(), '좋아요 실패');
-                    });
+                  if (accounts.isSignedIn) {
+                    forums
+                      .post(`api글 좋아요`)
+                      .then((res) => {
+                        console.log('좋아요 성공');
+                      })
+                      .catch((err) => {
+                        console.log(err.toJSON(), '좋아요 실패');
+                      });
+                  } else {
+                    setMessage('로그인 이후에 이용해주세요.');
+                  }
                 })()
               }
             >

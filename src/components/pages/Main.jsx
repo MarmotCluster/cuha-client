@@ -105,7 +105,12 @@ const Main = () => {
 
     window.addEventListener('scroll', funcScrollEvent);
     window.addEventListener('resize', funcResizeEvent);
-    renderTempFromPlaceHolder();
+
+    // renderTempFromPlaceHolder();
+
+    forums.get('/posts', { params: { sort: 'postId,desc' } }).then((res) => {
+      setTempDataRemoveThisLater();
+    });
 
     //
 
@@ -117,12 +122,12 @@ const Main = () => {
     };
   }, []);
 
-  const renderTempFromPlaceHolder = async () => {
-    const res = await axios.get('https://jsonplaceholder.typicode.com/posts');
-    // console.log(res.data);
+  // const renderTempFromPlaceHolder = async () => {
+  //   const res = await axios.get('https://jsonplaceholder.typicode.com/posts');
+  //   // console.log(res.data);
 
-    setTempDataRemoveThisLater((state) => res);
-  };
+  //   setTempDataRemoveThisLater((state) => res);
+  // };
 
   const renderInnerAlly = (cols) => {
     if (Object.keys(tempDataRemoveThisLater).length > 0) {

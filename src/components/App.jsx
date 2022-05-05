@@ -25,11 +25,13 @@ import ChallengeSolution from './pages/ChallengeSolution';
 import ChallengeCreateSolution from './pages/ChallengeCreateSolution';
 import ChallengeEditSolution from './pages/ChallengeEditSolution';
 import Ranking from './pages/Ranking';
+import Toast from './Toast';
 
 const App = () => {
   return (
     <React.Fragment>
       <BrowserRouter>
+        <Toast />
         <Header />
         <AdminHeader />
         <Routes>
