@@ -1,6 +1,10 @@
 # cuha-client
 Website for security circles in cju
 
+# preview
+![Main](https://user-images.githubusercontent.com/87087163/168082386-7022fc40-c4de-4014-9623-aae8dc4acd67.png)
+
+
 # how to run
 Execute commands below in project direction
 ```` 
