@@ -6,7 +6,7 @@ Website for security circles in cju
 
 
 # how to run
-Execute commands below in project direction
+Execute commands below in project path
 ```` 
 npm install
 npm start
