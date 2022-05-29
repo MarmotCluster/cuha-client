@@ -16,6 +16,7 @@ npm start
 ````
 
 # relese note
+05.29.22 : Ready to publish
 04.30.22 : Updated API connection</br>
 03.10.22 : Pre-added Create post page</br>
 02.07.22 : Tools for both Admin and general User are drafted</br>
